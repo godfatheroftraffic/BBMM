@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You!</title>
+    
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-XXXXXXX');</script>
+    <!-- End Google Tag Manager -->
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+        
+        .thank-you-container {
+            background: white;
+            border-radius: 1rem;
+            padding: 3rem;
+            max-width: 600px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        .checkmark {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #10b981;
+            margin: 0 auto 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: scaleIn 0.5s ease-out;
+        }
+        
+        .checkmark svg {
+            width: 50px;
+            height: 50px;
+            stroke: white;
+            stroke-width: 3;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-dasharray: 100;
+            stroke-dashoffset: 100;
+            animation: drawCheck 0.5s ease-out 0.3s forwards;
+        }
+        
+        @keyframes scaleIn {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes drawCheck {
+            to { stroke-dashoffset: 0; }
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            color: #1f2937;
+            margin-bottom: 1rem;
+        }
+        
+        p {
+            font-size: 1.125rem;
+            color: #6b7280;
+            line-height: 1.6;
+        }
+        
+        .next-steps {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: #f3f4f6;
+            border-radius: 0.5rem;
+            text-align: left;
+        }
+        
+        .next-steps h2 {
+            font-size: 1.25rem;
+            color: #1f2937;
+            margin-bottom: 1rem;
+        }
+        
+        .next-steps ul {
+            list-style: none;
+        }
+        
+        .next-steps li {
+            padding: 0.5rem 0;
+            color: #4b5563;
+        }
+        
+        .next-steps li:before {
+            content: "✓ ";
+            color: #10b981;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    
+    <div class="thank-you-container">
+        <div class="checkmark">
+            <svg viewBox="0 0 52 52">
+                <path d="M14 27l8 8 16-16"/>
+            </svg>
+        </div>
+        
+        <h1>Thank You!</h1>
+        <p>Your request has been successfully submitted. We'll be in touch with you shortly.</p>
+        
+        <div class="next-steps">
+            <h2>What Happens Next?</h2>
+            <ul>
+                <li>Check your email for confirmation</li>
+                <li>We'll reach out within 24 hours</li>
+                <li>Keep an eye on your phone for our call</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+    // ========================================================================
+    // MASTER THANK YOU PAGE - COMPLETE 182-PARAMETER DATA LAYER PUSH
+    // ========================================================================
+    // CORRECTED: Uses exact AdKernel/Keitaro macro names (no _id suffixes)
+    // ========================================================================
+
+    (function() {
+        'use strict';
+        
+        // Helper function to get cookie
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) {
+                return decodeURIComponent(parts.pop().split(';').shift());
+            }
+            return '';
+        }
+        
+        // Helper function to parse as number if numeric, otherwise return as string
+        function parseValue(value) {
+            if (value === '' || value === null || value === undefined) return undefined;
+            if (value === 'true') return true;
+            if (value === 'false') return false;
+            const num = Number(value);
+            return !isNaN(num) && value !== '' ? num : value;
+        }
+        
+        console.log('🚀 Thank You Page - Reading cookies and building data layer...');
+        
+        // ====================================================================
+        // BUILD COMPLETE DATA LAYER OBJECT (ALL 182 PARAMETERS)
+        // ====================================================================
+        
+        const dataLayerData = {
+            event: 'thankyou_conversion',
+            
+            // ================================================================
+            // ADKERNEL CORE TRACKING (9)
+            // CORRECTED: Uses exact macro names
+            // ================================================================
+            conversion: getCookie('conversion'),              // {conversion} macro - NOT conversion_id
+            goal_id: getCookie('goal_id'),                    // {goal_id} macro
+            campaign: getCookie('campaign'),                  // {campaign} macro - NOT campaign_id
+            banner: getCookie('banner'),                      // {banner} macro - NOT banner_id
+            offer: getCookie('offer'),                        // {offer} macro - NOT offer_id
+            conversion_value: parseValue(getCookie('conversion_value')) || 0,
+            conversion_type: getCookie('conversion_type') || 'generic',
+            brand: getCookie('brand') || 'default',
+            dsp_step: parseValue(getCookie('dsp_step')) || 3,
+            
+            // ================================================================
+            // ADKERNEL NATIVE PARAMETERS (56)
+            // ================================================================
+            pubzone: getCookie('pubzone'),
+            publisher: getCookie('publisher'),
+            country_name: getCookie('country_name'),
+            region: getCookie('region'),
+            city: getCookie('city'),
+            device_type: getCookie('device_type'),
+            os: getCookie('os'),
+            browser: getCookie('browser'),
+            Keyword: getCookie('Keyword'),
+            bid: parseValue(getCookie('bid')),
+            date: getCookie('date'),
+            day_of_month: getCookie('day_of_month'),
+            day_of_week: getCookie('day_of_week'),
+            device_brand: getCookie('device_brand'),
+            device_model: getCookie('device_model'),
+            request_id: getCookie('request_id'),
+            month: getCookie('month'),
+            original_subid: getCookie('original_subid'),
+            os_type: getCookie('os_type'),
+            postback_id: getCookie('postback_id'),
+            app_bundle: getCookie('app_bundle'),
+            app_id: getCookie('app_id'),
+            pubfeed: getCookie('pubfeed'),
+            subid: getCookie('subid'),
+            payout: parseValue(getCookie('payout')),
+            pubpoint: getCookie('pubpoint'),
+            Query: getCookie('Query'),
+            site_id: getCookie('site_id'),
+            referrer_domain: getCookie('referrer_domain'),
+            remfeed: getCookie('remfeed'),
+            ga: getCookie('ga'),
+            search_referrer_domain: getCookie('search_referrer_domain'),
+            search_ip: getCookie('search_ip'),
+            source_subid: getCookie('source_subid'),
+            State_Name: getCookie('State_Name'),
+            source: getCookie('source'),
+            ip: getCookie('ip'),
+            carrier: getCookie('carrier'),
+            zip: getCookie('zip'),
+            state: getCookie('state'),
+            country: getCookie('country'),
+            page_url: getCookie('page_url'),
+            referrer: getCookie('referrer'),
+            timestamp: getCookie('timestamp'),
+            user_agent: getCookie('user_agent'),
+            
+            // ================================================================
+            // KEITARO ROUTING (13)
+            // ================================================================
+            keitaro_subid: getCookie('keitaro_subid'),
+            _lp: getCookie('_lp'),
+            _offer_id: getCookie('_offer_id'),
+            sub1: getCookie('sub1'),
+            sub2: getCookie('sub2'),
+            sub3: getCookie('sub3'),
+            sub4: getCookie('sub4'),
+            sub5: getCookie('sub5'),
+            sub6: getCookie('sub6'),
+            sub7: getCookie('sub7'),
+            sub8: getCookie('sub8'),
+            sub9: getCookie('sub9'),
+            sub10: getCookie('sub10'),
+            
+            // ================================================================
+            // CREATIVE DNA - UNIVERSAL (8)
+            // ================================================================
+            av: getCookie('av'),
+            mb: getCookie('mb'),
+            io: getCookie('io'),
+            ct: getCookie('ct'),
+            ps: getCookie('ps'),
+            ca: getCookie('ca'),
+            up: getCookie('up'),
+            se: getCookie('se'),
+            
+            // ================================================================
+            // CREATIVE DNA - VIDEO/CTV (10)
+            // ================================================================
+            ss: getCookie('ss'),
+            ht: getCookie('ht'),
+            mpp: getCookie('mpp'),
+            nts: getCookie('nts'),
+            vs: getCookie('vs'),
+            bm: getCookie('bm'),
+            ts: getCookie('ts'),
+            gtu: getCookie('gtu'),
+            vl: getCookie('vl'),
+            ve: getCookie('ve'),
+            
+            // ================================================================
+            // CREATIVE DNA - DISPLAY/NATIVE (9)
+            // ================================================================
+            ii: getCookie('ii'),
+            ih: getCookie('ih'),
+            ic: getCookie('ic'),
+            bc: getCookie('bc'),
+            in: getCookie('in'),
+            to: getCookie('to'),
+            sp: getCookie('sp'),
+            at: getCookie('at'),
+            wf: getCookie('wf'),
+            
+            // ================================================================
+            // CREATIVE DNA - PUSH (5)
+            // ================================================================
+            pi: getCookie('pi'),
+            th: getCookie('th'),
+            mc: getCookie('mc'),
+            ul: getCookie('ul'),
+            pz: getCookie('pz'),
+            
+            // ================================================================
+            // CREATIVE DNA - POP (4)
+            // ================================================================
+            ag: getCookie('ag'),
+            vh: getCookie('vh'),
+            eit: getCookie('eit'),
+            ue: getCookie('ue'),
+            
+            // ================================================================
+            // ECHO LANDING PAGE PARAMETERS (26)
+            // ================================================================
+            hl: getCookie('hl'),
+            sh: getCookie('sh'),
+            cta: getCookie('cta'),
+            img: getCookie('img'),
+            link: getCookie('link'),
+            font: getCookie('font'),
+            btn_color: getCookie('btn_color'),
+            btn_text: getCookie('btn_text'),
+            btn_size: getCookie('btn_size'),
+            btn_style: getCookie('btn_style'),
+            hl_size: getCookie('hl_size'),
+            sh_size: getCookie('sh_size'),
+            hl_color: getCookie('hl_color'),
+            sh_color: getCookie('sh_color'),
+            overlay: getCookie('overlay'),
+            social_proof: getCookie('social_proof'),
+            social_text: getCookie('social_text'),
+            scarcity: getCookie('scarcity'),
+            scarcity_text: getCookie('scarcity_text'),
+            progress: getCookie('progress'),
+            micro_yes: getCookie('micro_yes'),
+            micro_text: getCookie('micro_text'),
+            archetype: getCookie('archetype'),
+            angle: getCookie('angle'),
+            variant: getCookie('variant'),
+            phase: getCookie('phase'),
+            
+            // ================================================================
+            // AVALANCHE CORE TOKENS (10)
+            // ================================================================
+            session_token: getCookie('session_token'),
+            user_fingerprint: getCookie('user_fingerprint'),
+            belief_pattern: getCookie('belief_pattern'),
+            archetype_signature_token: getCookie('archetype_signature_token'),
+            remnant_index: parseValue(getCookie('remnant_index')) || 0,
+            exit_trigger: getCookie('exit_trigger'),
+            activation_path_code: getCookie('activation_path_code'),
+            emotional_readiness: parseValue(getCookie('emotional_readiness')) || 0,
+            token_lineage: getCookie('token_lineage'),
+            soul_pattern_map: getCookie('soul_pattern_map'),
+            
+            // ================================================================
+            // AVALANCHE PERFORMANCE SIGNALS (8)
+            // ================================================================
+            eps_score: parseValue(getCookie('eps_score')) || 0,
+            aps_score: parseValue(getCookie('aps_score')) || 0,
+            attention_root: getCookie('attention_root'),
+            friction_point: getCookie('friction_point'),
+            mirror_moment_event: getCookie('mirror_moment_event'),
+            shame_trigger: getCookie('shame_trigger'),
+            truth_signal: getCookie('truth_signal'),
+            faith_factor: parseValue(getCookie('faith_factor')) || 0,
+            
+            // ================================================================
+            // AVALANCHE MUTATION & EVOLUTION (6)
+            // ================================================================
+            variant_generation: getCookie('variant_generation'),
+            mutation_parent: getCookie('mutation_parent'),
+            token_decay_score: parseValue(getCookie('token_decay_score')) || 0,
+            copy_evolution_path: getCookie('copy_evolution_path'),
+            winning_token_cluster: getCookie('winning_token_cluster'),
+            resurrection_trigger_type: getCookie('resurrection_trigger_type'),
+            
+            // ================================================================
+            // AVALANCHE MEMORY CHAIN (6)
+            // ================================================================
+            seen_day: getCookie('seen_day') || 'day0',
+            interaction_count: parseValue(getCookie('interaction_count')) || 1,
+            previous_exit_reason: getCookie('previous_exit_reason'),
+            sku_clicks: getCookie('sku_clicks'),
+            memory_chain_id: getCookie('memory_chain_id'),
+            behavioral_fingerprint_history: getCookie('behavioral_fingerprint_history'),
+            
+            // ================================================================
+            // AVALANCHE DESTINY STACK (5)
+            // ================================================================
+            ltv_ramp_vector: getCookie('ltv_ramp_vector'),
+            offer_stack_position: getCookie('offer_stack_position'),
+            destiny_alignment_score: parseValue(getCookie('destiny_alignment_score')) || 0,
+            bonus_stack_resonance: getCookie('bonus_stack_resonance'),
+            guarantee_safety_score: parseValue(getCookie('guarantee_safety_score')) || 0,
+            
+            // ================================================================
+            // BEHAVIOR TRACKING (14)
+            // ================================================================
+            scroll_depth: parseValue(getCookie('scroll_depth')) || 0,
+            time_on_page: parseValue(getCookie('time_on_page')) || 0,
+            return_visitor: parseValue(getCookie('return_visitor')) || false,
+            session_count: parseValue(getCookie('session_count')) || 1,
+            entry_page: getCookie('entry_page'),
+            funnel_step: getCookie('funnel_step'),
+            exit_intent_triggered: parseValue(getCookie('exit_intent_triggered')) || false,
+            form_fields_filled: parseValue(getCookie('form_fields_filled')) || 0,
+            chat_messages_sent: parseValue(getCookie('chat_messages_sent')) || 0,
+            lead_quality_score: parseValue(getCookie('lead_quality_score')) || 0,
+            email_verified: parseValue(getCookie('email_verified')) || false,
+            phone_verified: parseValue(getCookie('phone_verified')) || false,
+            appointment_confirmed: parseValue(getCookie('appointment_confirmed')) || false,
+            predicted_show_rate: parseValue(getCookie('predicted_show_rate'))
+        };
+        
+        // Remove undefined/null values to keep data layer clean
+        Object.keys(dataLayerData).forEach(key => {
+            if (dataLayerData[key] === undefined || dataLayerData[key] === null || dataLayerData[key] === '') {
+                delete dataLayerData[key];
+            }
+        });
+        
+        // ====================================================================
+        // PUSH TO GTM DATA LAYER
+        // ====================================================================
+        
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push(dataLayerData);
+        
+        console.log('✅ Thank You Conversion Fired!');
+        console.log('📊 Data Layer Object:', dataLayerData);
+        console.log('🎯 Total parameters sent to GTM:', Object.keys(dataLayerData).length);
+        
+        // Log critical conversion identifiers (CORRECTED KEY NAMES)
+        console.log('🔑 Critical IDs:');
+        console.log('  - Conversion:', dataLayerData.conversion);           // NOT conversion_id
+        console.log('  - Goal ID:', dataLayerData.goal_id);
+        console.log('  - Campaign:', dataLayerData.campaign);               // NOT campaign_id
+        console.log('  - Banner:', dataLayerData.banner);                   // NOT banner_id
+        console.log('  - Offer:', dataLayerData.offer);                     // NOT offer_id
+        console.log('  - Session Token:', dataLayerData.session_token);
+        console.log('  - Archetype:', dataLayerData.archetype);
+        console.log('  - Angle:', dataLayerData.angle);
+        console.log('  - Phase:', dataLayerData.phase);
+        
+    })();
+    </script>
+</body>
+</html>

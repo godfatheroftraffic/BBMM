@@ -1,0 +1,114 @@
+{
+  "_comment": "BRAND CONFIGURATION FILE - All brand customization in one place",
+  "_version": "2.0",
+  "_last_updated": "2024-02-19",
+  
+  "brand": {
+    "name": "Your Brand Name",
+    "domain": "lp.yourbrand.com",
+    "gtmId": "GTM-XXXXXXX",
+    "copyright": "© 2024 Your Brand Name. All rights reserved."
+  },
+  
+  "landing_page": {
+    "defaults": {
+      "headline": "Transform Your Business Today",
+      "subheadline": "Join thousands of successful companies already using our proven system",
+      "cta_text": "Get Started Now",
+      "cta_link": "https://calendly.com/yourbrand/meeting",
+      "background_image": "hero-background.jpg",
+      "overlay": "dark"
+    },
+    
+    "styling": {
+      "headline_size": "3rem",
+      "headline_color": "#ffffff",
+      "subheadline_size": "1.5rem",
+      "subheadline_color": "#ffffff",
+      "button_color": "#2563eb",
+      "button_text_color": "#ffffff",
+      "button_size": "large",
+      "button_style": "rounded"
+    },
+    
+    "features": {
+      "social_proof": {
+        "enabled": true,
+        "default_text": "Join 10,000+ satisfied customers"
+      },
+      "scarcity": {
+        "enabled": false,
+        "default_spots": 3,
+        "default_text": "Only {spots} spots remaining!"
+      }
+    }
+  },
+  
+  "footer": {
+    "enabled": true,
+    "links": {
+      "privacy": {
+        "enabled": true,
+        "text": "Privacy",
+        "url": "https://yourbrand.com/privacy"
+      },
+      "terms": {
+        "enabled": true,
+        "text": "Terms",
+        "url": "https://yourbrand.com/terms"
+      },
+      "cookies": {
+        "enabled": true,
+        "text": "Cookies",
+        "url": "https://yourbrand.com/cookies"
+      },
+      "contact": {
+        "enabled": true,
+        "text": "Contact",
+        "url": "https://yourbrand.com/contact"
+      }
+    }
+  },
+  
+  "consent": {
+    "requireConsent": false,
+    "requirePIIConsent": false
+  },
+  
+  "conversion_tracker": {
+    "splitTest": {
+      "enabled": true,
+      "variants": [
+        {
+          "name": "control",
+          "url": "https://calendly.com/yourbrand/meeting",
+          "weight": 100,
+          "enabled": true
+        }
+      ]
+    },
+    
+    "webhookThresholds": {
+      "_comment": "Minimum EPS required to fire each webhook (cost optimization)",
+      "ai_call_min_eps": 70,
+      "sms_min_eps": 50,
+      "email_min_eps": 30
+    },
+    
+    "dspPostback": {
+      "enabled": true,
+      "adkernel_campaign_id": "3214529",
+      "step_mapping": {
+        "survey_complete": "step_3",
+        "calendar_booked": "step_4",
+        "payment_complete": "step_5"
+      }
+    },
+    
+    "timing": {
+      "webhookTimeout": 3000,
+      "redirectDelay": 3000,
+      "fallbackLinkDelay": 10000
+    }
+  }
+}

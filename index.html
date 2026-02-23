@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">Loading...</title>
+    
+    <!--
+    ========================================================================
+    ECHO LANDING PAGE MASTER TEMPLATE v2.0
+    ========================================================================
+    
+    ZERO BRAND CUSTOMIZATION REQUIRED IN THIS FILE!
+    
+    ALL BRANDING LOADED FROM brand-config.json:
+    - GTM Container ID
+    - Default headline, subheadline, CTA, image
+    - Button colors, sizes, styles
+    - Footer links (Privacy, Terms, Cookies, Contact)
+    - Social proof text
+    - Scarcity settings
+    - Copyright info
+    
+    DEPLOYMENT PROCESS:
+    1. Copy this file from master-echo-repo to brand-echo-repo
+    2. Copy brand-config.json to brand-echo-repo
+    3. Customize ONLY brand-config.json for the brand
+    4. Deploy both files together
+    
+    NO CODE CHANGES NEEDED PER BRAND!
+    
+    ========================================================================
+    TRACKING SYSTEM:
+    - 182-parameter capture (AdKernel + Keitaro + Creative DNA + Avalanche)
+    - GTM conversion tracking (loaded from config)
+    - Complete cookie-based parameter passthrough
+    - EPS/APS predictive scoring
+    ========================================================================
+    -->
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body, html {
+            width: 100%;
+            height: 100%;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+        
+        .hero-container {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            z-index: 1;
+        }
+        
+        .content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 2rem;
+            max-width: 900px;
+        }
+        
+        .headline {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+        
+        .subheadline {
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: #ffffff;
+            margin-bottom: 2rem;
+            line-height: 1.4;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            padding: 1.25rem 3rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #ffffff;
+            background: #2563eb;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .cta-button:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.5);
+        }
+        
+        .social-proof {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 0.5rem;
+            color: #ffffff;
+            font-size: 0.95rem;
+        }
+        
+        .scarcity {
+            margin-top: 1rem;
+            padding: 0.75rem 1.5rem;
+            background: rgba(239, 68, 68, 0.9);
+            color: #ffffff;
+            border-radius: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.8);
+            color: #ffffff;
+            text-align: center;
+            font-size: 0.875rem;
+            z-index: 10;
+        }
+        
+        .footer a {
+            color: #60a5fa;
+            text-decoration: none;
+            margin: 0 0.75rem;
+        }
+        
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .headline {
+                font-size: 2rem;
+            }
+            
+            .subheadline {
+                font-size: 1.125rem;
+            }
+            
+            .cta-button {
+                padding: 1rem 2rem;
+                font-size: 1.125rem;
+            }
+            
+            .footer {
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- GTM noscript placeholder (injected dynamically from config) -->
+    <div id="gtm-noscript"></div>
+    
+    <div class="hero-container" id="hero">
+        <div class="overlay" id="overlay"></div>
+        <div class="content">
+            <h1 class="headline" id="headline">Loading...</h1>
+            <p class="subheadline" id="subheadline">Please wait...</p>
+            <a href="#" class="cta-button" id="cta">Loading...</a>
+            
+            <div class="social-proof" id="social-proof" style="display: none;">
+                <span id="social-text"></span>
+            </div>
+            
+            <div class="scarcity" id="scarcity" style="display: none;">
+                <span id="scarcity-text"></span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer" id="footer" style="display: none;">
+        <span id="copyright"></span>
+        <span id="footer-links"></span>
+    </div>
+
+    <script>
+    // ========================================================================
+    // LOAD BRAND CONFIG & INITIALIZE
+    // ========================================================================
+    
+    (function() {
+        'use strict';
+        
+        // Load brand configuration
+        fetch('/brand-config.json')
+            .then(function(response) {
+                if (!response.ok) throw new Error('Config not found');
+                return response.json();
+            })
+            .then(function(config) {
+                console.log('✅ Brand config loaded:', config.brand.name);
+                initializePage(config);
+            })
+            .catch(function(error) {
+                console.error('❌ Failed to load brand config:', error);
+                console.warn('⚠️ Using fallback defaults - CUSTOMIZE brand-config.json');
+                // Fallback to basic initialization
+                initializePage(getFallbackConfig());
+            });
+        
+        function getFallbackConfig() {
+            return {
+                brand: {
+                    name: 'Brand',
+                    gtmId: 'GTM-XXXXXXX',
+                    copyright: '© 2024 Brand'
+                },
+                landing_page: {
+                    defaults: {
+                        headline: 'Default Headline',
+                        subheadline: 'Default Subheadline',
+                        cta_text: 'Get Started',
+                        cta_link: '#',
+                        background_image: '',
+                        overlay: 'dark'
+                    },
+                    styling: {},
+                    features: {
+                        social_proof: { enabled: false },
+                        scarcity: { enabled: false }
+                    }
+                },
+                footer: { enabled: false, links: {} }
+            };
+        }
+        
+        function initializePage(config) {
+            // ================================================================
+            // INJECT GTM FROM CONFIG
+            // ================================================================
+            
+            var gtmId = config.brand.gtmId;
+            
+            // Inject GTM script
+            var gtmScript = document.createElement('script');
+            gtmScript.innerHTML = "(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','" + gtmId + "');";
+            document.head.appendChild(gtmScript);
+            
+            // Inject GTM noscript
+            var gtmNoscript = document.getElementById('gtm-noscript');
+            gtmNoscript.innerHTML = '<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=' + gtmId + '" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>';
+            
+            console.log('✅ GTM injected:', gtmId);
+            
+            // ================================================================
+            // 182-PARAMETER TRACKING SYSTEM
+            // ================================================================
+            
+            var urlParams = new URLSearchParams(window.location.search);
+            
+            function getParam(key, defaultValue) {
+                return urlParams.get(key) || defaultValue || '';
+            }
+            
+            function setCookie(name, value, days) {
+                if (!value) return;
+                days = days || 365;
+                var expires = new Date();
+                expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+                document.cookie = name + '=' + encodeURIComponent(value) + ';expires=' + expires.toUTCString() + ';path=/';
+            }
+            
+            console.log('🚀 Parameter Capture Started');
+            
+            // ================================================================
+            // CATEGORY 1: ADKERNEL CORE (16 parameters)
+            // ================================================================
+            var adkernelCore = {
+                conversion: getParam('trck'),
+                campaign: getParam('campaign_id'),
+                banner: getParam('creative_id'),
+                publisher: getParam('publisher_id'),
+                site_id: getParam('site_id'),
+                domain: getParam('domain'),
+                app_id: getParam('app_id'),
+                app_bundle: getParam('bundle'),
+                placement_id: getParam('placement_id'),
+                tagid: getParam('tagid'),
+                keyword: getParam('keyword'),
+                timestamp: getParam('timestamp') || new Date().toISOString(),
+                conversion_value: getParam('conversion_value', '0'),
+                conversion_type: getParam('conversion_type', 'generic'),
+                brand: getParam('brand', config.brand.name),
+                dsp_step: getParam('dsp_step', '3')
+            };
+            
+            Object.keys(adkernelCore).forEach(function(key) { setCookie(key, adkernelCore[key]); });
+            setCookie('gtm_id', gtmId);
+            
+            // ================================================================
+            // CATEGORY 2: ADKERNEL NATIVE (38 parameters)
+            // ================================================================
+            var nativeParams = ['pubzone', 'country_name', 'region', 'city', 'device_type', 'os', 'browser', 'Keyword', 'bid', 'date', 'day_of_month', 'day_of_week', 'device_brand', 'device_model', 'request_id', 'month', 'original_subid', 'os_type', 'postback_id', 'pubfeed', 'subid', 'payout', 'pubpoint', 'Query', 'referrer_domain', 'remfeed', 'ga', 'search_referrer_domain', 'search_ip', 'source_subid', 'State_Name', 'source', 'ip', 'carrier', 'zip', 'state', 'country'];
+            nativeParams.forEach(function(p) { setCookie(p, getParam(p)); });
+            setCookie('page_url', window.location.href);
+            setCookie('referrer', document.referrer);
+            setCookie('user_agent', navigator.userAgent);
+            
+            // ================================================================
+            // CATEGORY 3: KEITARO (13 parameters)
+            // ================================================================
+            ['keitaro_subid', '_lp', '_offer_id', 'sub1', 'sub2', 'sub3', 'sub4', 'sub5', 'sub6', 'sub7', 'sub8', 'sub9', 'sub10'].forEach(function(p) {
+                setCookie(p, getParam(p.replace('keitaro_', '')));
+            });
+            
+            // ================================================================
+            // CATEGORY 4: CREATIVE DNA - ALL 42 PARAMETERS
+            // ================================================================
+            ['av', 'mb', 'io', 'ct', 'ps', 'ca', 'up', 'se', 'ss', 'ht', 'mpp', 'nts', 'vs', 'bm', 'ts', 'gtu', 'vl', 've', 'ii', 'ih', 'ic', 'bc', 'in', 'to', 'sp', 'at', 'wf', 'pi', 'th', 'mc', 'ul', 'pz', 'ag', 'vh', 'eit', 'ue'].forEach(function(p) {
+                setCookie(p, getParam(p));
+            });
+            
+            // ================================================================
+            // CATEGORY 5: ECHO LANDING PAGE (27 parameters)
+            // ================================================================
+            var defaults = config.landing_page.defaults;
+            var echoParams = {
+                fi: getParam('fi'),
+                hl: getParam('hl', defaults.headline),
+                sh: getParam('sh', defaults.subheadline),
+                cta: getParam('cta', defaults.cta_text),
+                img: getParam('img', defaults.background_image),
+                link: getParam('link', defaults.cta_link),
+                archetype: getParam('archetype'),
+                angle: getParam('angle'),
+                variant: getParam('variant'),
+                phase: getParam('phase')
+            };
+            
+            ['font', 'btn_color', 'btn_text', 'btn_size', 'btn_style', 'hl_size', 'sh_size', 'hl_color', 'sh_color', 'overlay', 'social_proof', 'social_text', 'scarcity', 'scarcity_text', 'progress', 'micro_yes', 'micro_text'].forEach(function(p) {
+                echoParams[p] = getParam(p);
+            });
+            
+            Object.keys(echoParams).forEach(function(key) { setCookie(key, echoParams[key]); });
+            
+            // ================================================================
+            // CATEGORY 6: AVALANCHE TOKENS (35 parameters)
+            // ================================================================
+            var avalancheParams = {
+                session_token: getParam('session_token') || 'sess_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+                user_fingerprint: getParam('user_fingerprint'),
+                belief_pattern: getParam('belief_pattern'),
+                archetype_signature_token: getParam('archetype_signature_token'),
+                remnant_index: getParam('remnant_index', '0'),
+                exit_trigger: getParam('exit_trigger'),
+                activation_path_code: getParam('activation_path_code'),
+                emotional_readiness: getParam('emotional_readiness', '0'),
+                token_lineage: getParam('token_lineage'),
+                soul_pattern_map: getParam('soul_pattern_map'),
+                eps_score: getParam('eps_score', '0'),
+                aps_score: getParam('aps_score', '0'),
+                attention_root: getParam('attention_root'),
+                friction_point: getParam('friction_point'),
+                mirror_moment_event: getParam('mirror_moment_event'),
+                shame_trigger: getParam('shame_trigger'),
+                truth_signal: getParam('truth_signal'),
+                faith_factor: getParam('faith_factor', '0'),
+                variant_generation: getParam('variant_generation'),
+                mutation_parent: getParam('mutation_parent'),
+                token_decay_score: getParam('token_decay_score', '0'),
+                copy_evolution_path: getParam('copy_evolution_path'),
+                winning_token_cluster: getParam('winning_token_cluster'),
+                resurrection_trigger_type: getParam('resurrection_trigger_type'),
+                seen_day: getParam('seen_day', 'day0'),
+                interaction_count: getParam('interaction_count', '1'),
+                previous_exit_reason: getParam('previous_exit_reason'),
+                sku_clicks: getParam('sku_clicks'),
+                memory_chain_id: getParam('memory_chain_id'),
+                behavioral_fingerprint_history: getParam('behavioral_fingerprint_history'),
+                ltv_ramp_vector: getParam('ltv_ramp_vector'),
+                offer_stack_position: getParam('offer_stack_position'),
+                destiny_alignment_score: getParam('destiny_alignment_score', '0'),
+                bonus_stack_resonance: getParam('bonus_stack_resonance'),
+                guarantee_safety_score: getParam('guarantee_safety_score', '0')
+            };
+            
+            Object.keys(avalancheParams).forEach(function(key) { setCookie(key, avalancheParams[key]); });
+            
+            // ================================================================
+            // CATEGORY 7: BEHAVIOR TRACKING (14 parameters)
+            // ================================================================
+            var behaviorDefaults = {
+                scroll_depth: '0', time_on_page: '0', return_visitor: 'false',
+                session_count: '1', entry_page: window.location.pathname,
+                exit_intent_triggered: 'false', form_fields_filled: '0',
+                chat_messages_sent: '0', lead_quality_score: '0',
+                email_verified: 'false', phone_verified: 'false',
+                appointment_confirmed: 'false'
+            };
+            
+            ['scroll_depth', 'time_on_page', 'return_visitor', 'session_count', 'entry_page', 'funnel_step', 'exit_intent_triggered', 'form_fields_filled', 'chat_messages_sent', 'lead_quality_score', 'email_verified', 'phone_verified', 'appointment_confirmed', 'predicted_show_rate'].forEach(function(p) {
+                setCookie(p, getParam(p, behaviorDefaults[p] || ''));
+            });
+            
+            console.log('✅ All 182 parameters captured');
+            console.log('🔑 Conversion:', adkernelCore.conversion, 'Campaign:', adkernelCore.campaign, 'Banner:', adkernelCore.banner);
+            
+            // ================================================================
+            // APPLY BRANDING FROM CONFIG
+            // ================================================================
+            
+            document.getElementById('headline').textContent = echoParams.hl;
+            document.title = echoParams.hl;
+            document.getElementById('subheadline').textContent = echoParams.sh;
+            
+            var ctaButton = document.getElementById('cta');
+            ctaButton.textContent = echoParams.cta;
+            ctaButton.href = echoParams.link;
+            
+            if (echoParams.img) {
+                document.getElementById('hero').style.backgroundImage = "url('/public/" + echoParams.img + "')";
+            }
+            
+            // Overlay
+            var overlayMap = { light: 'rgba(0,0,0,0.3)', medium: 'rgba(0,0,0,0.5)', dark: 'rgba(0,0,0,0.75)', xdark: 'rgba(0,0,0,0.9)' };
+            document.getElementById('overlay').style.background = overlayMap[echoParams.overlay || defaults.overlay] || 'rgba(0,0,0,0.75)';
+            
+            // Social proof
+            var socialConfig = config.landing_page.features.social_proof;
+            if (echoParams.social_proof === 'on' || socialConfig.enabled) {
+                var socialEl = document.getElementById('social-proof');
+                socialEl.style.display = 'block';
+                document.getElementById('social-text').textContent = echoParams.social_text || socialConfig.default_text;
+            }
+            
+            // Scarcity
+            var scarcityConfig = config.landing_page.features.scarcity;
+            var scarcityVal = parseInt(echoParams.scarcity || (scarcityConfig.enabled ? scarcityConfig.default_spots : 0));
+            if (scarcityVal > 0) {
+                var scarcityEl = document.getElementById('scarcity');
+                scarcityEl.style.display = 'block';
+                var text = echoParams.scarcity_text || scarcityConfig.default_text;
+                document.getElementById('scarcity-text').textContent = text.replace('{spots}', scarcityVal);
+            }
+            
+            // Apply styling from config or URL params
+            var styling = config.landing_page.styling || {};
+            
+            if (echoParams.btn_color || styling.button_color) {
+                ctaButton.style.background = echoParams.btn_color || styling.button_color;
+            }
+            if (echoParams.btn_text || styling.button_text_color) {
+                ctaButton.style.color = echoParams.btn_text || styling.button_text_color;
+            }
+            
+            var sizeMap = { small: '0.875rem 1.5rem', medium: '1rem 2rem', large: '1.25rem 3rem', xlarge: '1.5rem 4rem' };
+            var btnSize = echoParams.btn_size || styling.button_size;
+            if (btnSize) ctaButton.style.padding = sizeMap[btnSize] || '1.25rem 3rem';
+            
+            var styleMap = { square: '0', rounded: '0.5rem', pill: '50px' };
+            var btnStyle = echoParams.btn_style || styling.button_style;
+            if (btnStyle) ctaButton.style.borderRadius = styleMap[btnStyle] || '0.5rem';
+            
+            var headline = document.getElementById('headline');
+            if (echoParams.hl_size || styling.headline_size) headline.style.fontSize = echoParams.hl_size || styling.headline_size;
+            if (echoParams.hl_color || styling.headline_color) headline.style.color = echoParams.hl_color || styling.headline_color;
+            
+            var subheadline = document.getElementById('subheadline');
+            if (echoParams.sh_size || styling.subheadline_size) subheadline.style.fontSize = echoParams.sh_size || styling.subheadline_size;
+            if (echoParams.sh_color || styling.subheadline_color) subheadline.style.color = echoParams.sh_color || styling.subheadline_color;
+            
+            // Footer
+            if (config.footer.enabled) {
+                var footerEl = document.getElementById('footer');
+                footerEl.style.display = 'block';
+                document.getElementById('copyright').textContent = config.brand.copyright || '';
+                
+                var footerLinks = [];
+                var links = config.footer.links;
+                if (links.privacy && links.privacy.enabled) footerLinks.push('<a href="' + links.privacy.url + '">' + links.privacy.text + '</a>');
+                if (links.terms && links.terms.enabled) footerLinks.push('<a href="' + links.terms.url + '">' + links.terms.text + '</a>');
+                if (links.cookies && links.cookies.enabled) footerLinks.push('<a href="' + links.cookies.url + '">' + links.cookies.text + '</a>');
+                if (links.contact && links.contact.enabled) footerLinks.push('<a href="' + links.contact.url + '">' + links.contact.text + '</a>');
+                
+                if (footerLinks.length) {
+                    document.getElementById('footer-links').innerHTML = ' | ' + footerLinks.join(' | ');
+                }
+            }
+            
+            // ================================================================
+            // GTM EVENTS
+            // ================================================================
+            
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({
+                event: 'echo_page_view',
+                conversion: adkernelCore.conversion,
+                campaign: adkernelCore.campaign,
+                banner: adkernelCore.banner,
+                publisher: adkernelCore.publisher,
+                archetype: echoParams.archetype,
+                angle: echoParams.angle,
+                phase: echoParams.phase,
+                funnel_intent: echoParams.fi
+            });
+            
+            console.log('✅ Echo Page View fired');
+            
+            // CTA Click
+            ctaButton.addEventListener('click', function() {
+                window.dataLayer.push({
+                    event: 'echo_cta_click',
+                    conversion: adkernelCore.conversion,
+                    cta_text: echoParams.cta,
+                    time_on_page: Math.round((Date.now() - performance.timing.navigationStart) / 1000)
+                });
+                console.log('🎯 CTA Click tracked');
+            });
+            
+            // Scroll depth
+            var maxScroll = 0;
+            window.addEventListener('scroll', function() {
+                var scrollPercent = Math.round((window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100);
+                if (scrollPercent > maxScroll) {
+                    maxScroll = scrollPercent;
+                    setCookie('scroll_depth', maxScroll.toString());
+                }
+            });
+            
+            // Time on page
+            setInterval(function() {
+                var timeOnPage = Math.round((Date.now() - performance.timing.navigationStart) / 1000);
+                setCookie('time_on_page', timeOnPage.toString());
+            }, 5000);
+            
+            console.log('✅ Echo Landing Page Initialized:', config.brand.name);
+        }
+    })();
+    </script>
+</body>
+</html>

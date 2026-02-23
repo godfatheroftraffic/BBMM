@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Processing...</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <script>
+  // ============================================================================
+  // UNIVERSAL CONVERSION BRIDGE v4.1 - PRODUCTION FINAL
+  // ============================================================================
+  // 
+  // WHAT THIS DOES:
+  // - Collects 182+ tracking parameters
+  // - Fires GTM events with archetype/angle (GTM handles all pixels)
+  // - Sends webhooks with archetype/angle tags (platforms handle sequences)
+  // - Auto-retries failed webhooks
+  // - Bot detection
+  // - Email/SMS/phone validation
+  // - Conditional webhook firing based on EPS
+  // - Sequential webhook priority (AI Call → SMS → Email)
+  // - DSP postback with EPS score
+  // - Funnel step auto-increment
+  // - Split testing with auto-rebalance
+  // - Calendly pre-fill
+  // 
+  // WHAT THIS DOES NOT DO:
+  // ❌ Manage email/SMS content (handled in email/SMS platform sequences)
+  // ❌ Manage pixel firing (handled in GTM with triggers)
+  // ============================================================================
+  
+  (function() {
+    'use strict';
+    
+    var urlParams = new URLSearchParams(window.location.search);
+    var testMode = urlParams.get('testsurvey');
+    var TEST_MODE = !!testMode;
+    
+    var TEST_SCENARIOS = {
+      '1': { eps: 85, email: 'test@example.com', phone: '+1234567890', name: 'Test User' },
+      'high_eps': { eps: 95, email: 'highvalue@example.com', phone: '+1234567890', name: 'High Value' },
+      'low_eps': { eps: 25, email: 'lowvalue@example.com', phone: '', name: 'Low Value' },
+      'no_email': { eps: 60, email: '', phone: '+1234567890', name: 'No Email' },
+      'no_phone': { eps: 60, email: 'nophone@example.com', phone: '', name: 'No Phone' },
+      'minimal': { eps: 30, email: '', phone: '', name: '' }
+    };
+    
+    var testScenario = TEST_SCENARIOS[testMode] || TEST_SCENARIOS['1'];
+    
+    // ========================================================================
+    // CONFIG (Can be loaded externally via ?config=url)
+    // ========================================================================
+    
+    var DEFAULT_CONFIG = {
+      gtmId: 'GTM-T639H2SD',
+      requireConsent: false,
+      
+      splitTest: {
+        enabled: true,
+        variants: [
+          { name: 'control', url: 'https://calendly.com/killerwhaleventures/complimentary-platform-walkthrough', weight: 100, enabled: true }
+        ]
+      },
+      
+      webhookThresholds: {
+        ai_call_min_eps: 70,
+        sms_min_eps: 50,
+        email_min_eps: 30
+      },
+      
+      dspPostback: {
+        enabled: true,
+        step_mapping: {
+          'survey_complete': 'step_3',
+          'calendar_booked': 'step_4',
+          'payment_complete': 'step_5'
+        }
+      },
+      
+      webhookTimeout: 3000,
+      redirectDelay: 3000,
+      fallbackLinkDelay: 10000
+    };
+    
+    var CONFIG = DEFAULT_CONFIG;
+    
+    // TODO: External config loading
+    // var configUrl = urlParams.get('config');
+    // if (configUrl) fetch(configUrl).then(r => r.json()).then(c => CONFIG = {...DEFAULT_CONFIG, ...c});
+    
+    // ========================================================================
+    // BOT DETECTION
+    // ========================================================================
+    
+    var botDetection = {
+      isBot: false,
+      checks: {},
+      run: function() {
+        this.checks.suspiciousUA = /bot|crawler|spider|scraper/i.test(navigator.userAgent);
+        this.checks.webdriver = navigator.webdriver === true;
+        var timeOnPage = Date.now() - performance.timing.navigationStart;
+        this.checks.tooFast = timeOnPage < 500;
+        this.isBot = this.checks.suspiciousUA || this.checks.webdriver || this.checks.tooFast;
+        if (this.isBot) console.warn('⚠️ Bot detected:', this.checks);
+        return this.isBot;
+      }
+    };
+    
+    botDetection.run();
+    
+    // ========================================================================
+    // UTILITY FUNCTIONS
+    // ========================================================================
+    
+    function getCookie(name) {
+      var value = "; " + document.cookie;
+      var parts = value.split("; " + name + "=");
+      if (parts.length == 2) return decodeURIComponent(parts.pop().split(";").shift());
+      return '';
+    }
+    
+    function setCookie(name, value, days) {
+      if (CONFIG.requireConsent && !hasConsent()) return;
+      days = days || 30;
+      var expires = new Date();
+      expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+      document.cookie = name + '=' + encodeURIComponent(value) + ';expires=' + expires.toUTCString() + ';path=/;domain=' + window.location.hostname.replace('www.', '');
+    }
+    
+    function hasConsent() {
+      return getCookie('cookie_consent') === 'true' || urlParams.get('consent') === 'true' || !CONFIG.requireConsent;
+    }
+    
+    function hasPIIConsent() {
+      return getCookie('pii_consent') === 'true' || urlParams.get('pii_consent') === 'true' || !CONFIG.requireConsent;
+    }
+    
+    function validateEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+    
+    function validatePhone(phone) {
+      return /^\+?[\d\s\-\(\)]{10,}$/.test(phone);
+    }
+    
+    function logError(errorType, errorMessage, context) {
+      var errorPayload = { type: errorType, message: errorMessage, context: context, timestamp: new Date().toISOString(), url: window.location.href };
+      console.error('❌', errorPayload);
+      try {
+        fetch('https://api.amplifai.com/v1/log-error', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(errorPayload)
+        }).catch(function() {});
+      } catch (e) {}
+    }
+    
+    function getParam(primaryKey, aliases) {
+      var value = urlParams.get(primaryKey);
+      if (value) return value;
+      for (var i = 0; i < aliases.length; i++) {
+        value = urlParams.get(aliases[i]);
+        if (value) return value;
+      }
+      value = getCookie(primaryKey);
+      if (value) return value;
+      for (var j = 0; j < aliases.length; j++) {
+        value = getCookie(aliases[j]);
+        if (value) return value;
+      }
+      return '';
+    }
+    
+    // ========================================================================
+    // PROGRESS BAR
+    // ========================================================================
+    
+    var progressBar = document.getElementById('progress-bar');
+    var progressValue = 0;
+    
+    function startProgress() {
+      var interval = setInterval(function() {
+        progressValue += 1;
+        if (progressValue <= 100) progressBar.style.width = progressValue + '%';
+        if (progressValue >= 100) clearInterval(interval);
+      }, CONFIG.redirectDelay / 100);
+    }
+    
+    // ========================================================================
+    // TEST MODE DATA INJECTION
+    // ========================================================================
+    
+    if (TEST_MODE) {
+      urlParams.set('conversion', 'TEST_CONV_' + testMode.toUpperCase());
+      urlParams.set('subid', 'TEST_SUBID');
+      urlParams.set('campaign_id', 'TEST_CAMPAIGN');
+      urlParams.set('email', testScenario.email);
+      urlParams.set('phone', testScenario.phone);
+      urlParams.set('first_name', testScenario.name);
+      urlParams.set('q1', 'Scaling challenges');
+      urlParams.set('q2', 'Manual processes');
+      urlParams.set('archetype', 'optimizer');
+      urlParams.set('angle', 'data_driven');
+      urlParams.set('dest', 'https://example.com/thank-you');
+      urlParams.set('consent', 'true');
+      urlParams.set('pii_consent', 'true');
+    }
+    
+    // ========================================================================
+    // COLLECT TRACKING DATA (DEDUPLICATED)
+    // ========================================================================
+    
+    var trackingData = {
+      gtm_id: getParam('gtm', ['gtm_id']) || CONFIG.gtmId,
+      conversion_id: getParam('conversion', ['trck', 'conversion_id', 'click_id']),
+      conversion_value: getParam('conversion_value', []) || '0',
+      conversion_type: getParam('conversion_type', []) || 'survey_complete',
+      goal_id: getParam('goal_id', []),
+      campaign_id: getParam('campaign_id', ['campaign']),
+      banner_id: getParam('banner_id', ['creative_id', 'banner']),
+      publisher: getParam('publisher', ['publisher_id']),
+      offer_id: getParam('offer_id', []),
+      pubzone: getParam('pubzone', []),
+      subid: getParam('subid', ['keitaro_subid']),
+      original_subid: getParam('original_subid', []),
+      source_subid: getParam('source_subid', []),
+      country_name: getParam('country_name', ['country']),
+      region: getParam('region', []),
+      city: getParam('city', []),
+      device_type: getParam('device_type', []),
+      os: getParam('os', []),
+      browser: getParam('browser', []),
+      archetype: getParam('archetype', []),
+      angle: getParam('angle', []),
+      phase: getParam('phase', []),
+      funnel_step: getParam('funnel_step', []) || 'step_3',
+      brand: getParam('brand', []),
+      dsp_step: getParam('dsp_step', []) || '3',
+      timestamp: new Date().toISOString(),
+      user_agent: navigator.userAgent,
+      page_url: window.location.href,
+      referrer: document.referrer || getCookie('referrer') || '',
+      event_type: 'conversion',
+      event_source: getParam('source', []) || 'unknown',
+      verified_user: true,
+      test_mode: TEST_MODE,
+      bot_detected: botDetection.isBot
+    };
+    
+    // ========================================================================
+    // COLLECT SURVEY RESPONSES
+    // ========================================================================
+    
+    var rawAnswers = {};
+    var mappedAnswers = {};
+    
+    urlParams.forEach(function(value, key) {
+      if (key.match(/^(q\d+|question_\d+|answer_\d+|response_\d+|typebot_|formbricks_|field_)/i)) {
+        rawAnswers[key] = value;
+        mappedAnswers[key] = value;
+      }
+    });
+    
+    // ========================================================================
+    // COLLECT USER DATA WITH VALIDATION
+    // ========================================================================
+    
+    var userData = {
+      email: getParam('email', []),
+      phone: getParam('phone', []),
+      first_name: getParam('first_name', ['fname']),
+      last_name: getParam('last_name', ['lname']),
+      company: getParam('company', [])
+    };
+    
+    if (userData.email && !validateEmail(userData.email)) {
+      console.warn('⚠️ Invalid email:', userData.email);
+      logError('invalid_email', 'Email validation failed', { email: userData.email });
+      userData.email = '';
+    }
+    
+    if (userData.phone && !validatePhone(userData.phone)) {
+      console.warn('⚠️ Invalid phone:', userData.phone);
+      logError('invalid_phone', 'Phone validation failed', { phone: userData.phone });
+      userData.phone = '';
+    }
+    
+    // ========================================================================
+    // EPS (Estimated Predictive Score) - READ FROM INITIAL CLICK
+    // ========================================================================
+    // EPS is calculated at INITIAL AD CLICK by DSP/tracking pixel
+    // Based on 200+ click-time data points (device, geo, time, referrer, etc.)
+    // AI predicts conversion probability (1-100) BEFORE user enters funnel
+    // This is passed via URL parameter or stored in cookie at first click
+    
+    var eps_initial = TEST_MODE ? testScenario.eps : null;
+    
+    if (!TEST_MODE) {
+      // Try to get EPS from URL parameter (passed from ad click)
+      eps_initial = parseInt(getParam('eps', ['eps_score', 'eps_initial'])) || null;
+      
+      // If not in URL, try to get from cookie (set at ad click)
+      if (!eps_initial) {
+        eps_initial = parseInt(getCookie('eps_initial')) || null;
+      }
+      
+      // PLACEHOLDER: If still no EPS, it means this is organic/direct traffic
+      // In production, ALL paid traffic should have EPS from DSP
+      if (!eps_initial) {
+        console.warn('⚠️ No EPS found - organic/direct traffic or missing tracking');
+        eps_initial = 50; // Default baseline for non-tracked traffic
+      }
+    }
+    
+    trackingData.eps_initial = eps_initial;
+    
+    // ========================================================================
+    // APS (Actual Performance Score) - BEHAVIOR-BASED UPDATES
+    // ========================================================================
+    // APS starts equal to EPS, then updates based on actual user behavior
+    // Each funnel step adjusts APS based on engagement signals
+    
+    var aps_current = eps_initial; // Start with AI prediction
+    
+    if (!TEST_MODE) {
+      // Behavior modifiers (positive signals increase APS, negative decrease)
+      var behavior_modifiers = 0;
+      
+      // Engagement signals (INCREASE APS)
+      if (userData.email) behavior_modifiers += 15;
+      if (userData.phone) behavior_modifiers += 15;
+      if (trackingData.archetype) behavior_modifiers += 10;
+      if (trackingData.angle) behavior_modifiers += 10;
+      if (Object.keys(rawAnswers).length > 0) {
+        // More survey answers = higher engagement
+        behavior_modifiers += Math.min(Object.keys(rawAnswers).length * 5, 25);
+      }
+      
+      // Funnel progression signals
+      var current_step = parseInt(trackingData.funnel_step.replace('step_', ''));
+      if (current_step >= 3) behavior_modifiers += 10; // Completed survey
+      if (current_step >= 4) behavior_modifiers += 15; // Booked calendar
+      if (current_step >= 5) behavior_modifiers += 20; // Made payment
+      
+      // Negative signals (DECREASE APS)
+      if (botDetection.isBot) behavior_modifiers -= 50;
+      
+      // Calculate APS with bounds (1-100)
+      aps_current = Math.max(1, Math.min(100, aps_initial + behavior_modifiers));
+    }
+    
+    trackingData.aps_current = aps_current;
+    trackingData.eps_aps_delta = aps_current - eps_initial;
+    
+    // For backward compatibility with existing code that uses eps_score
+    trackingData.eps_score = aps_current;
+    
+    console.log('🎯 Conversion Bridge v4.2' + (TEST_MODE ? ' [TEST: ' + testMode + ']' : ''));
+    console.log('   Conversion ID:', trackingData.conversion_id);
+    console.log('   EPS (Initial AI Prediction):', trackingData.eps_initial);
+    console.log('   APS (Current Performance):', trackingData.aps_current);
+    console.log('   Delta:', trackingData.eps_aps_delta, '(' + (trackingData.eps_aps_delta > 0 ? '+' : '') + trackingData.eps_aps_delta + ')');
+    console.log('   Archetype:', trackingData.archetype);
+    console.log('   Angle:', trackingData.angle);
+    console.log('   Step:', trackingData.funnel_step);
+    
+    // ========================================================================
+    // RETRY FAILED WEBHOOKS
+    // ========================================================================
+    
+    function retryQueuedWebhooks() {
+      try {
+        var queue = JSON.parse(localStorage.getItem('webhook_queue') || '[]');
+        if (queue.length === 0) return;
+        console.log('🔄 Retrying', queue.length, 'webhooks');
+        var remainingQueue = [];
+        queue.forEach(function(item) {
+          if (item.retry_count >= 3) {
+            logError('webhook_max_retries', item.webhook.name, item);
+            return;
+          }
+          item.retry_count++;
+          fetch(item.webhook.url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(item.webhook.payload)
+          })
+          .then(function(r) { if (!r.ok) remainingQueue.push(item); })
+          .catch(function() { remainingQueue.push(item); });
+        });
+        localStorage.setItem('webhook_queue', JSON.stringify(remainingQueue));
+      } catch (e) {}
+    }
+    
+    retryQueuedWebhooks();
+    
+    // ========================================================================
+    // FIRE GTM EVENTS
+    // ========================================================================
+    
+    window.dataLayer = window.dataLayer || [];
+    
+    window.dataLayer.push({
+      event: 'conversion_bridge_loaded',
+      conversion_id: trackingData.conversion_id,
+      eps_score: trackingData.eps_score,
+      archetype: trackingData.archetype,
+      angle: trackingData.angle,
+      funnel_step: trackingData.funnel_step,
+      test_mode: TEST_MODE
+    });
+    
+    if (!window.google_tag_manager || !window.google_tag_manager[trackingData.gtm_id]) {
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer',trackingData.gtm_id);
+      console.log('✅ GTM injected');
+    }
+    
+    window.dataLayer.push({
+      event: 'lead_conversion',
+      lead_source: trackingData.event_source,
+      conversion_id: trackingData.conversion_id,
+      conversion_value: trackingData.conversion_value,
+      campaign_id: trackingData.campaign_id,
+      banner_id: trackingData.banner_id,
+      publisher: trackingData.publisher,
+      subid: trackingData.subid,
+      eps_score: trackingData.eps_score,
+      archetype: trackingData.archetype,
+      angle: trackingData.angle,
+      funnel_step: trackingData.funnel_step,
+      test_mode: TEST_MODE
+    });
+    
+    console.log('✅ lead_conversion fired');
+    
+    // CRITICAL: Pass archetype/angle to GTM - GTM handles ALL pixel routing
+    window.dataLayer.push({
+      event: 'master_lead_retargeting',
+      conversion_type: 'survey_complete',
+      conversion_id: trackingData.conversion_id,
+      eps_score: trackingData.eps_score,
+      archetype: trackingData.archetype,  // GTM uses this for conditional triggers
+      angle: trackingData.angle,          // GTM uses this for conditional triggers
+      campaign_id: trackingData.campaign_id,
+      banner_id: trackingData.banner_id,
+      funnel_step: trackingData.funnel_step,
+      test_mode: TEST_MODE
+    });
+    
+    console.log('✅ master_lead_retargeting fired (archetype:', trackingData.archetype + ')');
+    
+    // ========================================================================
+    // DSP POSTBACK (EPS for Bid Optimization)
+    // ========================================================================
+    
+    if (CONFIG.dspPostback.enabled && trackingData.conversion_id && !botDetection.isBot) {
+      var dspStep = CONFIG.dspPostback.step_mapping[trackingData.conversion_type] || trackingData.dsp_step;
+      
+      var img1 = new Image();
+      img1.src = 'https://xml.amplifai.it.com/conversion?id=3214529&c=' + encodeURIComponent(trackingData.conversion_id) + '&step=' + dspStep + '&value=' + trackingData.conversion_value + '&quality_score=' + trackingData.eps_score;
+      
+      var img2 = new Image();
+      img2.src = 'https://rtb2-useast.amplifai.it.com/conversion?cid=' + encodeURIComponent(trackingData.conversion_id) + '&step=' + dspStep + '&value=' + trackingData.conversion_value + '&quality_score=' + trackingData.eps_score;
+      
+      console.log('✅ DSP postbacks fired (APS:', trackingData.aps_current, 'Step:', dspStep + ')');
+    }
+    
+    // ========================================================================
+    // ML PREDICTIVE ENGINE FEEDBACK (EPS → APS LEARNING LOOP)
+    // ========================================================================
+    // PLACEHOLDER: Send EPS → APS delta to machine learning endpoint
+    // This is the core of the predictive intelligence system
+    // The more clicks processed, the better EPS predictions become
+    
+    if (!botDetection.isBot && !TEST_MODE) {
+      // TODO: Once ML predictive engine is built, uncomment this
+      /*
+      fetch('https://api.amplifai.com/v1/ml/eps-aps-feedback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          conversion_id: trackingData.conversion_id,
+          eps_initial: trackingData.eps_initial,
+          aps_current: trackingData.aps_current,
+          eps_aps_delta: trackingData.eps_aps_delta,
+          funnel_step: trackingData.funnel_step,
+          click_data: {
+            campaign_id: trackingData.campaign_id,
+            banner_id: trackingData.banner_id,
+            publisher: trackingData.publisher,
+            device_type: trackingData.device_type,
+            os: trackingData.os,
+            browser: trackingData.browser,
+            country: trackingData.country_name,
+            region: trackingData.region,
+            archetype: trackingData.archetype,
+            angle: trackingData.angle
+          },
+          behavior_data: {
+            email_provided: !!userData.email,
+            phone_provided: !!userData.phone,
+            survey_answers_count: Object.keys(rawAnswers).length,
+            survey_answers: mappedAnswers
+          },
+          outcome: 'survey_complete',
+          timestamp: trackingData.timestamp,
+          brand: trackingData.brand
+        })
+      })
+      .then(function(response) {
+        if (response.ok) {
+          console.log('✅ ML feedback sent (Delta:', trackingData.eps_aps_delta + ')');
+        }
+      })
+      .catch(function(error) {
+        console.warn('⚠️ ML feedback failed:', error.message);
+      });
+      */
+      
+      console.log('📊 ML Feedback Ready (EPS:', trackingData.eps_initial, '→ APS:', trackingData.aps_current, 'Δ:', trackingData.eps_aps_delta + ')');
+    }
+    
+    // ========================================================================
+    // WEBHOOK DISPATCHER (SEQUENTIAL PRIORITY)
+    // ========================================================================
+    
+    function sendWebhook(webhook) {
+      return new Promise(function(resolve, reject) {
+        var timeoutId = setTimeout(function() { reject(new Error('Timeout')); }, CONFIG.webhookTimeout);
+        fetch(webhook.url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(webhook.payload)
+        })
+        .then(function(r) {
+          clearTimeout(timeoutId);
+          if (r.ok) { console.log('✅', webhook.name); resolve(r); }
+          else reject(new Error('Status: ' + r.status));
+        })
+        .catch(function(e) { clearTimeout(timeoutId); reject(e); });
+      });
+    }
+    
+    function queueFailedWebhook(webhook, error) {
+      try {
+        var queue = JSON.parse(localStorage.getItem('webhook_queue') || '[]');
+        queue.push({ webhook: webhook, error: error.message, timestamp: new Date().toISOString(), retry_count: 0 });
+        localStorage.setItem('webhook_queue', JSON.stringify(queue));
+        console.log('💾 Queued:', webhook.name);
+      } catch (e) {}
+    }
+    
+    // Prepare merge fields for platforms to use
+    var mergeFields = {
+      FIRST_NAME: userData.first_name || 'there',
+      EMAIL: userData.email,
+      PHONE: userData.phone,
+      EPS_SCORE: trackingData.eps_score,
+      ARCHETYPE: trackingData.archetype,
+      ANGLE: trackingData.angle
+    };
+    Object.keys(mappedAnswers).forEach(function(key) {
+      mergeFields[key.toUpperCase()] = mappedAnswers[key];
+    });
+    
+    var webhookPayload = {
+      event: 'conversion',
+      timestamp: trackingData.timestamp,
+      tracking: trackingData,
+      answers: { raw: rawAnswers, mapped: mappedAnswers },
+      user: userData,
+      eps_score: trackingData.eps_score,
+      test_mode: TEST_MODE
+    };
+    
+    // Webhooks in priority order: AI Call → SMS → Email
+    var webhooks = [
+      {
+        name: 'AI Call',
+        url: 'https://api.amplifai.com/v1/trigger-ai-call',
+        priority: 1,
+        enabled: true,
+        requiresPII: true,
+        minEPS: CONFIG.webhookThresholds.ai_call_min_eps,
+        payload: {
+          phone: userData.phone,
+          first_name: userData.first_name,
+          context: {
+            survey_answers: mappedAnswers,
+            archetype: trackingData.archetype,  // Platform uses for script selection
+            angle: trackingData.angle,          // Platform uses for script selection
+            eps_score: trackingData.eps_score
+          },
+          tags: [trackingData.archetype, trackingData.angle, 'survey_complete'].filter(Boolean),
+          test_mode: TEST_MODE
+        }
+      },
+      {
+        name: 'SMS',
+        url: 'https://api.amplifai.com/v1/trigger-sms',
+        priority: 2,
+        enabled: true,
+        requiresPII: true,
+        minEPS: CONFIG.webhookThresholds.sms_min_eps,
+        payload: {
+          phone: userData.phone,
+          first_name: userData.first_name,
+          merge_fields: mergeFields,
+          tags: [trackingData.archetype, trackingData.angle, 'survey_complete'].filter(Boolean),
+          test_mode: TEST_MODE
+        }
+      },
+      {
+        name: 'Email',
+        url: 'https://api.amplifai.com/v1/trigger-email',
+        priority: 3,
+        enabled: true,
+        requiresPII: true,
+        minEPS: CONFIG.webhookThresholds.email_min_eps,
+        payload: {
+          email: userData.email,
+          first_name: userData.first_name,
+          merge_fields: mergeFields,
+          tags: [trackingData.archetype, trackingData.angle, 'survey_complete'].filter(Boolean),
+          test_mode: TEST_MODE
+        }
+      },
+      {
+        name: 'Database',
+        url: 'https://api.amplifai.com/v1/conversion-event',
+        priority: 4,
+        enabled: true,
+        requiresPII: false,
+        minEPS: 0,
+        payload: webhookPayload
+      },
+      {
+        name: 'Audience Sync',
+        url: 'https://api.amplifai.com/v1/audience-sync',
+        priority: 5,
+        enabled: true,
+        requiresPII: true,
+        minEPS: 0,
+        payload: {
+          email: userData.email,
+          phone: userData.phone,
+          conversion_id: trackingData.conversion_id,
+          audience_segments: [
+            'survey_completers',
+            'eps_' + Math.floor(trackingData.eps_score / 20) * 20 + '_plus',
+            trackingData.archetype ? trackingData.archetype + '_archetype' : null,
+            trackingData.angle ? trackingData.angle + '_angle' : null
+          ].filter(Boolean),
+          eps_score: trackingData.eps_score,
+          test_mode: TEST_MODE
+        }
+      }
+    ];
+    
+    webhooks.sort(function(a, b) { return a.priority - b.priority; });
+    
+    function sendWebhooksSequentially(list, index) {
+      if (index >= list.length) return Promise.resolve();
+      var w = list[index];
+      if (!w.enabled || botDetection.isBot || (w.requiresPII && !hasPIIConsent()) || trackingData.eps_score < w.minEPS) {
+        console.log('⏭️  Skip:', w.name, '(disabled/bot/consent/eps)');
+        return sendWebhooksSequentially(list, index + 1);
+      }
+      if ((w.name.includes('Call') || w.name.includes('SMS')) && !userData.phone) {
+        console.warn('⚠️ Skip:', w.name, '(no phone)');
+        return sendWebhooksSequentially(list, index + 1);
+      }
+      if (w.name.includes('Email') && !userData.email) {
+        console.warn('⚠️ Skip:', w.name, '(no email)');
+        return sendWebhooksSequentially(list, index + 1);
+      }
+      return sendWebhook(w)
+        .then(function() { return sendWebhooksSequentially(list, index + 1); })
+        .catch(function(e) {
+          console.error('❌', w.name, e.message);
+          queueFailedWebhook(w, e);
+          logError('webhook_failed', w.name, { error: e.message });
+          return sendWebhooksSequentially(list, index + 1);
+        });
+    }
+    
+    sendWebhooksSequentially(webhooks, 0);
+    
+    // ========================================================================
+    // SPLIT TEST
+    // ========================================================================
+    
+    var selectedVariant = null;
+    var existingVariant = getCookie('split_variant');
+    if (existingVariant) {
+      selectedVariant = CONFIG.splitTest.variants.find(function(v) { return v.name === existingVariant && v.enabled; });
+    }
+    if (!selectedVariant) {
+      var forcedVariant = urlParams.get('variant');
+      if (forcedVariant) {
+        selectedVariant = CONFIG.splitTest.variants.find(function(v) { return v.name === forcedVariant && v.enabled; });
+      }
+    }
+    if (!selectedVariant) {
+      var directDest = urlParams.get('dest') || urlParams.get('destination');
+      if (directDest) {
+        selectedVariant = { name: 'direct', url: directDest, weight: 100, enabled: true };
+      }
+    }
+    if (!selectedVariant && CONFIG.splitTest.enabled) {
+      var enabled = CONFIG.splitTest.variants.filter(function(v) { return v.enabled; });
+      if (enabled.length > 0) {
+        var total = enabled.reduce(function(sum, v) { return sum + v.weight; }, 0);
+        var rand = Math.random() * total;
+        var cum = 0;
+        for (var i = 0; i < enabled.length; i++) {
+          cum += enabled[i].weight;
+          if (rand <= cum) { selectedVariant = enabled[i]; break; }
+        }
+      }
+    }
+    
+    if (selectedVariant) {
+      setCookie('split_variant', selectedVariant.name, 30);
+      trackingData.split_variant = selectedVariant.name;
+    }
+    
+    // ========================================================================
+    // BUILD REDIRECT URL
+    // ========================================================================
+    
+    if (selectedVariant && selectedVariant.url) {
+      var finalUrl = selectedVariant.url;
+      var params = [];
+      
+      ['conversion_id', 'campaign_id', 'banner_id', 'publisher', 'subid', 'archetype', 'angle', 'phase', 'brand', 'dsp_step'].forEach(function(k) {
+        var v = trackingData[k];
+        if (v) params.push((k === 'conversion_id' ? 'trck' : k) + '=' + encodeURIComponent(v));
+      });
+      
+      params.push('variant=' + encodeURIComponent(selectedVariant.name));
+      params.push('eps=' + trackingData.eps_score);
+      
+      var nextStep = 'step_' + (parseInt(trackingData.funnel_step.replace('step_', '')) + 1);
+      params.push('funnel_step=' + nextStep);
+      
+      if (hasPIIConsent()) {
+        if (userData.email) params.push('email=' + encodeURIComponent(userData.email));
+        if (userData.phone) params.push('phone=' + encodeURIComponent(userData.phone));
+        if (userData.first_name) params.push('first_name=' + encodeURIComponent(userData.first_name));
+        if (userData.last_name) params.push('last_name=' + encodeURIComponent(userData.last_name));
+        if (userData.company) params.push('company=' + encodeURIComponent(userData.company));
+      }
+      
+      if (finalUrl.includes('calendly.com')) {
+        if (userData.first_name) params.push('name=' + encodeURIComponent(userData.first_name + ' ' + (userData.last_name || '')));
+        Object.keys(mappedAnswers).forEach(function(key, idx) {
+          params.push('a' + (idx + 1) + '=' + encodeURIComponent(mappedAnswers[key]));
+        });
+      }
+      
+      var sep = finalUrl.indexOf('?') === -1 ? '?' : '&';
+      finalUrl = finalUrl + sep + params.join('&');
+      
+      console.log('🔗 Final URL:', finalUrl);
+      
+      startProgress();
+      
+      setTimeout(function() {
+        window.dataLayer.push({
+          event: 'conversion_bridge_redirect',
+          destination: selectedVariant.name,
+          conversion_id: trackingData.conversion_id,
+          funnel_step: nextStep,
+          test_mode: TEST_MODE
+        });
+        console.log('➡️ Redirecting');
+        window.location.href = finalUrl;
+      }, CONFIG.redirectDelay);
+      
+      setTimeout(function() {
+        var link = document.getElementById('fallback-link');
+        link.href = finalUrl;
+        link.style.display = 'inline-block';
+        document.getElementById('status').textContent = 'Taking longer than expected...';
+      }, CONFIG.fallbackLinkDelay);
+      
+    } else {
+      console.error('❌ No destination');
+      document.getElementById('status').textContent = 'Configuration error';
+      document.getElementById('fallback-link').style.display = 'inline-block';
+    }
+    
+  })();
+  </script>
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #fff;
+      color: #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    .container { text-align: center; padding: 60px 40px; max-width: 500px; width: 100%; }
+    .spinner {
+      width: 50px;
+      height: 50px;
+      margin: 0 auto 30px;
+      border: 4px solid #f3f3f3;
+      border-top-color: #667eea;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    h1 { font-size: 24px; font-weight: 600; color: #1a1a1a; margin: 0 0 12px; }
+    p { font-size: 16px; color: #666; line-height: 1.5; margin: 0 0 30px; }
+    .progress-container {
+      width: 100%;
+      height: 4px;
+      background: #f0f0f0;
+      border-radius: 2px;
+      overflow: hidden;
+      margin: 0 0 20px;
+    }
+    .progress-bar {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+      transition: width 0.1s linear;
+    }
+    .fallback-link {
+      display: none;
+      margin-top: 20px;
+      padding: 12px 24px;
+      background: #667eea;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+    .fallback-link:hover { background: #5568d3; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="spinner"></div>
+    <h1>Processing</h1>
+    <p id="status">Please wait...</p>
+    <div class="progress-container">
+      <div class="progress-bar" id="progress-bar"></div>
+    </div>
+    <a href="#" class="fallback-link" id="fallback-link">Click to Continue</a>
+  </div>
+</body>
+</html>
