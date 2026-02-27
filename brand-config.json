@@ -8,25 +8,25 @@
     "_comment": "========== STEP 1: YOUR BRAND INFORMATION ==========",
     "_instructions": "Fill in your brand details below. This appears on all pages.",
     
-    "name": "Your Brand Name",
+    "name": "Beyond Borders Matchmaking",
     "_name_help": "👆 Type your company name here (example: Killer Whale Ventures)",
     
-    "code": "ybr",
-    "_code_help": "👆 Create a 2-4 letter code for yoFur brand (lowercase, no spaces). Examples: kwv, nike, aapl. This is used in image filenames.",
+    "code": "bbmm",
+    "_code_help": "👆 Create a 2-4 letter code for your brand (lowercase, no spaces). Examples: kwv, nike, aapl. This is used in image filenames.",
     
     "domain": "lp.beyondbordersmatchmaking.com",
-    "_domain_help": "👆 Your landing page domain (example: lp.killerwhaleventures.com)",
+    "_domain_help": "👆 Your landing page domain (example: lp.beyondbordersmatchmaking.com)",
     
-    "gtmId": "GTM-XXXXXXX",
+    "gtmId": "GTM-THBRKCTQ",
     "_gtmId_help": "👆 Your Google Tag Manager container ID. Get this from: tagmanager.google.com > Admin > Container Settings",
-    "_gtmId_format": "Format must be: GTM-XXXXXXX (example: GTM-T639H2SD)",
-    "_gtmId_critical": "🚨 CRITICAL: This MUST be changed from GTM-XXXXXXX to your actual container ID. Without this, NO TRACKING will work! All conversion tracking, retargeting pixels, and postbacks require GTM to be configured correctly.",
+    "_gtmId_format": "Format must be: GTM-THBRKCTQ (example: GTM-T639H2SD)",
+    "_gtmId_critical": "🚨 CRITICAL: This MUST be changed from GTM-THBRKCTQ to your actual container ID. Without this, NO TRACKING will work! All conversion tracking, retargeting pixels, and postbacks require GTM to be configured correctly.",
     "_gtmId_where_to_get": "Get your GTM ID: 1) Go to tagmanager.google.com, 2) Click Admin (bottom left), 3) Click Container Settings, 4) Copy the Container ID (starts with GTM-)",
     
     "logo": "logo.png",
     "_logo_help": "👆 Your logo filename in the /public/ folder",
     
-    "copyright": "© 2026 Your Brand Name. All rights reserved.",
+    "copyright": "© 2026 Beyond Borders Matchmaking. All rights reserved.",
     "_copyright_help": "👆 Copyright text shown in footer. Update the year and company name."
   },
   
@@ -35,13 +35,13 @@
     "_instructions": "Customize your landing page headline, button text, and background image.",
     
     "defaults": {
-      "headline": "Transform Your Business Today",
+      "headline": "Finding Love Shouldn't Be This Hard. Meet Your Future Wife in Colombia.",
       "_headline_help": "👆 Main headline on your landing page. Make it compelling! (40-60 characters works best)",
       
-      "subheadline": "Join thousands of successful companies already using our proven system",
+      "subheadline": "Beyond Borders Matchmaking connects American men with beautiful, marriage-minded Colombian women through personalized matchmaking and hands-on support every step of the way.",
       "_subheadline_help": "👆 Subheadline below main headline. Explain your value proposition. (60-120 characters)",
       
-      "cta_text": "Get Started Now",
+      "cta_text": "Meet Your Future Wife",
       "_cta_text_help": "👆 Text on your main button. Keep it short and action-oriented. Examples: 'Get Started Now', 'Book Demo', 'View Live Signals'",
       
       "cta_link": "https://calendly.com/yourbrand/meeting",
@@ -156,18 +156,18 @@
         "text": "Privacy",
         "_text_help": "👆 Link text shown to users",
         
-        "url": "https://yourbrand.com/privacy",
+        "url": "https://www.beyondbordersmatchmaking.com/privacy-policy",
         "_url_help": "👆 URL to your privacy policy page"
       },
       
       "terms": {
         "enabled": true,
         "text": "Terms",
-        "url": "https://yourbrand.com/terms"
+        "url": "https://www.beyondbordersmatchmaking.com/terms-of-service"
       },
       
       "cookies": {
-        "enabled": true,
+        "enabled": false,
         "text": "Cookies",
         "url": "https://yourbrand.com/cookies"
       },
@@ -175,7 +175,7 @@
       "contact": {
         "enabled": true,
         "text": "Contact",
-        "url": "https://yourbrand.com/contact"
+        "url": "https://www.beyondbordersmatchmaking.com/contact-us"
       }
     }
   },
