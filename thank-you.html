@@ -1,457 +1,521 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thank You!</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="page-title">Thank You</title>
+  
+  <!--
+  ========================================================================
+  THANK YOU PAGE MASTER TEMPLATE v2.2
+  ========================================================================
+  
+  CHANGELOG v2.2:
+  - Added funnel_step: 'step_3' to thankyou_conversion event
+  - Added funnel_step: 'step_3' to dsp_postback event
+  
+  ========================================================================
+  -->
+  
+  <link rel="icon" type="image/png" id="favicon" href="/public/favicon.png">
+  
+  <script id="gtm-loader"></script>
+  
+  <style>
+    :root {
+      --brand-accent: #2563eb;
+      --brand-accent-text: #ffffff;
+      --brand-text: #ffffff;
+      --brand-font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Helvetica Neue", Helvetica, sans-serif;
+      --brand-bg: #0a1f31;
+    }
     
-    <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-XXXXXXX');</script>
-    <!-- End Google Tag Manager -->
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
     
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 2rem;
-        }
-        
-        .thank-you-container {
-            background: white;
-            border-radius: 1rem;
-            padding: 3rem;
-            max-width: 600px;
-            text-align: center;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        }
-        
-        .checkmark {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: #10b981;
-            margin: 0 auto 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            animation: scaleIn 0.5s ease-out;
-        }
-        
-        .checkmark svg {
-            width: 50px;
-            height: 50px;
-            stroke: white;
-            stroke-width: 3;
-            fill: none;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-            stroke-dasharray: 100;
-            stroke-dashoffset: 100;
-            animation: drawCheck 0.5s ease-out 0.3s forwards;
-        }
-        
-        @keyframes scaleIn {
-            0% { transform: scale(0); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-        
-        @keyframes drawCheck {
-            to { stroke-dashoffset: 0; }
-        }
-        
-        h1 {
-            font-size: 2.5rem;
-            color: #1f2937;
-            margin-bottom: 1rem;
-        }
-        
-        p {
-            font-size: 1.125rem;
-            color: #6b7280;
-            line-height: 1.6;
-        }
-        
-        .next-steps {
-            margin-top: 2rem;
-            padding: 1.5rem;
-            background: #f3f4f6;
-            border-radius: 0.5rem;
-            text-align: left;
-        }
-        
-        .next-steps h2 {
-            font-size: 1.25rem;
-            color: #1f2937;
-            margin-bottom: 1rem;
-        }
-        
-        .next-steps ul {
-            list-style: none;
-        }
-        
-        .next-steps li {
-            padding: 0.5rem 0;
-            color: #4b5563;
-        }
-        
-        .next-steps li:before {
-            content: "✓ ";
-            color: #10b981;
-            font-weight: bold;
-            margin-right: 0.5rem;
-        }
-    </style>
+    body {
+      font-family: var(--brand-font);
+      background: var(--brand-bg);
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      position: relative;
+    }
+    
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.75);
+      z-index: 0;
+      pointer-events: none;
+    }
+    
+    .container {
+      background: transparent;
+      border-radius: 0;
+      padding: 48px 24px;
+      max-width: 720px;
+      width: 100%;
+      box-shadow: none;
+      text-align: center;
+      margin-bottom: 80px;
+      position: relative;
+      z-index: 1;
+      color: #ffffff;
+    }
+    
+    .checkmark {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 24px;
+      background: transparent;
+      border: 4px solid var(--brand-accent);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      color: var(--brand-accent);
+      animation: checkmarkPop 0.5s ease;
+    }
+    
+    @keyframes checkmarkPop {
+      0% { transform: scale(0); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+    
+    h1 {
+      font-size: 38px;
+      color: #ffffff;
+      margin-bottom: 16px;
+      font-weight: 800;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+    }
+    
+    p {
+      font-size: 18px;
+      color: #ffffff;
+      line-height: 1.45;
+      margin-bottom: 24px;
+      opacity: 0.95;
+    }
+    
+    .info-box {
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 24px;
+      margin: 32px 0;
+      text-align: left;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .info-box h3 {
+      color: #ffffff;
+      margin-bottom: 12px;
+      font-size: 20px;
+      font-weight: 700;
+    }
+    
+    .info-box ul {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .info-box li {
+      padding: 8px 0;
+      color: rgba(255, 255, 255, 0.95);
+      font-size: 16px;
+    }
+    
+    .info-box li:before {
+      content: "✓";
+      color: var(--brand-accent);
+      font-weight: bold;
+      margin-right: 8px;
+    }
+    
+    #echo-footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0,0,0,0.8);
+      color: rgba(255,255,255,0.7);
+      padding: 16px 20px;
+      font-size: 12px;
+      text-align: center;
+      z-index: 1000;
+      backdrop-filter: blur(10px);
+    }
+
+    #footer-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    #footer-links {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    #footer-links a {
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    #footer-links a:hover {
+      color: rgba(255,255,255,1);
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        padding: 32px 24px;
+      }
+      
+      h1 {
+        font-size: 28px;
+      }
+      
+      p {
+        font-size: 16px;
+      }
+      
+      #footer-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 8px;
+      }
+      
+      #footer-links {
+        justify-content: center;
+      }
+      
+      #echo-footer {
+        font-size: 11px;
+        padding: 12px 16px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) -->
+
+<noscript id="gtm-noscript"></noscript>
+
+<div class="container">
+  
+  <div class="checkmark">✓</div>
+  
+  <h1 id="page-title-main">Thank You!</h1>
+  
+  <p id="page-subtitle">Your request has been confirmed.</p>
+  
+  <div class="info-box" id="info-section">
+    <h3 id="info-title">What Happens Next:</h3>
+    <ul id="info-list">
+      <li>Check your email for confirmation</li>
+      <li>We'll be in touch shortly</li>
+      <li>Have any questions? Reply to our email</li>
+    </ul>
+  </div>
+  
+  <p style="margin-top: 32px;">
+    <strong>Thank you!</strong><br>
+    <span id="brand-name">Brand Name</span>
+  </p>
+</div>
+
+<footer id="echo-footer">
+  <div id="footer-content">
+    <p id="footer-copyright"></p>
+    <div id="footer-links"></div>
+  </div>
+</footer>
+
+<script>
+(function() {
+  "use strict";
+  
+  let brandConfig = null;
+  
+  fetch('/brand-config.json')
+    .then(res => {
+      if (!res.ok) throw new Error('Config file not found');
+      return res.json();
+    })
+    .then(config => {
+      brandConfig = config;
+      brandConfig._loaded = true;
+      console.log('✅ brand-config.json loaded');
+      initializePage();
+    })
+    .catch(err => {
+      console.warn('⚠️ brand-config.json not found, using defaults');
+      brandConfig = {
+        brand: { name: 'Brand Name', code: 'brand', gtmId: 'GTM-XXXXXXX', copyright: '© 2026 Brand Name. All rights reserved.' },
+        thank_you_page: { headline: 'Thank You!', subheadline: 'Your request has been confirmed.', redirect: { enabled: false } },
+        footer: { links: {} },
+        tracking: { cookies: { expirationDays: 365 } }
+      };
+      initializePage();
+    });
+
+  function initializePage() {
     
-    <div class="thank-you-container">
-        <div class="checkmark">
-            <svg viewBox="0 0 52 52">
-                <path d="M14 27l8 8 16-16"/>
-            </svg>
-        </div>
-        
-        <h1>Thank You!</h1>
-        <p>Your request has been successfully submitted. We'll be in touch with you shortly.</p>
-        
-        <div class="next-steps">
-            <h2>What Happens Next?</h2>
-            <ul>
-                <li>Check your email for confirmation</li>
-                <li>We'll reach out within 24 hours</li>
-                <li>Keep an eye on your phone for our call</li>
-            </ul>
-        </div>
-    </div>
-
-    <script>
-    // ========================================================================
-    // MASTER THANK YOU PAGE - COMPLETE 182-PARAMETER DATA LAYER PUSH
-    // ========================================================================
-    // CORRECTED: Uses exact AdKernel/Keitaro macro names (no _id suffixes)
-    // ========================================================================
-
-    (function() {
-        'use strict';
-        
-        // Helper function to get cookie
-        function getCookie(name) {
-            const value = `; ${document.cookie}`;
-            const parts = value.split(`; ${name}=`);
-            if (parts.length === 2) {
-                return decodeURIComponent(parts.pop().split(';').shift());
-            }
-            return '';
+    const gtmId = brandConfig.brand.gtmId;
+    const gtmScript = document.getElementById('gtm-loader');
+    gtmScript.innerHTML = `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','${gtmId}');`;
+    
+    const noscript = document.getElementById('gtm-noscript');
+    noscript.innerHTML = `<iframe src="https://www.googletagmanager.com/ns.html?id=${gtmId}" height="0" width="0" style="display:none;visibility:hidden"></iframe>`;
+    
+    function getCookie(name) {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return decodeURIComponent(parts.pop().split(';').shift());
+      return '';
+    }
+    
+    function parseValue(value) {
+      if (value === '' || value === null || value === undefined) return undefined;
+      if (value === 'true') return true;
+      if (value === 'false') return false;
+      const num = Number(value);
+      return !isNaN(num) && value !== '' ? num : value;
+    }
+    
+    const DEBUG = new URLSearchParams(window.location.search).get("debug") === "1";
+    const urlPath = window.location.pathname;
+    const urlParams = new URLSearchParams(window.location.search);
+    const conversionType = urlParams.get('type') || detectConversionType(urlPath);
+    
+    function detectConversionType(path) {
+      if (path.includes('booking') || path.includes('calendly')) return 'booking';
+      if (path.includes('form') || path.includes('lead')) return 'lead';
+      if (path.includes('purchase') || path.includes('payment')) return 'purchase';
+      if (path.includes('signup') || path.includes('register')) return 'signup';
+      if (path.includes('download')) return 'download';
+      return 'generic';
+    }
+    
+    const dataLayerData = {
+      event: 'thankyou_conversion',
+      funnel_step: 'step_3',
+      brand: brandConfig.brand.code,
+      conversion_type: conversionType,
+      conversion: getCookie('conversion'), goal_id: getCookie('goal_id'), campaign: getCookie('campaign'),
+      banner: getCookie('banner'), offer: getCookie('offer'), publisher: getCookie('publisher'),
+      conversion_value: parseValue(getCookie('conversion_value')) || 0, dsp_step: parseValue(getCookie('dsp_step')) || 3,
+      pubzone: getCookie('pubzone'), country_name: getCookie('country_name'), region: getCookie('region'),
+      city: getCookie('city'), device_type: getCookie('device_type'), os: getCookie('os'), browser: getCookie('browser'),
+      Keyword: getCookie('Keyword'), bid: parseValue(getCookie('bid')), date: getCookie('date'),
+      day_of_month: getCookie('day_of_month'), day_of_week: getCookie('day_of_week'), device_brand: getCookie('device_brand'),
+      device_model: getCookie('device_model'), request_id: getCookie('request_id'), month: getCookie('month'),
+      original_subid: getCookie('original_subid'), os_type: getCookie('os_type'), postback_id: getCookie('postback_id'),
+      app_bundle: getCookie('app_bundle'), app_id: getCookie('app_id'), pubfeed: getCookie('pubfeed'),
+      subid: getCookie('subid'), payout: parseValue(getCookie('payout')), pubpoint: getCookie('pubpoint'),
+      Query: getCookie('Query'), site_id: getCookie('site_id'), referrer_domain: getCookie('referrer_domain'),
+      remfeed: getCookie('remfeed'), ga: getCookie('ga'), search_referrer_domain: getCookie('search_referrer_domain'),
+      search_ip: getCookie('search_ip'), source_subid: getCookie('source_subid'), State_Name: getCookie('State_Name'),
+      source: getCookie('source'), ip: getCookie('ip'), carrier: getCookie('carrier'), zip: getCookie('zip'),
+      state: getCookie('state'), country: getCookie('country'), page_url: getCookie('page_url'),
+      referrer: getCookie('referrer'), timestamp: getCookie('timestamp'), user_agent: getCookie('user_agent'),
+      placement_id: getCookie('placement_id'), tagid: getCookie('tagid'),
+      keitaro_subid: getCookie('keitaro_subid'), _lp: getCookie('_lp'), _offer_id: getCookie('_offer_id'),
+      sub1: getCookie('sub1'), sub2: getCookie('sub2'), sub3: getCookie('sub3'), sub4: getCookie('sub4'),
+      sub5: getCookie('sub5'), sub6: getCookie('sub6'), sub7: getCookie('sub7'), sub8: getCookie('sub8'),
+      sub9: getCookie('sub9'), sub10: getCookie('sub10'),
+      av: getCookie('av'), mb: getCookie('mb'), io: getCookie('io'), ct: getCookie('ct'), ps: getCookie('ps'),
+      ca: getCookie('ca'), up: getCookie('up'), se: getCookie('se'),
+      ss: getCookie('ss'), ht: getCookie('ht'), mpp: getCookie('mpp'), nts: getCookie('nts'), vs: getCookie('vs'),
+      bm: getCookie('bm'), ts: getCookie('ts'), gtu: getCookie('gtu'), vl: getCookie('vl'), ve: getCookie('ve'),
+      ii: getCookie('ii'), ih: getCookie('ih'), ic: getCookie('ic'), bc: getCookie('bc'), in: getCookie('in'),
+      to: getCookie('to'), sp: getCookie('sp'), at: getCookie('at'), wf: getCookie('wf'),
+      pi: getCookie('pi'), th: getCookie('th'), mc: getCookie('mc'), ul: getCookie('ul'), pz: getCookie('pz'),
+      ag: getCookie('ag'), vh: getCookie('vh'), eit: getCookie('eit'), ue: getCookie('ue'),
+      fi: getCookie('fi'), hl: getCookie('hl'), sh: getCookie('sh'), cta: getCookie('cta'), img: getCookie('img'),
+      link: getCookie('link'), font: getCookie('font'), btn_color: getCookie('btn_color'), btn_text: getCookie('btn_text'),
+      btn_size: getCookie('btn_size'), btn_style: getCookie('btn_style'), hl_size: getCookie('hl_size'),
+      sh_size: getCookie('sh_size'), hl_color: getCookie('hl_color'), sh_color: getCookie('sh_color'),
+      overlay: getCookie('overlay'), overlay_custom: getCookie('overlay_custom'), social_proof: getCookie('social_proof'),
+      social_text: getCookie('social_text'), scarcity: getCookie('scarcity'), scarcity_text: getCookie('scarcity_text'),
+      progress: getCookie('progress'), micro_yes: getCookie('micro_yes'), micro_text: getCookie('micro_text'),
+      archetype: getCookie('archetype'), angle: getCookie('angle'), variant: getCookie('variant'),
+      phase: getCookie('phase'), ad: getCookie('ad'),
+      session_token: getCookie('session_token'), user_fingerprint: getCookie('user_fingerprint'),
+      belief_pattern: getCookie('belief_pattern'), archetype_signature_token: getCookie('archetype_signature_token'),
+      remnant_index: parseValue(getCookie('remnant_index')) || 0, exit_trigger: getCookie('exit_trigger'),
+      activation_path_code: getCookie('activation_path_code'), emotional_readiness: parseValue(getCookie('emotional_readiness')) || 0,
+      token_lineage: getCookie('token_lineage'), soul_pattern_map: getCookie('soul_pattern_map'),
+      eps_score: parseValue(getCookie('eps_score')) || 0, aps_score: parseValue(getCookie('aps_score')) || 0,
+      attention_root: getCookie('attention_root'), friction_point: getCookie('friction_point'),
+      mirror_moment_event: getCookie('mirror_moment_event'), shame_trigger: getCookie('shame_trigger'),
+      truth_signal: getCookie('truth_signal'), faith_factor: parseValue(getCookie('faith_factor')) || 0,
+      variant_generation: getCookie('variant_generation'), mutation_parent: getCookie('mutation_parent'),
+      token_decay_score: parseValue(getCookie('token_decay_score')) || 0, copy_evolution_path: getCookie('copy_evolution_path'),
+      winning_token_cluster: getCookie('winning_token_cluster'), resurrection_trigger_type: getCookie('resurrection_trigger_type'),
+      seen_day: getCookie('seen_day') || 'day0', interaction_count: parseValue(getCookie('interaction_count')) || 1,
+      previous_exit_reason: getCookie('previous_exit_reason'), sku_clicks: getCookie('sku_clicks'),
+      memory_chain_id: getCookie('memory_chain_id'), behavioral_fingerprint_history: getCookie('behavioral_fingerprint_history'),
+      ltv_ramp_vector: getCookie('ltv_ramp_vector'), offer_stack_position: getCookie('offer_stack_position'),
+      destiny_alignment_score: parseValue(getCookie('destiny_alignment_score')) || 0,
+      bonus_stack_resonance: getCookie('bonus_stack_resonance'), guarantee_safety_score: parseValue(getCookie('guarantee_safety_score')) || 0,
+      scroll_depth: parseValue(getCookie('scroll_depth')) || 0, time_on_page: parseValue(getCookie('time_on_page')) || 0,
+      return_visitor: parseValue(getCookie('return_visitor')) || false, session_count: parseValue(getCookie('session_count')) || 1,
+      entry_page: getCookie('entry_page'), funnel_step: getCookie('funnel_step'),
+      exit_intent_triggered: parseValue(getCookie('exit_intent_triggered')) || false,
+      form_fields_filled: parseValue(getCookie('form_fields_filled')) || 0, chat_messages_sent: parseValue(getCookie('chat_messages_sent')) || 0,
+      lead_quality_score: parseValue(getCookie('lead_quality_score')) || 0, email_verified: parseValue(getCookie('email_verified')) || false,
+      phone_verified: parseValue(getCookie('phone_verified')) || false, appointment_confirmed: parseValue(getCookie('appointment_confirmed')) || false,
+      predicted_show_rate: parseValue(getCookie('predicted_show_rate'))
+    };
+    
+    Object.keys(dataLayerData).forEach(key => {
+      if (dataLayerData[key] === undefined || dataLayerData[key] === null || dataLayerData[key] === '') delete dataLayerData[key];
+    });
+    
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push(dataLayerData);
+    
+    if (DEBUG) {
+      console.log('✅ GTM Data Layer Complete!');
+      console.log('📊 Parameters:', Object.keys(dataLayerData).length);
+      console.log('🔑 Conversion:', dataLayerData.conversion);
+      console.log('📈 Data:', dataLayerData);
+    } else {
+      console.log('✅ Thank You - Conversion tracked');
+    }
+    
+    window.dataLayer.push({
+      event: 'dsp_postback',
+      conversion: dataLayerData.conversion,
+      goal_id: dataLayerData.goal_id,
+      dsp_step: dataLayerData.dsp_step,
+      conversion_value: dataLayerData.conversion_value || 0,
+      aps_current: dataLayerData.aps_score || 0,
+      eps_initial: dataLayerData.eps_score || 0,
+      campaign: dataLayerData.campaign,
+      banner: dataLayerData.banner,
+      publisher: dataLayerData.publisher,
+      archetype: dataLayerData.archetype,
+      angle: dataLayerData.angle,
+      ad: dataLayerData.ad,
+      funnel_step: 'step_3'
+    });
+    
+    if (DEBUG) console.log('✅ dsp_postback event fired (GTM handles pixels)');
+    
+    window.dataLayer.push({
+      event: 'master_converted_retargeting',
+      conversion_type: conversionType,
+      conversion: dataLayerData.conversion,
+      eps_score: dataLayerData.eps_score || 0,
+      aps_current: dataLayerData.aps_score || 0,
+      archetype: dataLayerData.archetype,
+      angle: dataLayerData.angle,
+      ad: dataLayerData.ad,
+      phase: dataLayerData.phase,
+      campaign: dataLayerData.campaign,
+      banner: dataLayerData.banner,
+      funnel_step: 'step_3'
+    });
+    
+    if (DEBUG) {
+      console.log('✅ master_converted_retargeting fired');
+      console.log('   Archetype:', dataLayerData.archetype, '| Angle:', dataLayerData.angle);
+      console.log('   GTM will fire conditional pixels/webhooks for converted leads');
+    }
+    
+    const contentConfig = {
+      'booking': {
+        title: "You're All Set!", subtitle: "Your appointment has been confirmed.", infoTitle: "What to Expect:",
+        infoItems: ["A deep dive into your situation", "Personalized recommendations", "Live demo", "Q&A session"]
+      },
+      'lead': {
+        title: "Thank You!", subtitle: "We've received your information.", infoTitle: "What Happens Next:",
+        infoItems: ["We'll review your submission", "Team member reaches out within 24hrs", "Check email for confirmation"]
+      },
+      'purchase': {
+        title: "Order Confirmed!", subtitle: "Thank you for your purchase.", infoTitle: "What's Next:",
+        infoItems: ["Check email for order details", "Order processed within 24hrs", "Track order in your account"]
+      },
+      'generic': {
+        title: brandConfig.thank_you_page?.headline || "Thank You!",
+        subtitle: brandConfig.thank_you_page?.subheadline || "Your request has been confirmed.",
+        infoTitle: "What Happens Next:",
+        infoItems: ["Check your email", "We'll be in touch shortly", "Questions? Reply to our email"]
+      }
+    };
+    
+    const content = contentConfig[conversionType] || contentConfig['generic'];
+    document.getElementById('page-title-main').textContent = content.title;
+    document.getElementById('page-subtitle').textContent = content.subtitle;
+    document.getElementById('info-title').textContent = content.infoTitle;
+    
+    const infoList = document.getElementById('info-list');
+    infoList.innerHTML = '';
+    content.infoItems.forEach(item => {
+      const li = document.createElement('li');
+      li.textContent = item;
+      infoList.appendChild(li);
+    });
+    
+    document.getElementById('brand-name').textContent = brandConfig.brand.name;
+    document.getElementById('page-title').textContent = content.title + ' - ' + brandConfig.brand.name;
+    document.getElementById('footer-copyright').textContent = brandConfig.brand.copyright;
+    
+    const footerLinksEl = document.getElementById('footer-links');
+    footerLinksEl.innerHTML = '';
+    if (brandConfig.footer?.links) {
+      const links = brandConfig.footer.links;
+      ['privacy', 'terms', 'cookies', 'contact'].forEach(key => {
+        if (links[key]?.enabled !== false && links[key]?.url) {
+          const a = document.createElement('a');
+          a.href = links[key].url;
+          a.target = '_blank';
+          a.rel = 'noopener noreferrer';
+          a.textContent = links[key].text || key.charAt(0).toUpperCase() + key.slice(1);
+          footerLinksEl.appendChild(a);
         }
-        
-        // Helper function to parse as number if numeric, otherwise return as string
-        function parseValue(value) {
-            if (value === '' || value === null || value === undefined) return undefined;
-            if (value === 'true') return true;
-            if (value === 'false') return false;
-            const num = Number(value);
-            return !isNaN(num) && value !== '' ? num : value;
-        }
-        
-        console.log('🚀 Thank You Page - Reading cookies and building data layer...');
-        
-        // ====================================================================
-        // BUILD COMPLETE DATA LAYER OBJECT (ALL 182 PARAMETERS)
-        // ====================================================================
-        
-        const dataLayerData = {
-            event: 'thankyou_conversion',
-            
-            // ================================================================
-            // ADKERNEL CORE TRACKING (9)
-            // CORRECTED: Uses exact macro names
-            // ================================================================
-            conversion: getCookie('conversion'),              // {conversion} macro - NOT conversion_id
-            goal_id: getCookie('goal_id'),                    // {goal_id} macro
-            campaign: getCookie('campaign'),                  // {campaign} macro - NOT campaign_id
-            banner: getCookie('banner'),                      // {banner} macro - NOT banner_id
-            offer: getCookie('offer'),                        // {offer} macro - NOT offer_id
-            conversion_value: parseValue(getCookie('conversion_value')) || 0,
-            conversion_type: getCookie('conversion_type') || 'generic',
-            brand: getCookie('brand') || 'default',
-            dsp_step: parseValue(getCookie('dsp_step')) || 3,
-            
-            // ================================================================
-            // ADKERNEL NATIVE PARAMETERS (56)
-            // ================================================================
-            pubzone: getCookie('pubzone'),
-            publisher: getCookie('publisher'),
-            country_name: getCookie('country_name'),
-            region: getCookie('region'),
-            city: getCookie('city'),
-            device_type: getCookie('device_type'),
-            os: getCookie('os'),
-            browser: getCookie('browser'),
-            Keyword: getCookie('Keyword'),
-            bid: parseValue(getCookie('bid')),
-            date: getCookie('date'),
-            day_of_month: getCookie('day_of_month'),
-            day_of_week: getCookie('day_of_week'),
-            device_brand: getCookie('device_brand'),
-            device_model: getCookie('device_model'),
-            request_id: getCookie('request_id'),
-            month: getCookie('month'),
-            original_subid: getCookie('original_subid'),
-            os_type: getCookie('os_type'),
-            postback_id: getCookie('postback_id'),
-            app_bundle: getCookie('app_bundle'),
-            app_id: getCookie('app_id'),
-            pubfeed: getCookie('pubfeed'),
-            subid: getCookie('subid'),
-            payout: parseValue(getCookie('payout')),
-            pubpoint: getCookie('pubpoint'),
-            Query: getCookie('Query'),
-            site_id: getCookie('site_id'),
-            referrer_domain: getCookie('referrer_domain'),
-            remfeed: getCookie('remfeed'),
-            ga: getCookie('ga'),
-            search_referrer_domain: getCookie('search_referrer_domain'),
-            search_ip: getCookie('search_ip'),
-            source_subid: getCookie('source_subid'),
-            State_Name: getCookie('State_Name'),
-            source: getCookie('source'),
-            ip: getCookie('ip'),
-            carrier: getCookie('carrier'),
-            zip: getCookie('zip'),
-            state: getCookie('state'),
-            country: getCookie('country'),
-            page_url: getCookie('page_url'),
-            referrer: getCookie('referrer'),
-            timestamp: getCookie('timestamp'),
-            user_agent: getCookie('user_agent'),
-            
-            // ================================================================
-            // KEITARO ROUTING (13)
-            // ================================================================
-            keitaro_subid: getCookie('keitaro_subid'),
-            _lp: getCookie('_lp'),
-            _offer_id: getCookie('_offer_id'),
-            sub1: getCookie('sub1'),
-            sub2: getCookie('sub2'),
-            sub3: getCookie('sub3'),
-            sub4: getCookie('sub4'),
-            sub5: getCookie('sub5'),
-            sub6: getCookie('sub6'),
-            sub7: getCookie('sub7'),
-            sub8: getCookie('sub8'),
-            sub9: getCookie('sub9'),
-            sub10: getCookie('sub10'),
-            
-            // ================================================================
-            // CREATIVE DNA - UNIVERSAL (8)
-            // ================================================================
-            av: getCookie('av'),
-            mb: getCookie('mb'),
-            io: getCookie('io'),
-            ct: getCookie('ct'),
-            ps: getCookie('ps'),
-            ca: getCookie('ca'),
-            up: getCookie('up'),
-            se: getCookie('se'),
-            
-            // ================================================================
-            // CREATIVE DNA - VIDEO/CTV (10)
-            // ================================================================
-            ss: getCookie('ss'),
-            ht: getCookie('ht'),
-            mpp: getCookie('mpp'),
-            nts: getCookie('nts'),
-            vs: getCookie('vs'),
-            bm: getCookie('bm'),
-            ts: getCookie('ts'),
-            gtu: getCookie('gtu'),
-            vl: getCookie('vl'),
-            ve: getCookie('ve'),
-            
-            // ================================================================
-            // CREATIVE DNA - DISPLAY/NATIVE (9)
-            // ================================================================
-            ii: getCookie('ii'),
-            ih: getCookie('ih'),
-            ic: getCookie('ic'),
-            bc: getCookie('bc'),
-            in: getCookie('in'),
-            to: getCookie('to'),
-            sp: getCookie('sp'),
-            at: getCookie('at'),
-            wf: getCookie('wf'),
-            
-            // ================================================================
-            // CREATIVE DNA - PUSH (5)
-            // ================================================================
-            pi: getCookie('pi'),
-            th: getCookie('th'),
-            mc: getCookie('mc'),
-            ul: getCookie('ul'),
-            pz: getCookie('pz'),
-            
-            // ================================================================
-            // CREATIVE DNA - POP (4)
-            // ================================================================
-            ag: getCookie('ag'),
-            vh: getCookie('vh'),
-            eit: getCookie('eit'),
-            ue: getCookie('ue'),
-            
-            // ================================================================
-            // ECHO LANDING PAGE PARAMETERS (26)
-            // ================================================================
-            hl: getCookie('hl'),
-            sh: getCookie('sh'),
-            cta: getCookie('cta'),
-            img: getCookie('img'),
-            link: getCookie('link'),
-            font: getCookie('font'),
-            btn_color: getCookie('btn_color'),
-            btn_text: getCookie('btn_text'),
-            btn_size: getCookie('btn_size'),
-            btn_style: getCookie('btn_style'),
-            hl_size: getCookie('hl_size'),
-            sh_size: getCookie('sh_size'),
-            hl_color: getCookie('hl_color'),
-            sh_color: getCookie('sh_color'),
-            overlay: getCookie('overlay'),
-            social_proof: getCookie('social_proof'),
-            social_text: getCookie('social_text'),
-            scarcity: getCookie('scarcity'),
-            scarcity_text: getCookie('scarcity_text'),
-            progress: getCookie('progress'),
-            micro_yes: getCookie('micro_yes'),
-            micro_text: getCookie('micro_text'),
-            archetype: getCookie('archetype'),
-            angle: getCookie('angle'),
-            variant: getCookie('variant'),
-            phase: getCookie('phase'),
-            
-            // ================================================================
-            // AVALANCHE CORE TOKENS (10)
-            // ================================================================
-            session_token: getCookie('session_token'),
-            user_fingerprint: getCookie('user_fingerprint'),
-            belief_pattern: getCookie('belief_pattern'),
-            archetype_signature_token: getCookie('archetype_signature_token'),
-            remnant_index: parseValue(getCookie('remnant_index')) || 0,
-            exit_trigger: getCookie('exit_trigger'),
-            activation_path_code: getCookie('activation_path_code'),
-            emotional_readiness: parseValue(getCookie('emotional_readiness')) || 0,
-            token_lineage: getCookie('token_lineage'),
-            soul_pattern_map: getCookie('soul_pattern_map'),
-            
-            // ================================================================
-            // AVALANCHE PERFORMANCE SIGNALS (8)
-            // ================================================================
-            eps_score: parseValue(getCookie('eps_score')) || 0,
-            aps_score: parseValue(getCookie('aps_score')) || 0,
-            attention_root: getCookie('attention_root'),
-            friction_point: getCookie('friction_point'),
-            mirror_moment_event: getCookie('mirror_moment_event'),
-            shame_trigger: getCookie('shame_trigger'),
-            truth_signal: getCookie('truth_signal'),
-            faith_factor: parseValue(getCookie('faith_factor')) || 0,
-            
-            // ================================================================
-            // AVALANCHE MUTATION & EVOLUTION (6)
-            // ================================================================
-            variant_generation: getCookie('variant_generation'),
-            mutation_parent: getCookie('mutation_parent'),
-            token_decay_score: parseValue(getCookie('token_decay_score')) || 0,
-            copy_evolution_path: getCookie('copy_evolution_path'),
-            winning_token_cluster: getCookie('winning_token_cluster'),
-            resurrection_trigger_type: getCookie('resurrection_trigger_type'),
-            
-            // ================================================================
-            // AVALANCHE MEMORY CHAIN (6)
-            // ================================================================
-            seen_day: getCookie('seen_day') || 'day0',
-            interaction_count: parseValue(getCookie('interaction_count')) || 1,
-            previous_exit_reason: getCookie('previous_exit_reason'),
-            sku_clicks: getCookie('sku_clicks'),
-            memory_chain_id: getCookie('memory_chain_id'),
-            behavioral_fingerprint_history: getCookie('behavioral_fingerprint_history'),
-            
-            // ================================================================
-            // AVALANCHE DESTINY STACK (5)
-            // ================================================================
-            ltv_ramp_vector: getCookie('ltv_ramp_vector'),
-            offer_stack_position: getCookie('offer_stack_position'),
-            destiny_alignment_score: parseValue(getCookie('destiny_alignment_score')) || 0,
-            bonus_stack_resonance: getCookie('bonus_stack_resonance'),
-            guarantee_safety_score: parseValue(getCookie('guarantee_safety_score')) || 0,
-            
-            // ================================================================
-            // BEHAVIOR TRACKING (14)
-            // ================================================================
-            scroll_depth: parseValue(getCookie('scroll_depth')) || 0,
-            time_on_page: parseValue(getCookie('time_on_page')) || 0,
-            return_visitor: parseValue(getCookie('return_visitor')) || false,
-            session_count: parseValue(getCookie('session_count')) || 1,
-            entry_page: getCookie('entry_page'),
-            funnel_step: getCookie('funnel_step'),
-            exit_intent_triggered: parseValue(getCookie('exit_intent_triggered')) || false,
-            form_fields_filled: parseValue(getCookie('form_fields_filled')) || 0,
-            chat_messages_sent: parseValue(getCookie('chat_messages_sent')) || 0,
-            lead_quality_score: parseValue(getCookie('lead_quality_score')) || 0,
-            email_verified: parseValue(getCookie('email_verified')) || false,
-            phone_verified: parseValue(getCookie('phone_verified')) || false,
-            appointment_confirmed: parseValue(getCookie('appointment_confirmed')) || false,
-            predicted_show_rate: parseValue(getCookie('predicted_show_rate'))
-        };
-        
-        // Remove undefined/null values to keep data layer clean
-        Object.keys(dataLayerData).forEach(key => {
-            if (dataLayerData[key] === undefined || dataLayerData[key] === null || dataLayerData[key] === '') {
-                delete dataLayerData[key];
-            }
-        });
-        
-        // ====================================================================
-        // PUSH TO GTM DATA LAYER
-        // ====================================================================
-        
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push(dataLayerData);
-        
-        console.log('✅ Thank You Conversion Fired!');
-        console.log('📊 Data Layer Object:', dataLayerData);
-        console.log('🎯 Total parameters sent to GTM:', Object.keys(dataLayerData).length);
-        
-        // Log critical conversion identifiers (CORRECTED KEY NAMES)
-        console.log('🔑 Critical IDs:');
-        console.log('  - Conversion:', dataLayerData.conversion);           // NOT conversion_id
-        console.log('  - Goal ID:', dataLayerData.goal_id);
-        console.log('  - Campaign:', dataLayerData.campaign);               // NOT campaign_id
-        console.log('  - Banner:', dataLayerData.banner);                   // NOT banner_id
-        console.log('  - Offer:', dataLayerData.offer);                     // NOT offer_id
-        console.log('  - Session Token:', dataLayerData.session_token);
-        console.log('  - Archetype:', dataLayerData.archetype);
-        console.log('  - Angle:', dataLayerData.angle);
-        console.log('  - Phase:', dataLayerData.phase);
-        
-    })();
-    </script>
+      });
+    }
+    
+    if (brandConfig.thank_you_page?.redirect?.enabled) {
+      const redirectUrl = brandConfig.thank_you_page.redirect.url;
+      const redirectDelay = (brandConfig.thank_you_page.redirect.delay_seconds || 3) * 1000;
+      setTimeout(() => { window.location.href = redirectUrl; }, redirectDelay);
+    }
+    
+  }
+})();
+</script>
+
 </body>
 </html>
