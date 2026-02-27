@@ -12,9 +12,9 @@
     "_name_help": "👆 Type your company name here (example: Killer Whale Ventures)",
     
     "code": "ybr",
-    "_code_help": "👆 Create a 2-4 letter code for your brand (lowercase, no spaces). Examples: kwv, nike, aapl. This is used in image filenames.",
+    "_code_help": "👆 Create a 2-4 letter code for yoFur brand (lowercase, no spaces). Examples: kwv, nike, aapl. This is used in image filenames.",
     
-    "domain": "lp.yourbrand.com",
+    "domain": "lp.beyondbordersmatchmaking.com",
     "_domain_help": "👆 Your landing page domain (example: lp.killerwhaleventures.com)",
     
     "gtmId": "GTM-XXXXXXX",
