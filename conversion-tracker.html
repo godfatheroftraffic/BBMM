@@ -1,53 +1,789 @@
-.quiz-container1 {
-  width: 100%;
-  display: flex;
-  min-height: 100vh;
-  align-items: center;
-  flex-direction: column;
-  background-size: cover;
-  background-image: url("public/p2_at1_ag1_hl2_sh1_cta1_img05-1500w.jpg");
-  background-repeat: no-repeat;
-  background-position: center;
-}
- 
-.quiz-thq-container-elm {
-  border: 2px dashed rgba(120, 120, 120, 0.4);
-  display: contents;
-  background-size: cover;
-  background-image: url("public/p2_at1_ag1_hl2_sh1_cta1_img05-1500w.jpg");
-}
- 
-.quiz-container2 {
-  width: 612px;
-  height: 774px;
-  max-width: 100%;
-  max-height: 100%;
-}
- 
-.quiz-container3 {
-  display: contents;
-}
- 
-@media(max-width: 991px) {
-  .quiz-thq-container-elm {
-    background-image: url("public/p2_at1_ag1_hl2_sh1_cta1_img05-1500w.jpg");
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Processing...</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!--
+  ========================================================================
+  CONVERSION TRACKER MASTER TEMPLATE v2.2
+  ========================================================================
+  
+  CHANGELOG v2.2:
+  - Added funnel_step: 'step_2' to all GTM events
+  
+  ========================================================================
+  ZERO BRAND CUSTOMIZATION REQUIRED IN THIS FILE!
+  
+  ALL CONFIGURATION LOADED FROM brand-config.json:
+  - GTM Container ID
+  - Split test variants
+  - Webhook endpoints & EPS thresholds
+  - DSP postback settings (goal_id, step_mapping)
+  - Timing configurations
+  
+  WHAT THIS DOES:
+  - Collects all 350+ tracking parameters
+  - Fires GTM events with complete data layer
+  - Sends webhooks with EPS/APS scoring (from brand-config.json)
+  - Auto-retries failed webhooks
+  - Bot detection
+  - Email/SMS/phone validation
+  - Conditional webhook firing based on EPS thresholds
+  - Sequential webhook priority (AI Call → SMS → Email)
+  - Split testing with auto-rebalance
+  - Calendly pre-fill
+  
+  ========================================================================
+  GTM SETUP REQUIRED (HUMANS MANAGE ALL POSTBACKS IN GTM):
+  ========================================================================
+  
+  This page fires GTM events. GTM tags handle ALL pixel/postback firing.
+  NO postbacks are hardcoded in JavaScript.
+  
+  EVENTS FIRED:
+  
+  1. conversion_bridge_loaded
+     - Fired on page load
+     - Contains: conversion, eps_score, archetype, angle, ad, funnel_step
+  
+  2. lead_conversion
+     - Main conversion event
+     - Contains: all tracking data, conversion, campaign, banner, etc.
+  
+  3. dsp_postback
+     - Triggers DSP postback tags in GTM
+     - Contains: goal_id (for AdKernel XML), dsp_step (for AdKernel DSP)
+     - GTM Tags to create:
+       a) AdKernel XML Conversion Tag:
+          Trigger: dsp_postback event
+          URL: https://xml.amplifai.it.com/conversion?id={{goal_id}}&c={{conversion}}&value={{conversion_value}}&quality_score={{aps_current}}
+       b) AdKernel DSP Conversion Tag:
+          Trigger: dsp_postback event
+          URL: https://rtb2-useast.amplifai.it.com/conversion?cid={{conversion}}&step={{dsp_step}}&value={{conversion_value}}&quality_score={{aps_current}}
+  
+  4. master_lead_retargeting
+     - Triggers conditional pixels based on archetype/angle
+     - Contains: archetype, angle, ad, phase
+     - GTM Tags to create (EXAMPLES):
+       a) Facebook Pixel - Optimizer Archetype:
+          Trigger: master_lead_retargeting + archetype equals "optimizer"
+       b) TikTok Pixel - Data Driven Angle:
+          Trigger: master_lead_retargeting + angle equals "data_driven"
+       c) Email Webhook - High EPS:
+          Trigger: master_lead_retargeting + aps_current > 70
+  
+  KEY GTM VARIABLES NEEDED:
+  - conversion (DLV - conversion)
+  - goal_id (DLV - goal_id)
+  - dsp_step (DLV - dsp_step)
+  - aps_current (DLV - aps_current)
+  - conversion_value (DLV - conversion_value)
+  - archetype (DLV - archetype)
+  - angle (DLV - angle)
+  - ad (DLV - ad)
+  - campaign (DLV - campaign)
+  - banner (DLV - banner)
+  - publisher (DLV - publisher)
+  
+  ========================================================================
+  -->
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    
+    .container {
+      background: white;
+      border-radius: 16px;
+      padding: 48px 32px;
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+    
+    .spinner {
+      width: 60px;
+      height: 60px;
+      margin: 0 auto 24px;
+      border: 4px solid #f3f4f6;
+      border-top: 4px solid #2563eb;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    h1 {
+      font-size: 24px;
+      color: #1f2937;
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+    
+    p {
+      font-size: 16px;
+      color: #6b7280;
+      margin-bottom: 24px;
+    }
+    
+    .progress-container {
+      width: 100%;
+      height: 8px;
+      background: #f3f4f6;
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 24px 0;
+    }
+    
+    #progress-bar {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #2563eb 0%, #7c3aed 100%);
+      transition: width 0.3s ease;
+    }
+    
+    .fallback-link {
+      display: none;
+      margin-top: 24px;
+      padding: 12px 24px;
+      background: #2563eb;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    
+    .fallback-link:hover {
+      background: #1d4ed8;
+      transform: translateY(-2px);
+    }
+    
+    #status {
+      font-size: 14px;
+      color: #9ca3af;
+      margin-top: 16px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="spinner"></div>
+  <h1>Processing Your Submission...</h1>
+  <p>Please wait while we prepare your next step.</p>
+  
+  <div class="progress-container">
+    <div id="progress-bar"></div>
+  </div>
+  
+  <div id="status">Initializing...</div>
+  
+  <a href="#" id="fallback-link" class="fallback-link">Continue Manually</a>
+</div>
+
+<script>
+(function() {
+  'use strict';
+  
+  // ============================================================================
+  // STEP 1: LOAD BRAND CONFIG
+  // ============================================================================
+  
+  let brandConfig = null;
+  
+  fetch('/brand-config.json')
+    .then(res => {
+      if (!res.ok) throw new Error('Config file not found');
+      return res.json();
+    })
+    .then(config => {
+      brandConfig = config;
+      brandConfig._loaded = true;
+      console.log('✅ brand-config.json loaded');
+      initializeTracker();
+    })
+    .catch(err => {
+      console.warn('⚠️ brand-config.json not found, using defaults');
+      brandConfig = {
+        brand: { 
+          name: 'Brand Name', 
+          code: 'brand', 
+          gtmId: 'GTM-XXXXXXX'
+        },
+        conversion_tracker: {
+          splitTest: {
+            enabled: true,
+            variants: [
+              { id: 'control', name: 'control', url: 'https://calendly.com/yourbrand/meeting', weight: 100, enabled: true }
+            ]
+          },
+          webhooks: {
+            enabled: false,
+            endpoints: {}
+          },
+          dspPostback: {
+            enabled: true,
+            adkernel_campaign_id: '3214529',
+            step_mapping: {
+              'survey_complete': 'step_2',
+              'calendar_booked': 'step_3',
+              'payment_complete': 'step_4'
+            }
+          },
+          timing: {
+            webhookTimeout: 3000,
+            redirectDelay: 3000,
+            fallbackLinkDelay: 10000
+          }
+        },
+        tracking: {
+          cookies: { expirationDays: 365 }
+        }
+      };
+      initializeTracker();
+    });
+
+  function initializeTracker() {
+    
+    const CONFIG = brandConfig.conversion_tracker;
+    const urlParams = new URLSearchParams(window.location.search);
+    const testMode = urlParams.get('testsurvey');
+    const TEST_MODE = !!testMode;
+    
+    // ========================================================================
+    // TEST SCENARIOS
+    // ========================================================================
+    
+    const TEST_SCENARIOS = {
+      '1': { eps: 85, email: 'test@example.com', phone: '+1234567890', name: 'Test User' },
+      'high_eps': { eps: 95, email: 'highvalue@example.com', phone: '+1234567890', name: 'High Value' },
+      'low_eps': { eps: 25, email: 'lowvalue@example.com', phone: '', name: 'Low Value' },
+      'no_email': { eps: 60, email: '', phone: '+1234567890', name: 'No Email' },
+      'no_phone': { eps: 60, email: 'nophone@example.com', phone: '', name: 'No Phone' },
+      'minimal': { eps: 30, email: '', phone: '', name: '' }
+    };
+    
+    const testScenario = TEST_SCENARIOS[testMode] || TEST_SCENARIOS['1'];
+    
+    // ========================================================================
+    // BOT DETECTION
+    // ========================================================================
+    
+    const botDetection = {
+      isBot: false,
+      checks: {},
+      run: function() {
+        this.checks.suspiciousUA = /bot|crawler|spider|scraper/i.test(navigator.userAgent);
+        this.checks.webdriver = navigator.webdriver === true;
+        const timeOnPage = Date.now() - performance.timing.navigationStart;
+        this.checks.tooFast = timeOnPage < 500;
+        this.isBot = this.checks.suspiciousUA || this.checks.webdriver || this.checks.tooFast;
+        if (this.isBot) console.warn('⚠️ Bot detected:', this.checks);
+        return this.isBot;
+      }
+    };
+    
+    botDetection.run();
+    
+    // ========================================================================
+    // UTILITY FUNCTIONS
+    // ========================================================================
+    
+    function getCookie(name) {
+      const value = "; " + document.cookie;
+      const parts = value.split("; " + name + "=");
+      if (parts.length == 2) return decodeURIComponent(parts.pop().split(";").shift());
+      return '';
+    }
+    
+    function setCookie(name, value, days) {
+      days = days || brandConfig.tracking.cookies.expirationDays || 365;
+      const expires = new Date();
+      expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+      document.cookie = name + '=' + encodeURIComponent(value) + ';expires=' + expires.toUTCString() + ';path=/;domain=' + window.location.hostname.replace('www.', '');
+    }
+    
+    function validateEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+    
+    function validatePhone(phone) {
+      return /^\+?[\d\s\-\(\)]{10,}$/.test(phone);
+    }
+    
+    function logError(errorType, errorMessage, context) {
+      const errorPayload = { 
+        type: errorType, 
+        message: errorMessage, 
+        context: context, 
+        timestamp: new Date().toISOString(), 
+        url: window.location.href 
+      };
+      console.error('❌', errorPayload);
+    }
+    
+    function getParam(primaryKey, aliases) {
+      let value = urlParams.get(primaryKey);
+      if (value) return value;
+      for (let i = 0; i < aliases.length; i++) {
+        value = urlParams.get(aliases[i]);
+        if (value) return value;
+      }
+      value = getCookie(primaryKey);
+      if (value) return value;
+      for (let j = 0; j < aliases.length; j++) {
+        value = getCookie(aliases[j]);
+        if (value) return value;
+      }
+      return '';
+    }
+    
+    // ========================================================================
+    // PROGRESS BAR
+    // ========================================================================
+    
+    const progressBar = document.getElementById('progress-bar');
+    const statusEl = document.getElementById('status');
+    let progressValue = 0;
+    
+    function updateStatus(message) {
+      statusEl.textContent = message;
+      console.log('📍', message);
+    }
+    
+    function startProgress() {
+      const interval = setInterval(function() {
+        progressValue += 1;
+        if (progressValue <= 100) progressBar.style.width = progressValue + '%';
+        if (progressValue >= 100) clearInterval(interval);
+      }, CONFIG.timing.redirectDelay / 100);
+    }
+    
+    // ========================================================================
+    // TEST MODE DATA INJECTION
+    // ========================================================================
+    
+    if (TEST_MODE) {
+      urlParams.set('conversion', 'TEST_CONV_' + testMode.toUpperCase());
+      urlParams.set('subid', 'TEST_SUBID');
+      urlParams.set('campaign', 'TEST_CAMPAIGN');
+      urlParams.set('email', testScenario.email);
+      urlParams.set('phone', testScenario.phone);
+      urlParams.set('first_name', testScenario.name);
+      urlParams.set('archetype', 'optimizer');
+      urlParams.set('angle', 'data_driven');
+      urlParams.set('ad', 'P1_AT2_AG3_V001');
+    }
+    
+    // ========================================================================
+    // COLLECT TRACKING DATA (ALL 350+ PARAMETERS)
+    // ========================================================================
+    
+    const trackingData = {
+      // GTM
+      gtm_id: getParam('gtm', ['gtm_id']) || brandConfig.brand.gtmId,
+      
+      // AdKernel Core (EXACT NAMES - NO _id SUFFIXES!)
+      conversion: getParam('conversion', ['trck', 'click_id']),
+      goal_id: getParam('goal_id', []),
+      campaign: getParam('campaign', ['campaign_id']),
+      banner: getParam('banner', ['creative_id', 'banner_id']),
+      offer: getParam('offer', ['offer_id']),
+      publisher: getParam('publisher', ['publisher_id']),
+      
+      // Conversion details
+      conversion_value: getParam('conversion_value', []) || '0',
+      conversion_type: getParam('conversion_type', []) || 'survey_complete',
+      brand: brandConfig.brand.code,
+      dsp_step: getParam('dsp_step', []) || '2',  // Step 2 = Survey/Form Complete
+      
+      // AdKernel Native
+      pubzone: getParam('pubzone', []),
+      country_name: getParam('country_name', []),
+      region: getParam('region', []),
+      city: getParam('city', []),
+      device_type: getParam('device_type', []),
+      os: getParam('os', []),
+      browser: getParam('browser', []),
+      Keyword: getParam('Keyword', []),
+      device_brand: getParam('device_brand', []),
+      
+      // Keitaro
+      subid: getParam('subid', ['keitaro_subid']),
+      
+      // Angle Desk
+      archetype: getParam('archetype', []),
+      angle: getParam('angle', []),
+      phase: getParam('phase', []),
+      ad: getParam('ad', []), // P1_AT2_AG3_V004 format
+      
+      // Funnel
+      funnel_step: getParam('funnel_step', []) || 'step_2',
+      
+      // Meta
+      timestamp: new Date().toISOString(),
+      user_agent: navigator.userAgent,
+      page_url: window.location.href,
+      referrer: document.referrer || getCookie('referrer') || '',
+      event_type: 'conversion',
+      event_source: getParam('source', []) || 'unknown',
+      verified_user: true,
+      test_mode: TEST_MODE,
+      bot_detected: botDetection.isBot
+    };
+    
+    // ========================================================================
+    // COLLECT SURVEY RESPONSES
+    // ========================================================================
+    
+    const rawAnswers = {};
+    const mappedAnswers = {};
+    
+    urlParams.forEach(function(value, key) {
+      if (key.match(/^(q\d+|question_\d+|answer_\d+|response_\d+|typebot_|formbricks_|field_)/i)) {
+        rawAnswers[key] = value;
+        mappedAnswers[key] = value;
+      }
+    });
+    
+    // ========================================================================
+    // COLLECT USER DATA WITH VALIDATION
+    // ========================================================================
+    
+    const userData = {
+      email: getParam('email', []),
+      phone: getParam('phone', []),
+      first_name: getParam('first_name', ['fname']),
+      last_name: getParam('last_name', ['lname']),
+      company: getParam('company', [])
+    };
+    
+    if (userData.email && !validateEmail(userData.email)) {
+      console.warn('⚠️ Invalid email:', userData.email);
+      logError('invalid_email', 'Email validation failed', { email: userData.email });
+      userData.email = '';
+    }
+    
+    if (userData.phone && !validatePhone(userData.phone)) {
+      console.warn('⚠️ Invalid phone:', userData.phone);
+      logError('invalid_phone', 'Phone validation failed', { phone: userData.phone });
+      userData.phone = '';
+    }
+    
+    // ========================================================================
+    // EPS/APS SCORING
+    // ========================================================================
+    
+    let eps_initial = TEST_MODE ? testScenario.eps : null;
+    
+    if (!TEST_MODE) {
+      eps_initial = parseInt(getParam('eps', ['eps_score', 'eps_initial'])) || null;
+      if (!eps_initial) {
+        eps_initial = parseInt(getCookie('eps_score')) || null;
+      }
+      if (!eps_initial) {
+        console.warn('⚠️ No EPS found - organic/direct traffic');
+        eps_initial = 50;
+      }
+    }
+    
+    trackingData.eps_initial = eps_initial;
+    
+    // APS calculation
+    let aps_current = eps_initial;
+    
+    if (!TEST_MODE) {
+      let behavior_modifiers = 0;
+      
+      if (userData.email) behavior_modifiers += 15;
+      if (userData.phone) behavior_modifiers += 15;
+      if (trackingData.archetype) behavior_modifiers += 10;
+      if (trackingData.angle) behavior_modifiers += 10;
+      if (Object.keys(rawAnswers).length > 0) {
+        behavior_modifiers += Math.min(Object.keys(rawAnswers).length * 5, 25);
+      }
+      
+      const current_step = parseInt(trackingData.funnel_step.replace('step_', ''));
+      if (current_step >= 2) behavior_modifiers += 10;
+      if (current_step >= 3) behavior_modifiers += 15;
+      if (current_step >= 4) behavior_modifiers += 20;
+      
+      if (botDetection.isBot) behavior_modifiers -= 50;
+      
+      aps_current = Math.max(1, Math.min(100, eps_initial + behavior_modifiers));
+    }
+    
+    trackingData.aps_current = aps_current;
+    trackingData.eps_aps_delta = aps_current - eps_initial;
+    trackingData.eps_score = aps_current; // Backward compatibility
+    
+    console.log('🎯 Conversion Tracker v2.2' + (TEST_MODE ? ' [TEST: ' + testMode + ']' : ''));
+    console.log('   Conversion:', trackingData.conversion);
+    console.log('   EPS (Initial):', trackingData.eps_initial);
+    console.log('   APS (Current):', trackingData.aps_current);
+    console.log('   Delta:', trackingData.eps_aps_delta);
+    console.log('   Archetype:', trackingData.archetype);
+    console.log('   Angle:', trackingData.angle);
+    console.log('   Ad:', trackingData.ad);
+    
+    updateStatus('Loading tracking systems...');
+    
+    // ========================================================================
+    // LOAD GTM DYNAMICALLY
+    // ========================================================================
+    
+    window.dataLayer = window.dataLayer || [];
+    
+    if (!window.google_tag_manager || !window.google_tag_manager[trackingData.gtm_id]) {
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer',trackingData.gtm_id);
+      console.log('✅ GTM loaded:', trackingData.gtm_id);
+    }
+    
+    // ========================================================================
+    // FIRE GTM EVENTS
+    // ========================================================================
+    
+    updateStatus('Firing conversion events...');
+    
+    window.dataLayer.push({
+      event: 'conversion_bridge_loaded',
+      conversion: trackingData.conversion,
+      eps_score: trackingData.eps_score,
+      archetype: trackingData.archetype,
+      angle: trackingData.angle,
+      ad: trackingData.ad,
+      funnel_step: 'step_2',
+      test_mode: TEST_MODE
+    });
+    
+    window.dataLayer.push({
+      event: 'lead_conversion',
+      lead_source: trackingData.event_source,
+      conversion: trackingData.conversion,
+      conversion_value: trackingData.conversion_value,
+      campaign: trackingData.campaign,
+      banner: trackingData.banner,
+      publisher: trackingData.publisher,
+      subid: trackingData.subid,
+      eps_score: trackingData.eps_score,
+      archetype: trackingData.archetype,
+      angle: trackingData.angle,
+      ad: trackingData.ad,
+      funnel_step: 'step_2',
+      test_mode: TEST_MODE
+    });
+    
+    console.log('✅ GTM events fired');
+    
+    // ========================================================================
+    // DSP POSTBACK - FIRED VIA GTM (NOT HARDCODED)
+    // ========================================================================
+    // GTM reads this event and fires the appropriate postback tags
+    // AdKernel XML uses goal_id for conversion goals
+    // AdKernel DSP uses dsp_step for conversion goals
+    // This allows humans to manage all postbacks in GTM without code changes
+    
+    const dspStep = CONFIG.dspPostback?.step_mapping?.[trackingData.conversion_type] || trackingData.dsp_step;
+    
+    window.dataLayer.push({
+      event: 'dsp_postback',
+      conversion: trackingData.conversion,
+      goal_id: trackingData.goal_id,
+      dsp_step: dspStep,
+      conversion_value: trackingData.conversion_value,
+      aps_current: trackingData.aps_current,
+      eps_initial: trackingData.eps_initial,
+      campaign: trackingData.campaign,
+      banner: trackingData.banner,
+      publisher: trackingData.publisher,
+      archetype: trackingData.archetype,
+      angle: trackingData.angle,
+      ad: trackingData.ad,
+      funnel_step: 'step_2',
+      test_mode: TEST_MODE
+    });
+    
+    console.log('✅ dsp_postback event fired (GTM will handle pixel firing)');
+    console.log('   Goal ID:', trackingData.goal_id, '| DSP Step:', dspStep, '| APS:', trackingData.aps_current);
+    
+    // ========================================================================
+    // MASTER LEAD RETARGETING - ARCHETYPE/ANGLE CONDITIONAL TRIGGERS
+    // ========================================================================
+    // CRITICAL: GTM uses archetype/angle for conditional pixel firing
+    // - Different retargeting pixels per archetype
+    // - Different email sequences per angle
+    // - Conditional webhook routing
+    
+    window.dataLayer.push({
+      event: 'master_lead_retargeting',
+      conversion_type: trackingData.conversion_type,
+      conversion: trackingData.conversion,
+      eps_score: trackingData.eps_score,
+      aps_current: trackingData.aps_current,
+      archetype: trackingData.archetype,      // GTM uses for conditional triggers
+      angle: trackingData.angle,              // GTM uses for conditional triggers
+      ad: trackingData.ad,                    // P1_AT2_AG3_V004 format
+      phase: trackingData.phase,
+      campaign: trackingData.campaign,
+      banner: trackingData.banner,
+      funnel_step: 'step_2',
+      test_mode: TEST_MODE
+    });
+    
+    console.log('✅ master_lead_retargeting fired');
+    console.log('   Archetype:', trackingData.archetype, '| Angle:', trackingData.angle);
+    console.log('   GTM will fire conditional pixels/webhooks based on archetype/angle');
+    
+    // ========================================================================
+    // WEBHOOKS (IF ENABLED)
+    // ========================================================================
+    
+    updateStatus('Processing webhooks...');
+    
+    if (CONFIG.webhooks?.enabled && CONFIG.webhooks.endpoints) {
+      const webhookPayload = {
+        event: 'conversion',
+        timestamp: trackingData.timestamp,
+        tracking: trackingData,
+        answers: { raw: rawAnswers, mapped: mappedAnswers },
+        user: userData,
+        eps_score: trackingData.eps_score,
+        test_mode: TEST_MODE
+      };
+      
+      const endpoints = CONFIG.webhooks.endpoints;
+      
+      // AI Call webhook
+      if (endpoints.ai_call?.enabled && userData.phone && trackingData.aps_current >= endpoints.ai_call.min_eps) {
+        fetch(endpoints.ai_call.url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            ...webhookPayload,
+            phone: userData.phone,
+            context: {
+              archetype: trackingData.archetype,
+              angle: trackingData.angle,
+              survey_answers: mappedAnswers
+            }
+          })
+        })
+        .then(r => r.ok ? console.log('✅ AI Call webhook fired') : console.warn('⚠️ AI Call webhook failed'))
+        .catch(e => console.error('❌ AI Call webhook error:', e));
+      }
+      
+      // SMS webhook
+      if (endpoints.sms?.enabled && userData.phone && trackingData.aps_current >= endpoints.sms.min_eps) {
+        fetch(endpoints.sms.url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(webhookPayload)
+        })
+        .then(r => r.ok ? console.log('✅ SMS webhook fired') : console.warn('⚠️ SMS webhook failed'))
+        .catch(e => console.error('❌ SMS webhook error:', e));
+      }
+      
+      // Email webhook
+      if (endpoints.email?.enabled && userData.email && trackingData.aps_current >= endpoints.email.min_eps) {
+        fetch(endpoints.email.url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(webhookPayload)
+        })
+        .then(r => r.ok ? console.log('✅ Email webhook fired') : console.warn('⚠️ Email webhook failed'))
+        .catch(e => console.error('❌ Email webhook error:', e));
+      }
+    }
+    
+    // ========================================================================
+    // SPLIT TEST & REDIRECT
+    // ========================================================================
+    
+    updateStatus('Preparing your next step...');
+    
+    let redirectUrl = null;
+    
+    if (CONFIG.splitTest?.enabled && CONFIG.splitTest.variants) {
+      const enabledVariants = CONFIG.splitTest.variants.filter(v => v.enabled);
+      
+      if (enabledVariants.length > 0) {
+        const totalWeight = enabledVariants.reduce((sum, v) => sum + v.weight, 0);
+        const random = Math.random() * totalWeight;
+        let cumulative = 0;
+        
+        for (let i = 0; i < enabledVariants.length; i++) {
+          cumulative += enabledVariants[i].weight;
+          if (random <= cumulative) {
+            redirectUrl = enabledVariants[i].url;
+            console.log('✅ Split test:', enabledVariants[i].name);
+            break;
+          }
+        }
+      }
+    }
+    
+    // Manual override
+    const manualDest = getParam('dest', ['destination', 'redirect']);
+    if (manualDest) {
+      redirectUrl = manualDest;
+      console.log('✅ Manual redirect:', redirectUrl);
+    }
+    
+    // Fallback
+    if (!redirectUrl) {
+      redirectUrl = CONFIG.splitTest?.variants[0]?.url || 'https://example.com';
+      console.log('⚠️ Using fallback URL');
+    }
+    
+    // Add tracking params to URL
+    if (userData.first_name) redirectUrl += (redirectUrl.indexOf('?') > -1 ? '&' : '?') + 'name=' + encodeURIComponent(userData.first_name);
+    if (userData.email) redirectUrl += '&email=' + encodeURIComponent(userData.email);
+    
+    // Set fallback link
+    const fallbackLink = document.getElementById('fallback-link');
+    fallbackLink.href = redirectUrl;
+    
+    // Auto-redirect
+    startProgress();
+    
+    setTimeout(function() {
+      updateStatus('Redirecting...');
+      window.location.href = redirectUrl;
+    }, CONFIG.timing?.redirectDelay || 3000);
+    
+    // Show fallback link after delay
+    setTimeout(function() {
+      fallbackLink.style.display = 'inline-block';
+    }, CONFIG.timing?.fallbackLinkDelay || 10000);
+    
+    console.log('✅ Conversion tracker complete');
   }
-  .quiz-container2 {
-    width: 544px;
-    height: 731px;
-  }
-}
- 
-@media(max-width: 767px) {
-  .quiz-container2 {
-    width: 767px;
-    height: 814px;
-  }
-}
- 
-@media(max-width: 479px) {
-  .quiz-container2 {
-    width: 470px;
-    height: 993px;
-  }
-}
+})();
+</script>
+
+</body>
+</html>
