@@ -57,7 +57,7 @@
         "naming_example": "Desktop: 5_kwv.jpg, Mobile: 5_kwv_mobile.jpg"
       },
       
-      "overlay": "dark",
+      "overlay": "medium",
       "_overlay_help": "👆 How dark the background overlay is. Options: light, medium, dark, xdark"
     },
     
