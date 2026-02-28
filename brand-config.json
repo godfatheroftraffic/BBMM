@@ -35,16 +35,16 @@
     "_instructions": "Customize your landing page headline, button text, and background image.",
     
     "defaults": {
-      "headline": "Finding Love Shouldn't Be This Hard. Meet Your Future Wife in Colombia.",
+      "headline": "Meet Your Future Wife",
       "_headline_help": "👆 Main headline on your landing page. Make it compelling! (40-60 characters works best)",
       
-      "subheadline": "Beyond Borders Matchmaking connects American men with beautiful, marriage-minded Colombian women through personalized matchmaking and hands-on support every step of the way.",
+      "subheadline": "Connect with beautiful, marriage-minded women with personalized matchmaking",
       "_subheadline_help": "👆 Subheadline below main headline. Explain your value proposition. (60-120 characters)",
       
-      "cta_text": "Meet Your Future Wife",
+      "cta_text": "Find Your Future Wife",
       "_cta_text_help": "👆 Text on your main button. Keep it short and action-oriented. Examples: 'Get Started Now', 'Book Demo', 'View Live Signals'",
       
-      "cta_link": "https://calendly.com/yourbrand/meeting",
+      "cta_link": "https://www.beyondbordersmatchmaking.com/login",
       "_cta_link_help": "👆 Where the button takes users. Usually a Calendly link, TypeBot survey, or FormBricks form. MUST start with https://",
       
       "background_image": "1_bbmm.png",
@@ -91,18 +91,18 @@
       "_note": "Additional features like countdown timer and progress indicators can be enabled via URL parameters on the landing page (not in this config file).",
       
       "social_proof": {
-        "enabled": true,
+        "enabled": false,
         "_enabled_help": "👆 Show social proof popups? true = yes, false = no",
         
-        "default_text": "Join 10,000+ satisfied customers",
+        "default_text": "Join 1000+ satisfied customers",
         "_default_text_help": "👆 Text shown in social proof popup. Update the number to match your actual customers."
       },
       
       "scarcity": {
         "enabled": false,
-        "_enabled_help": "👆 Show 'only X spots remaining' message? true = yes, false = no",
+        "_enabled_help": "👆 Show 'only 2 matchmaking consults remaining this week' message? true = yes, false = no",
         
-        "default_spots": 3,
+        "default_spots": 2,
         "default_text": "Only {spots} spots remaining!",
         "_default_text_help": "👆 Scarcity message. {spots} will be replaced with the number above."
       },
@@ -111,7 +111,7 @@
         "enabled": false,
         "_enabled_help": "👆 Show 'Yes, I'm interested' checkbox that must be checked before CTA is enabled? Good for lead qualification. true = yes, false = no",
         
-        "default_text": "Yes, I'm interested",
+        "default_text": "Yes, find me my dream wife!",
         "_default_text_help": "👆 Checkbox label text. Examples: 'Yes, I want to learn more', 'I'm ready to get started'",
         "_note": "Can also be enabled per-landing-page via URL parameter: ?micro_yes=on&micro_text=Custom+text"
       }
@@ -185,7 +185,7 @@
     "_instructions": "Test multiple survey/form URLs to see which converts better.",
     
     "splitTest": {
-      "enabled": true,
+      "enabled": false,
       "_enabled_help": "👆 Enable split testing? true = yes, false = no",
       
       "variants": [
@@ -198,7 +198,7 @@
           "name": "control",
           "_name_help": "👆 Friendly name for reports",
           
-          "url": "https://calendly.com/yourbrand/meeting",
+          "url": "https://www.beyondbordersmatchmaking.com/login",
           "_url_help": "👆 Where users go after clicking CTA. Usually Calendly, TypeBot, or FormBricks.",
           
           "weight": 100,
