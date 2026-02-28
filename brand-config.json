@@ -23,7 +23,7 @@
     "_gtmId_critical": "🚨 CRITICAL: This MUST be changed from GTM-THBRKCTQ to your actual container ID. Without this, NO TRACKING will work! All conversion tracking, retargeting pixels, and postbacks require GTM to be configured correctly.",
     "_gtmId_where_to_get": "Get your GTM ID: 1) Go to tagmanager.google.com, 2) Click Admin (bottom left), 3) Click Container Settings, 4) Copy the Container ID (starts with GTM-)",
     
-    "logo": "logo.png",
+    "logo": "bbmm logo.png",
     "_logo_help": "👆 Your logo filename in the /public/ folder",
     
     "copyright": "© 2026 Beyond Borders Matchmaking. All rights reserved.",
@@ -47,7 +47,7 @@
       "cta_link": "https://calendly.com/yourbrand/meeting",
       "_cta_link_help": "👆 Where the button takes users. Usually a Calendly link, TypeBot survey, or FormBricks form. MUST start with https://",
       
-      "background_image": "4_ybr.jpg",
+      "background_image": "1_bbmm.png",
       "_background_image_help": "👆 Background image filename. Use format: NUMBER_BRANDCODE.jpg (example: 5_kwv.jpg). Image must be in /public/ folder.",
       "_mobile_image_required": "📱 IMPORTANT: You MUST also create a mobile version named NUMBER_BRANDCODE_mobile.jpg (example: 5_kwv_mobile.jpg)",
       "_image_specs": {
