@@ -64,19 +64,19 @@
     "styling": {
       "_comment": "========== STEP 3: BUTTON AND TEXT STYLING ==========",
       
-      "headline_size": "3rem",
+      "headline_size": "2rem",
       "_headline_size_help": "👆 Headline font size. Default is 3rem. Bigger = 4rem, Smaller = 2.5rem",
       
       "headline_color": "#ffffff",
       "_headline_color_help": "👆 Headline color (hex code). White = #ffffff, Black = #000000",
       
-      "subheadline_size": "1.5rem",
+      "subheadline_size": "1rem",
       "subheadline_color": "#ffffff",
       
-      "button_color": "#2563eb",
+      "button_color": "#e4c79a",
       "_button_color_help": "👆 Button background color (hex code). Popular colors: Blue=#2563eb, Green=#10b981, Purple=#7c3aed, Red=#ef4444, Teal=#1DBF8A",
       
-      "button_text_color": "#ffffff",
+      "button_text_color": "#0e1b2a",
       "_button_text_color_help": "👆 Button text color (hex code). Usually white (#ffffff) or black (#000000)",
       
       "button_size": "large",
