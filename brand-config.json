@@ -123,13 +123,16 @@
     "_instructions": "Customize what users see after they convert. This page tracks the final conversion event (thankyou_conversion) in GTM.",
     "_gtm_event": "When users reach this page, GTM fires 'thankyou_conversion' event which triggers final conversion pixels and postbacks.",
     
-    "headline": "Thank You!",
+    "headline": "Thank You! Your verification call is confirmed",
     "_headline_help": "👆 Headline on thank you page",
     
-    "subheadline": "We'll be in touch shortly",
+    "subheadline": "Your profile review has been scheduled.
+Your advisor will review your answers before the call so that your video call introductions can be coordinated.",
     "_subheadline_help": "👆 Subheadline on thank you page",
     
-    "message": "Check your email for next steps",
+    "message": "Check your email for call details
+    Add the call to your calendar
+    Be somewhere quiet for the conversation",
     "_message_help": "👆 Additional message below subheadline",
     
     "redirect": {
