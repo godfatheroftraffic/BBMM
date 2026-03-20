@@ -201,7 +201,7 @@ Your advisor will review your answers before the call so that your video call in
           "name": "control",
           "_name_help": "👆 Friendly name for reports",
           
-          "url": "https://www.beyondbordersmatchmaking.com/login",
+          "url": "https://cal.com/amplifai/beyondbordersmatchmaking-profile-verification-call",
           "_url_help": "👆 Where users go after clicking CTA. Usually Calendly, TypeBot, or FormBricks.",
           
           "weight": 100,
