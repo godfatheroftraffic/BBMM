@@ -447,7 +447,6 @@
     var epsScore  = parseFloat(trackingData.eps_score) || 0;
     var apsScore  = parseFloat(trackingData.aps_score) || epsScore;
     var dspStep   = 'step_2';
-    var linkParam = getParam('link', []);
 
     var debugMode = getParam('debug', []) === '1' || getParam('test_all', []) === '1';
     var testMode  = getParam('testsurvey', []) === '1' || getParam('test', []) === '1';
@@ -703,10 +702,6 @@
       if (!baseUrl || baseUrl === '#' || baseUrl === 'thank-you.html' || baseUrl.indexOf('conversion-tracker') !== -1) {
         return 'thank-you.html?' + qs;
       }
-      // External URL (TypeBot, Calendly, etc.) — redirect directly
-      if (baseUrl.indexOf('http') === 0) {
-        return baseUrl;
-      }
       setCookie('final_destination', baseUrl, 1);
       return 'thank-you.html?' + qs;
     }
@@ -774,6 +769,7 @@
       var fontFamily = deepGet(config, ['branding', 'font', 'family'], 'Inter');
       if (fontUrl) document.getElementById('brand-font-link').href = fontUrl;
       document.documentElement.style.setProperty('--brand-font', "'" + fontFamily + "', system-ui, sans-serif");
+      document.body.style.fontFamily = "'" + fontFamily + "', system-ui, sans-serif";
       document.title = deepGet(config, ['brand', 'name'], 'AmplifAI') + ' — Step 2';
 
       var btnColor = deepGet(config, ['landing_page', 'styling', 'button_color'], '#2563eb');

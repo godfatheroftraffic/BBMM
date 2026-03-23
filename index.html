@@ -942,8 +942,7 @@
     var av               = getParam('av', ['ad_variation']);
     var mb               = getParam('mb', ['media_buyer']);
     var eps_score        = getParam('eps_score', ['eps', 'eps_initial']);
-    var fi               = getParam('fi', []);
-    var link             = getParam('link', []);
+    var ret              = getParam('ret', []);
     var aps_score        = parseFloat(eps_score) || 0;
 
     // Normalize archetype/angle
@@ -1071,8 +1070,7 @@
       q1: q1, q2: q2, q3: q3, q4: q4, q5: q5,
       q6: q6, q7: q7, q8: q8, q9: q9, q10: q10,
       email: user_email, phone: user_phone, name: user_name,
-      fname: user_fname, lname: user_lname,
-      fi: fi, link: link
+      fname: user_fname, lname: user_lname
     };
 
     for (var key in allParams) {
@@ -1325,7 +1323,10 @@
       var heroImgSrc    = '';
 
       if (img) {
-        heroImgSrc = img.indexOf('http') === 0 ? img : 'public/' + img;
+        heroImgSrc = img;
+        if (isMobile && !img.includes('_mobile')) {
+          heroImgSrc = img.replace(/(\.\w+)$/, '_mobile$1');
+        }
       } else if (isMobile && defaultImgMob) {
         heroImgSrc = 'public/' + defaultImgMob;
       } else if (defaultImg) {
@@ -1362,7 +1363,7 @@
 
       var ctaEl = document.getElementById('cta-button');
       ctaEl.className = 'size-' + finalBtnSize + ' style-' + finalBtnStyle;
-      ctaEl.href   = (link && link.indexOf('http') === 0) ? link : 'conversion-tracker.html' + window.location.search;
+      ctaEl.href   = 'conversion-tracker.html' + window.location.search;
       ctaEl.target = '_blank';
       ctaEl.rel    = 'noopener';
 
@@ -1746,29 +1747,9 @@
         console.log('[Echo LP] ✅ All step_1 events fired. Opening: ' + destinationHref);
       }
 
-      // If external URL (TypeBot etc.) — append/override dynamic params
-      var finalHref = destinationHref;
-      if (destinationHref.indexOf('http') === 0) {
-        var sep = destinationHref.indexOf('?') !== -1 ? '&' : '?';
-        var appendParams = [];
-        if (cta)        appendParams.push('cta='        + encodeURIComponent(cta));
-        if (hl)         appendParams.push('hl='         + encodeURIComponent(hl));
-        if (sh)         appendParams.push('sh='         + encodeURIComponent(sh));
-        if (conversion) appendParams.push('conversion=' + encodeURIComponent(conversion));
-        if (campaign)   appendParams.push('campaign='   + encodeURIComponent(campaign));
-        if (banner)     appendParams.push('banner='     + encodeURIComponent(banner));
-        if (publisher)  appendParams.push('publisher='  + encodeURIComponent(publisher));
-        if (archetype)  appendParams.push('archetype='  + encodeURIComponent(archetype));
-        if (angle)      appendParams.push('angle='      + encodeURIComponent(angle));
-        if (ad)         appendParams.push('ad='         + encodeURIComponent(ad));
-        if (phase)      appendParams.push('phase='      + encodeURIComponent(phase));
-        if (eps_score)  appendParams.push('eps_score='  + encodeURIComponent(eps_score));
-        appendParams.push('aps_score=' + encodeURIComponent(currentAPS));
-        if (appendParams.length) finalHref = destinationHref + sep + appendParams.join('&');
-      }
-
+      // Open conversion-tracker in new tab — approved behavior
       setTimeout(function() {
-        window.open(finalHref, '_blank', 'noopener');
+        window.open(destinationHref, '_blank', 'noopener');
       }, 150);
     }
 
