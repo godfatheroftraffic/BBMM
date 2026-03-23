@@ -30,8 +30,8 @@
       "overlay": "medium"
     },
     "styling": {
-      "button_color": "#e4c79a",
-      "button_text_color": "#0e1b2a",
+      "button_color": "#b8860b",
+      "button_text_color": "#ffffff",
       "button_size": "xlarge",
       "button_style": "rounded"
     },
@@ -71,7 +71,7 @@
         "default_text": "Only {N} consultation spots available this week"
       },
       "progress": {
-        "enabled": false,
+        "enabled": true,
         "total_steps": 3
       },
       "micro_yes": {
