@@ -943,6 +943,7 @@
     var mb               = getParam('mb', ['media_buyer']);
     var eps_score        = getParam('eps_score', ['eps', 'eps_initial']);
     var ret              = getParam('ret', []);
+    var link             = getParam('link', []);
     var aps_score        = parseFloat(eps_score) || 0;
 
     // Normalize archetype/angle
@@ -1363,7 +1364,21 @@
 
       var ctaEl = document.getElementById('cta-button');
       ctaEl.className = 'size-' + finalBtnSize + ' style-' + finalBtnStyle;
-      ctaEl.href   = 'conversion-tracker.html' + window.location.search;
+      // ── CTA DESTINATION ROUTING ──────────────────────────────
+      // Priority: 1) link param (ad network) 2) debug=1 → CT 3) brand-config cta_destination 4) CT fallback
+      var ctaDest;
+      if (link && link.indexOf('http') === 0) {
+        ctaDest = link;
+      } else if (debug === '1') {
+        ctaDest = 'conversion-tracker.html' + window.location.search;
+      } else {
+        ctaDest = deepGet(brandConfig, ['landing_page', 'defaults', 'cta_destination'], '');
+        if (!ctaDest) {
+          console.warn('[Echo LP] ⚠️ No cta_destination in brand-config. Falling back to CT.');
+          ctaDest = 'conversion-tracker.html' + window.location.search;
+        }
+      }
+      ctaEl.href   = ctaDest;
       ctaEl.target = '_blank';
       ctaEl.rel    = 'noopener';
 
