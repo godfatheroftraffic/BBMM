@@ -703,7 +703,9 @@
         return 'thank-you.html?' + qs;
       }
       setCookie('final_destination', baseUrl, 1);
-      return 'thank-you.html?' + qs;
+      if (getParam('ux', []) === 'n') return 'thank-you.html?' + qs;
+      var sep = baseUrl.indexOf('?') !== -1 ? '&' : '?';
+      return baseUrl + sep + qs;
     }
 
     function startRedirectFlow(destinationUrl) {
