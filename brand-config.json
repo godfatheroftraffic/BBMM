@@ -37,7 +37,7 @@
     },
     "features": {
       "social_proof": {
-        "enabled": true,
+        "enabled": false,
         "variants": [
           {
             "emoji": "\ud83d\udc68\u200d\ud83d\udcbc",
