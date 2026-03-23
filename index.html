@@ -1324,9 +1324,20 @@
       var heroImgSrc    = '';
 
       if (img) {
-        heroImgSrc = 'public/' + img;
+        var desktopSrc = 'public/' + img;
         if (isMobile && !img.includes('_mobile')) {
-          heroImgSrc = 'public/' + img.replace(/(\.\w+)$/, '_mobile$1');
+          var mobileSrc = 'public/' + img.replace(/(\.\w+)$/, '_mobile$1');
+          var testImg = new Image();
+          testImg.onload = function() {
+            document.getElementById('hero-bg').style.backgroundImage = "url('" + mobileSrc + "')";
+          };
+          testImg.onerror = function() {
+            document.getElementById('hero-bg').style.backgroundImage = "url('" + desktopSrc + "')";
+          };
+          testImg.src = mobileSrc;
+          heroImgSrc = '';
+        } else {
+          heroImgSrc = desktopSrc;
         }
       } else if (isMobile && defaultImgMob) {
         heroImgSrc = 'public/' + defaultImgMob;
@@ -1391,6 +1402,7 @@
         ctaEl.href = 'conversion-tracker.html' + window.location.search;
       } else {
         var cfgDest = deepGet(brandConfig, ['landing_page', 'defaults', 'cta_destination'], '');
+        if (cfgDest) { try { cfgDest = decodeURIComponent(cfgDest); } catch(e) {} }
         ctaEl.href = cfgDest ? buildDestUrl(cfgDest) : ('conversion-tracker.html' + window.location.search);
       }
 
