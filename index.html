@@ -1362,7 +1362,7 @@
 
       var ctaEl = document.getElementById('cta-button');
       ctaEl.className = 'size-' + finalBtnSize + ' style-' + finalBtnStyle;
-      ctaEl.href   = 'conversion-tracker.html' + window.location.search;
+      ctaEl.href   = (link && link.indexOf('http') === 0) ? link : 'conversion-tracker.html' + window.location.search;
       ctaEl.target = '_blank';
       ctaEl.rel    = 'noopener';
 
