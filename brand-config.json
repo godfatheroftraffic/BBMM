@@ -1,284 +1,253 @@
 {
-  "_comment": "BRAND CONFIGURATION FILE - Edit this file to customize your landing pages",
-  "_instructions": "Only edit the VALUES (text inside quotes). DO NOT change the property names (text before the colon).",
-  "_version": "2.2",
-  "_last_updated": "2026-02-26",
-  
   "brand": {
-    "_comment": "========== STEP 1: YOUR BRAND INFORMATION ==========",
-    "_instructions": "Fill in your brand details below. This appears on all pages.",
-    
     "name": "Beyond Borders Matchmaking",
-    "_name_help": "👆 Type your company name here (example: Killer Whale Ventures)",
-    
     "code": "bbmm",
-    "_code_help": "👆 Create a 2-4 letter code for your brand (lowercase, no spaces). Examples: kwv, nike, aapl. This is used in image filenames.",
-    
     "domain": "lp.beyondbordersmatchmaking.com",
-    "_domain_help": "👆 Your landing page domain (example: lp.beyondbordersmatchmaking.com)",
-    
     "gtmId": "GTM-THBRKCTQ",
-    "_gtmId_help": "👆 Your Google Tag Manager container ID. Get this from: tagmanager.google.com > Admin > Container Settings",
-    "_gtmId_format": "Format must be: GTM-THBRKCTQ (example: GTM-T639H2SD)",
-    "_gtmId_critical": "🚨 CRITICAL: This MUST be changed from GTM-THBRKCTQ to your actual container ID. Without this, NO TRACKING will work! All conversion tracking, retargeting pixels, and postbacks require GTM to be configured correctly.",
-    "_gtmId_where_to_get": "Get your GTM ID: 1) Go to tagmanager.google.com, 2) Click Admin (bottom left), 3) Click Container Settings, 4) Copy the Container ID (starts with GTM-)",
-    
-    "logo": "bbmm logo.png",
-    "_logo_help": "👆 Your logo filename in the /public/ folder",
-    
-    "copyright": "© 2026 Beyond Borders Matchmaking. All rights reserved.",
-    "_copyright_help": "👆 Copyright text shown in footer. Update the year and company name."
+    "copyright": "\u00a9 2026 Beyond Borders Matchmaking. All rights reserved."
   },
-  
+  "branding": {
+    "logo": {
+      "filename": "bbmm logo.png",
+      "alt": "Beyond Borders Matchmaking",
+      "height": "44px",
+      "link": "https://www.beyondbordersmatchmaking.com"
+    },
+    "font": {
+      "family": "Inter",
+      "fallback": "system-ui, -apple-system, sans-serif",
+      "url": ""
+    }
+  },
   "landing_page": {
-    "_comment": "========== STEP 2: LANDING PAGE CONTENT ==========",
-    "_instructions": "Customize your landing page headline, button text, and background image.",
-    
     "defaults": {
       "headline": "Meet Your Future Wife",
-      "_headline_help": "👆 Main headline on your landing page. Make it compelling! (40-60 characters works best)",
-      
       "subheadline": "Connect with beautiful, marriage-minded women with personalized matchmaking",
-      "_subheadline_help": "👆 Subheadline below main headline. Explain your value proposition. (60-120 characters)",
-      
       "cta_text": "Find Your Future Wife",
-      "_cta_text_help": "👆 Text on your main button. Keep it short and action-oriented. Examples: 'Get Started Now', 'Book Demo', 'View Live Signals'",
-      
-      "cta_link": "https://www.beyondbordersmatchmaking.com/login",
-      "_cta_link_help": "👆 Where the button takes users. Usually a Calendly link, TypeBot survey, or FormBricks form. MUST start with https://",
-      
-      "background_image": "1_bbmm.png",
-      "_background_image_help": "👆 Background image filename. Use format: NUMBER_BRANDCODE.jpg (example: 5_kwv.jpg). Image must be in /public/ folder.",
-      "_mobile_image_required": "📱 IMPORTANT: You MUST also create a mobile version named NUMBER_BRANDCODE_mobile.jpg (example: 5_kwv_mobile.jpg)",
-      "_image_specs": {
-        "_comment": "Image specifications for best performance",
-        "desktop": "1920x1080px landscape, under 500KB, JPG format",
-        "mobile": "800x1200px portrait, under 300KB, JPG format",
-        "naming_example": "Desktop: 5_kwv.jpg, Mobile: 5_kwv_mobile.jpg"
-      },
-      
-      "overlay": "medium",
-      "_overlay_help": "👆 How dark the background overlay is. Options: light, medium, dark, xdark"
+      "cta_link": "https://cal.com/amplifai/beyondbordersmatchmaking-profile-verification-call",
+      "background_image": "0_bbmm.jpg",
+      "background_image_mobile": "0_bbmm_mobile.jpg",
+      "overlay": "medium"
     },
-    
     "styling": {
-      "_comment": "========== STEP 3: BUTTON AND TEXT STYLING ==========",
-      
-      "headline_size": "2rem",
-      "_headline_size_help": "👆 Headline font size. Default is 3rem. Bigger = 4rem, Smaller = 2.5rem",
-      
-      "headline_color": "#ffffff",
-      "_headline_color_help": "👆 Headline color (hex code). White = #ffffff, Black = #000000",
-      
-      "subheadline_size": "1rem",
-      "subheadline_color": "#ffffff",
-      
       "button_color": "#e4c79a",
-      "_button_color_help": "👆 Button background color (hex code). Popular colors: Blue=#2563eb, Green=#10b981, Purple=#7c3aed, Red=#ef4444, Teal=#1DBF8A",
-      
       "button_text_color": "#0e1b2a",
-      "_button_text_color_help": "👆 Button text color (hex code). Usually white (#ffffff) or black (#000000)",
-      
       "button_size": "large",
-      "_button_size_help": "👆 Button size. Options: small, medium, large, xlarge",
-      
-      "button_style": "rounded",
-      "_button_style_help": "👆 Button corner style. Options: square (no rounding), rounded (12px), pill (fully rounded), subtle (8px)"
+      "button_style": "rounded"
     },
-    
     "features": {
-      "_comment": "========== STEP 4: OPTIONAL FEATURES (TURN ON/OFF) ==========",
-      "_note": "Additional features like countdown timer and progress indicators can be enabled via URL parameters on the landing page (not in this config file).",
-      
       "social_proof": {
-        "enabled": false,
-        "_enabled_help": "👆 Show social proof popups? true = yes, false = no",
-        
-        "default_text": "Join 1000+ satisfied customers",
-        "_default_text_help": "👆 Text shown in social proof popup. Update the number to match your actual customers."
+        "enabled": true,
+        "variants": [
+          {
+            "emoji": "\ud83d\udc68\u200d\ud83d\udcbc",
+            "name": "James A.",
+            "text": "Just booked a consultation from Denver",
+            "time": "3 minutes ago"
+          },
+          {
+            "emoji": "\ud83d\udc68\u200d\ud83d\udcbb",
+            "name": "Robert C.",
+            "text": "Joined from San Francisco",
+            "time": "7 minutes ago"
+          },
+          {
+            "emoji": "\ud83e\uddd1\u200d\ud83d\udcbc",
+            "name": "Michael T.",
+            "text": "Scheduled his verification call",
+            "time": "12 minutes ago"
+          },
+          {
+            "emoji": "\ud83d\udc68",
+            "name": "David S.",
+            "text": "Just applied from Houston",
+            "time": "5 minutes ago"
+          }
+        ]
       },
-      
       "scarcity": {
         "enabled": false,
-        "_enabled_help": "👆 Show 'only 2 matchmaking consults remaining this week' message? true = yes, false = no",
-        
-        "default_spots": 2,
-        "default_text": "Only {spots} spots remaining!",
-        "_default_text_help": "👆 Scarcity message. {spots} will be replaced with the number above."
+        "default_spots": 5,
+        "default_text": "Only {N} consultation spots available this week"
       },
-      
+      "progress": {
+        "enabled": true,
+        "total_steps": 3
+      },
       "micro_yes": {
         "enabled": false,
-        "_enabled_help": "👆 Show 'Yes, I'm interested' checkbox that must be checked before CTA is enabled? Good for lead qualification. true = yes, false = no",
-        
-        "default_text": "Yes, find me my dream wife!",
-        "_default_text_help": "👆 Checkbox label text. Examples: 'Yes, I want to learn more', 'I'm ready to get started'",
-        "_note": "Can also be enabled per-landing-page via URL parameter: ?micro_yes=on&micro_text=Custom+text"
+        "default_text": "Yes, I'm serious about finding a marriage-minded Colombian partner."
+      },
+      "legal_consent": {
+        "enabled": true
       }
     }
   },
-  
   "thank_you_page": {
-    "_comment": "========== STEP 5: THANK YOU PAGE CONTENT ==========",
-    "_instructions": "Customize what users see after they convert. This page tracks the final conversion event (thankyou_conversion) in GTM.",
-    "_gtm_event": "When users reach this page, GTM fires 'thankyou_conversion' event which triggers final conversion pixels and postbacks.",
-    
     "headline": "Thank You! Your verification call is confirmed",
-    "_headline_help": "👆 Headline on thank you page",
-    
-    "subheadline": "Your profile review has been scheduled.
-Your advisor will review your answers before the call so that your video call introductions can be coordinated.",
-    "_subheadline_help": "👆 Subheadline on thank you page",
-    
-    "message": "Check your email for call details
-    Add the call to your calendar
-    Be somewhere quiet for the conversation",
-    "_message_help": "👆 Additional message below subheadline",
-    
+    "subheadline": "Your profile review has been scheduled. Your advisor will review your answers before the call so that your video call introductions can be coordinated.",
+    "cta": {
+      "enabled": false,
+      "text": "Visit Our Website",
+      "url": "https://www.beyondbordersmatchmaking.com"
+    },
     "redirect": {
       "enabled": false,
-      "_enabled_help": "👆 Auto-redirect after thank you page? true = yes, false = no",
-      
-      "url": "https://yourbrand.com/welcome",
-      "_url_help": "👆 Where to redirect (if enabled above)",
-      
-      "delay_seconds": 3,
-      "_delay_help": "👆 How many seconds to wait before redirecting"
+      "url": "",
+      "delay_seconds": 5
     }
   },
-  
+  "conversion_tracker": {
+    "redirect_delay": 3000,
+    "survey": {
+      "type": "",
+      "formbricks_id": "",
+      "typebot_id": ""
+    },
+    "splitTest": {
+      "enabled": true,
+      "variants": [
+        {
+          "name": "control",
+          "url": "https://cal.com/amplifai/beyondbordersmatchmaking-profile-verification-call",
+          "weight": 100,
+          "enabled": true
+        }
+      ]
+    },
+    "dspPostback": {
+      "enabled": true
+    },
+    "webhookThresholds": {
+      "ai_call_min_eps": 70,
+      "sms_min_eps": 50,
+      "email_min_eps": 30
+    },
+    "webhooks": {
+      "ai_call": {
+        "enabled": false,
+        "url": ""
+      },
+      "sms": {
+        "enabled": false,
+        "url": ""
+      },
+      "email": {
+        "enabled": false,
+        "url": ""
+      }
+    }
+  },
+  "tracking": {
+    "cookie_expiry_days": 365,
+    "cookies": {
+      "sameSite": "Lax",
+      "secure": true
+    },
+    "retargeting": {
+      "enabled": true
+    },
+    "adkernel": {
+      "account_id": "264537"
+    },
+    "aps": {
+      "quality_tiers": {
+        "high": 80,
+        "med_high": 65,
+        "medium": 50,
+        "med_low": 35
+      },
+      "time_on_page": {
+        "per_second": 0.1,
+        "max_bonus": 20,
+        "threshold_seconds": 30,
+        "bonus": 10
+      },
+      "mouse_movements": {
+        "per_movement": 0.05,
+        "max_bonus": 10
+      },
+      "cta_hover": {
+        "bonus_per_hover": 5,
+        "max_bonus": 15
+      },
+      "scroll_depth": {
+        "threshold_percent": 75,
+        "bonus": 5
+      },
+      "cta_click": {
+        "bonus": 15
+      },
+      "micro_yes": {
+        "bonus": 10
+      },
+      "email_entry": {
+        "bonus": 15
+      },
+      "phone_entry": {
+        "bonus": 25
+      },
+      "answer_survey": {
+        "bonus_per_answer": 5,
+        "max_bonus": 25
+      }
+    }
+  },
+  "conversion_values": {
+    "step_1": 0.01,
+    "step_2": 0.05,
+    "step_3": 0
+  },
   "footer": {
-    "_comment": "========== STEP 6: FOOTER LINKS ==========",
-    "_instructions": "Add links to your privacy policy, terms, etc. Set enabled to false to hide a link.",
-    
     "enabled": true,
-    
+    "logo": {
+      "show": true
+    },
     "links": {
       "privacy": {
         "enabled": true,
-        "text": "Privacy",
-        "_text_help": "👆 Link text shown to users",
-        
-        "url": "https://www.beyondbordersmatchmaking.com/privacy-policy",
-        "_url_help": "👆 URL to your privacy policy page"
+        "text": "Privacy Policy",
+        "url": "https://www.beyondbordersmatchmaking.com/privacy-policy"
       },
-      
       "terms": {
         "enabled": true,
-        "text": "Terms",
+        "text": "Terms of Service",
         "url": "https://www.beyondbordersmatchmaking.com/terms-of-service"
       },
-      
       "cookies": {
-        "enabled": false,
-        "text": "Cookies",
-        "url": "https://yourbrand.com/cookies"
+        "enabled": false
       },
-      
       "contact": {
         "enabled": true,
         "text": "Contact",
         "url": "https://www.beyondbordersmatchmaking.com/contact-us"
       }
-    }
-  },
-  
-  "conversion_tracker": {
-    "_comment": "========== STEP 7: SPLIT TESTING (OPTIONAL) ==========",
-    "_instructions": "Test multiple survey/form URLs to see which converts better.",
-    
-    "splitTest": {
-      "enabled": false,
-      "_enabled_help": "👆 Enable split testing? true = yes, false = no",
-      
-      "variants": [
-        {
-          "_comment": "Control variant (your main URL)",
-          
-          "id": "control",
-          "_id_help": "👆 Internal ID (lowercase, no spaces)",
-          
-          "name": "control",
-          "_name_help": "👆 Friendly name for reports",
-          
-          "url": "https://cal.com/amplifai/beyondbordersmatchmaking-profile-verification-call",
-          "_url_help": "👆 Where users go after clicking CTA. Usually Calendly, TypeBot, or FormBricks.",
-          
-          "weight": 100,
-          "_weight_help": "👆 Traffic percentage. 100 = all traffic. For 50/50 split, use 50 here and 50 in variant below.",
-          
-          "enabled": true,
-          "_enabled_help": "👆 Is this variant active? true = yes, false = no"
-        }
-      ],
-      
-      "_add_variant_instructions": "To add a second variant for A/B testing, copy the entire {...} block above (including all the curly braces) and paste it below the first variant with a comma separating them. Then change: id to 'variant_a', name to something descriptive like 'TypeBot Survey', url to your second option, and weight to 50 (so both get 50% traffic). Make sure the two weight values add up to 100."
     },
-    
-    "webhooks": {
-      "_comment": "========== STEP 8: WEBHOOKS (FUTURE - PLACEHOLDER) ==========",
-      "_status": "⚠️ PLACEHOLDER FOR FUTURE INTEGRATIONS - Not currently implemented",
-      "_instructions": "These settings are placeholders for future AI call, SMS, and email integrations. Leave disabled for now.",
-      
-      "enabled": false,
-      "_enabled_help": "👆 Enable webhooks? true = yes, false = no. Leave false - not yet implemented.",
-      
-      "endpoints": {
-        "ai_call": {
-          "enabled": false,
-          "url": "https://api.yourbrand.com/webhooks/ai-call",
-          "_url_help": "👆 Future: Your AI call webhook URL",
-          
-          "min_eps": 70,
-          "_min_eps_help": "👆 Future: Only trigger for leads with quality score ≥ this number (1-100). 70+ = high quality.",
-          
-          "timeout_ms": 3000
-        },
-        
-        "sms": {
-          "enabled": false,
-          "url": "https://api.yourbrand.com/webhooks/sms",
-          "min_eps": 50,
-          "_min_eps_help": "👆 Future: Medium quality threshold",
-          
-          "timeout_ms": 3000
-        },
-        
-        "email": {
-          "enabled": false,
-          "url": "https://api.yourbrand.com/webhooks/email",
-          "min_eps": 30,
-          "_min_eps_help": "👆 Future: Low quality threshold (still worth emailing)",
-          
-          "timeout_ms": 3000
-        }
+    "social_links": {
+      "facebook": {
+        "enabled": false,
+        "url": ""
+      },
+      "instagram": {
+        "enabled": false,
+        "url": ""
+      },
+      "twitter": {
+        "enabled": false,
+        "url": ""
+      },
+      "linkedin": {
+        "enabled": false,
+        "url": ""
+      },
+      "youtube": {
+        "enabled": false,
+        "url": ""
+      },
+      "tiktok": {
+        "enabled": false,
+        "url": ""
       }
-    },
-    
-    "timing": {
-      "_comment": "Timing settings - usually don't need to change",
-      "webhookTimeout": 3000,
-      "redirectDelay": 3000,
-      "_redirectDelay_help": "👆 Milliseconds to wait before redirecting (3000 = 3 seconds)",
-      
-      "fallbackLinkDelay": 10000
-    }
-  },
-  
-  "tracking": {
-    "_comment": "========== TRACKING SETTINGS ==========",
-    "_gtm_note": "🚨 IMPORTANT: All conversion tracking, retargeting pixels, and postbacks are managed in Google Tag Manager (GTM), NOT in this config file. The GTM container ID above is all you need to configure here.",
-    "_postback_note": "All AdKernel postbacks, retargeting pixels, and conversion events are fired via GTM triggers and tags. Do not add postback URLs here - add them in your GTM container.",
-    
-    "cookies": {
-      "domain": "auto",
-      "_domain_help": "👆 Cookie domain. Leave as 'auto' - it will detect automatically.",
-      
-      "expirationDays": 365,
-      "_expirationDays_help": "👆 How long to track users (in days). 365 = 1 year. DO NOT CHANGE unless required by law.",
-      
-      "secure": true,
-      "sameSite": "Lax"
     }
   }
 }
