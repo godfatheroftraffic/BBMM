@@ -447,6 +447,7 @@
     var epsScore  = parseFloat(trackingData.eps_score) || 0;
     var apsScore  = parseFloat(trackingData.aps_score) || epsScore;
     var dspStep   = 'step_2';
+    var linkParam = getParam('link', []);
 
     var debugMode = getParam('debug', []) === '1' || getParam('test_all', []) === '1';
     var testMode  = getParam('testsurvey', []) === '1' || getParam('test', []) === '1';
@@ -702,6 +703,10 @@
       if (!baseUrl || baseUrl === '#' || baseUrl === 'thank-you.html' || baseUrl.indexOf('conversion-tracker') !== -1) {
         return 'thank-you.html?' + qs;
       }
+      // External URL (TypeBot, Calendly, etc.) — redirect directly
+      if (baseUrl.indexOf('http') === 0) {
+        return baseUrl;
+      }
       setCookie('final_destination', baseUrl, 1);
       return 'thank-you.html?' + qs;
     }
@@ -816,7 +821,7 @@
         hasSurvey = true;
       }
 
-      var destinationUrl = selectSplitTestVariant(config);
+      var destinationUrl = linkParam || selectSplitTestVariant(config);
 
       if (debugMode) {
         document.getElementById('debug-panel').classList.add('active');
