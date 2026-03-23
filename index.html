@@ -942,7 +942,8 @@
     var av               = getParam('av', ['ad_variation']);
     var mb               = getParam('mb', ['media_buyer']);
     var eps_score        = getParam('eps_score', ['eps', 'eps_initial']);
-    var ret              = getParam('ret', []);
+    var fi               = getParam('fi', []);
+    var link             = getParam('link', []);
     var aps_score        = parseFloat(eps_score) || 0;
 
     // Normalize archetype/angle
@@ -1070,7 +1071,8 @@
       q1: q1, q2: q2, q3: q3, q4: q4, q5: q5,
       q6: q6, q7: q7, q8: q8, q9: q9, q10: q10,
       email: user_email, phone: user_phone, name: user_name,
-      fname: user_fname, lname: user_lname
+      fname: user_fname, lname: user_lname,
+      fi: fi, link: link
     };
 
     for (var key in allParams) {
@@ -1323,10 +1325,7 @@
       var heroImgSrc    = '';
 
       if (img) {
-        heroImgSrc = img;
-        if (isMobile && !img.includes('_mobile')) {
-          heroImgSrc = img.replace(/(\.\w+)$/, '_mobile$1');
-        }
+        heroImgSrc = img.indexOf('http') === 0 ? img : 'public/' + img;
       } else if (isMobile && defaultImgMob) {
         heroImgSrc = 'public/' + defaultImgMob;
       } else if (defaultImg) {
@@ -1364,7 +1363,8 @@
       var ctaEl = document.getElementById('cta-button');
       ctaEl.className = 'size-' + finalBtnSize + ' style-' + finalBtnStyle;
       ctaEl.href   = 'conversion-tracker.html' + window.location.search;
-      ctaEl.target = '_self';
+      ctaEl.target = '_blank';
+      ctaEl.rel    = 'noopener';
 
       // ── 11h. SCARCITY ────────────────────────────────────────
       var scarcityEnabled = scarcity ||
@@ -1746,9 +1746,8 @@
         console.log('[Echo LP] ✅ All step_1 events fired. Opening: ' + destinationHref);
       }
 
-      // Navigate same tab — keeps GTM Preview connected
       setTimeout(function() {
-        window.location.href = destinationHref;
+        window.open(destinationHref, '_blank', 'noopener');
       }, 150);
     }
 
