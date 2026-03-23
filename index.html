@@ -1746,8 +1746,29 @@
         console.log('[Echo LP] ✅ All step_1 events fired. Opening: ' + destinationHref);
       }
 
+      // If external URL (TypeBot etc.) — append/override dynamic params
+      var finalHref = destinationHref;
+      if (destinationHref.indexOf('http') === 0) {
+        var sep = destinationHref.indexOf('?') !== -1 ? '&' : '?';
+        var appendParams = [];
+        if (cta)        appendParams.push('cta='        + encodeURIComponent(cta));
+        if (hl)         appendParams.push('hl='         + encodeURIComponent(hl));
+        if (sh)         appendParams.push('sh='         + encodeURIComponent(sh));
+        if (conversion) appendParams.push('conversion=' + encodeURIComponent(conversion));
+        if (campaign)   appendParams.push('campaign='   + encodeURIComponent(campaign));
+        if (banner)     appendParams.push('banner='     + encodeURIComponent(banner));
+        if (publisher)  appendParams.push('publisher='  + encodeURIComponent(publisher));
+        if (archetype)  appendParams.push('archetype='  + encodeURIComponent(archetype));
+        if (angle)      appendParams.push('angle='      + encodeURIComponent(angle));
+        if (ad)         appendParams.push('ad='         + encodeURIComponent(ad));
+        if (phase)      appendParams.push('phase='      + encodeURIComponent(phase));
+        if (eps_score)  appendParams.push('eps_score='  + encodeURIComponent(eps_score));
+        appendParams.push('aps_score=' + encodeURIComponent(currentAPS));
+        if (appendParams.length) finalHref = destinationHref + sep + appendParams.join('&');
+      }
+
       setTimeout(function() {
-        window.open(destinationHref, '_blank', 'noopener');
+        window.open(finalHref, '_blank', 'noopener');
       }, 150);
     }
 
