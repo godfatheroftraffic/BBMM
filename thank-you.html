@@ -2,522 +2,694 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title id="page-title">Thank You</title>
-  
-  <!--
-  ========================================================================
-  THANK YOU PAGE MASTER TEMPLATE v2.2
-  ========================================================================
-  
-  CHANGELOG v2.2:
-  - Added funnel_step: 'step_3' to thankyou_conversion event
-  - Added funnel_step: 'step_3' to dsp_postback event
-  
-  ========================================================================
-  -->
-  
-  <link rel="icon" type="image/png" id="favicon" href="/public/favicon.png">
-  
-  <script id="gtm-loader"></script>
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Thank You</title>
+  <meta name="robots" content="noindex, nofollow">
+
+  <link id="brand-font-link" rel="stylesheet" href="">
+
   <style>
-    :root {
-      --brand-accent: #2563eb;
-      --brand-accent-text: #ffffff;
-      --brand-text: #ffffff;
-      --brand-font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Helvetica Neue", Helvetica, sans-serif;
-      --brand-bg: #0a1f31;
-    }
-    
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    
+    /* ============================================================
+       ECHO THANK YOU v1.0 — STYLES
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body { height: 100%; width: 100%; }
+
     body {
-      font-family: var(--brand-font);
-      background: var(--brand-bg);
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-attachment: fixed;
+      font-family: var(--brand-font, 'Inter', system-ui, sans-serif);
+      background: #050510;
+      color: #ffffff;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      position: relative;
     }
-    
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.75);
+
+    :root {
+      --brand-font: 'Inter', system-ui, sans-serif;
+      --btn-color: #2563eb;
+      --accent: #7c3aed;
+      --overlay-opacity: 0.65;
+    }
+
+    /* ── BACKGROUND ─────────────────────────────────────────── */
+    #bg-gradient {
+      position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: radial-gradient(ellipse at center top, #0d2a1a 0%, #050510 60%);
+      z-index: -1;
+    }
+
+    #hero-bg {
+      position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
       z-index: 0;
-      pointer-events: none;
     }
-    
-    .container {
-      background: transparent;
-      border-radius: 0;
-      padding: 48px 24px;
-      max-width: 720px;
-      width: 100%;
-      box-shadow: none;
-      text-align: center;
-      margin-bottom: 80px;
-      position: relative;
+
+    #hero-overlay {
+      position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, var(--overlay-opacity));
       z-index: 1;
-      color: #ffffff;
     }
-    
-    .checkmark {
-      width: 80px;
-      height: 80px;
-      margin: 0 auto 24px;
-      background: transparent;
-      border: 4px solid var(--brand-accent);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 48px;
-      color: var(--brand-accent);
-      animation: checkmarkPop 0.5s ease;
+
+    .bg-orb {
+      position: fixed; border-radius: 50%;
+      filter: blur(80px); opacity: 0.20; z-index: 0;
+      animation: orbFloat 10s ease-in-out infinite;
     }
-    
-    @keyframes checkmarkPop {
-      0% { transform: scale(0); }
-      50% { transform: scale(1.1); }
-      100% { transform: scale(1); }
+    .bg-orb-1 { width: 420px; height: 420px; background: var(--btn-color); top: -120px; left: -100px; animation-delay: 0s; }
+    .bg-orb-2 { width: 320px; height: 320px; background: var(--btn-color); bottom: -80px; right: -80px; animation-delay: -5s; }
+
+    @keyframes orbFloat {
+      0%, 100% { transform: translate(0,0) scale(1); }
+      33%       { transform: translate(18px,-18px) scale(1.04); }
+      66%       { transform: translate(-14px,14px) scale(0.96); }
     }
-    
-    h1 {
-      font-size: 38px;
-      color: #ffffff;
-      margin-bottom: 16px;
-      font-weight: 800;
-      line-height: 1.08;
+
+    /* ── LAYOUT ─────────────────────────────────────────────── */
+    #page-wrapper {
+      position: relative; z-index: 2;
+      display: flex; flex-direction: column; min-height: 100vh;
+    }
+
+    #main-content {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 40px 24px; text-align: center;
+    }
+
+    /* ── CARD ───────────────────────────────────────────────── */
+    #ty-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px;
+      padding: 52px 44px;
+      max-width: 520px; width: 100%;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+
+    /* ── LOGO ───────────────────────────────────────────────── */
+    #ty-logo { display: none; margin-bottom: 28px; }
+    #ty-logo img { height: 44px; width: auto; object-fit: contain; opacity: 0.9; }
+
+    /* ── CHECKMARK ──────────────────────────────────────────── */
+    #check-wrap {
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 32px;
+    }
+
+    .check-circle {
+      width: 88px; height: 88px; border-radius: 50%;
+      background: linear-gradient(135deg, #16a34a, #22c55e);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 0 0 rgba(34,197,94,0.4);
+      animation: checkPulse 2.5s ease-out forwards, checkGlow 3s 0.6s ease-in-out infinite;
+    }
+
+    .check-circle svg {
+      width: 44px; height: 44px;
+      stroke: #fff; stroke-width: 3;
+      fill: none; stroke-linecap: round; stroke-linejoin: round;
+      stroke-dasharray: 60;
+      stroke-dashoffset: 60;
+      animation: checkDraw 0.5s 0.3s ease-out forwards;
+    }
+
+    @keyframes checkPulse {
+      0%   { transform: scale(0); opacity: 0; }
+      60%  { transform: scale(1.12); opacity: 1; }
+      100% { transform: scale(1);   opacity: 1; }
+    }
+
+    @keyframes checkGlow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(34,197,94,0.3); }
+      50%       { box-shadow: 0 0 0 14px rgba(34,197,94,0); }
+    }
+
+    @keyframes checkDraw {
+      to { stroke-dashoffset: 0; }
+    }
+
+    /* ── TEXT ───────────────────────────────────────────────── */
+    #ty-title {
+      font-size: 1.75rem; font-weight: 800;
+      color: #ffffff; margin-bottom: 12px;
       letter-spacing: -0.02em;
     }
-    
-    p {
-      font-size: 18px;
-      color: #ffffff;
-      line-height: 1.45;
-      margin-bottom: 24px;
-      opacity: 0.95;
-    }
-    
-    .info-box {
-      background: rgba(255, 255, 255, 0.08);
-      border-radius: 12px;
-      padding: 24px;
-      margin: 32px 0;
-      text-align: left;
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    
-    .info-box h3 {
-      color: #ffffff;
-      margin-bottom: 12px;
-      font-size: 20px;
-      font-weight: 700;
-    }
-    
-    .info-box ul {
-      list-style: none;
-      padding: 0;
-    }
-    
-    .info-box li {
-      padding: 8px 0;
-      color: rgba(255, 255, 255, 0.95);
-      font-size: 16px;
-    }
-    
-    .info-box li:before {
-      content: "✓";
-      color: var(--brand-accent);
-      font-weight: bold;
-      margin-right: 8px;
-    }
-    
-    #echo-footer {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: rgba(0,0,0,0.8);
-      color: rgba(255,255,255,0.7);
-      padding: 16px 20px;
-      font-size: 12px;
-      text-align: center;
-      z-index: 1000;
-      backdrop-filter: blur(10px);
+
+    #ty-subtitle {
+      font-size: 1rem; color: rgba(255,255,255,0.65);
+      line-height: 1.6; margin-bottom: 36px;
+      max-width: 400px; margin-left: auto; margin-right: auto;
     }
 
-    #footer-content {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      max-width: 1200px;
-      margin: 0 auto;
-      flex-wrap: wrap;
-      gap: 12px;
+    /* ── CTA BUTTON ─────────────────────────────────────────── */
+    #ty-cta-wrap { margin-bottom: 28px; }
+
+    #ty-cta-btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      background: var(--btn-color); color: #fff;
+      font-size: 1rem; font-weight: 700;
+      padding: 16px 40px; border-radius: 12px;
+      text-decoration: none; cursor: pointer;
+      transition: filter 0.2s, transform 0.2s;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
     }
 
-    #footer-links {
-      display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
+    #ty-cta-btn:hover { filter: brightness(1.12); transform: translateY(-2px); }
+
+    /* ── REDIRECT COUNTDOWN ─────────────────────────────────── */
+    #redirect-notice {
+      display: none;
+      font-size: 12px; color: rgba(255,255,255,0.35);
+      margin-top: 8px;
     }
 
-    #footer-links a {
-      color: rgba(255,255,255,0.7);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
+    #redirect-notice.active { display: block; }
 
-    #footer-links a:hover {
-      color: rgba(255,255,255,1);
+    /* ── DETAILS STRIP ──────────────────────────────────────── */
+    #details-strip {
+      display: none;
+      border-top: 1px solid rgba(255,255,255,0.07);
+      padding-top: 20px; margin-top: 4px;
+      font-size: 12px; color: rgba(255,255,255,0.35);
+      line-height: 1.8; text-align: left;
     }
-    
-    @media (max-width: 768px) {
-      .container {
-        padding: 32px 24px;
-      }
-      
-      h1 {
-        font-size: 28px;
-      }
-      
-      p {
-        font-size: 16px;
-      }
-      
-      #footer-content {
-        flex-direction: column;
-        text-align: center;
-        gap: 8px;
-      }
-      
-      #footer-links {
-        justify-content: center;
-      }
-      
-      #echo-footer {
-        font-size: 11px;
-        padding: 12px 16px;
-      }
+    #details-strip.active { display: block; }
+    #details-strip strong { color: rgba(255,255,255,0.55); }
+
+    /* ── DEBUG ──────────────────────────────────────────────── */
+    #debug-panel {
+      display: none; position: fixed; top: 10px; right: 10px;
+      background: rgba(0,0,0,0.92); border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 12px; padding: 16px; font-size: 11px; color: #4ade80;
+      font-family: monospace; z-index: 9999;
+      max-width: 320px; max-height: 500px; overflow-y: auto; line-height: 1.6;
+    }
+    #debug-panel.active { display: block; }
+    #debug-panel .dtitle { color: #facc15; font-weight: 700; margin-bottom: 6px; padding-bottom: 4px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+
+    /* ── FOOTER ─────────────────────────────────────────────── */
+    #page-footer {
+      position: relative; z-index: 2;
+      background: rgba(0,0,0,0.4);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 20px; text-align: center;
+    }
+    #footer-inner { max-width: 600px; margin: 0 auto; }
+    #footer-logo-wrap { margin-bottom: 12px; }
+    #footer-logo-wrap img { height: 36px; width: auto; opacity: 0.7; }
+    #footer-social { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+    .social-icon { display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 50%; color: rgba(255,255,255,0.5); text-decoration: none; transition: all 0.2s; border: 1px solid transparent; }
+    .social-icon:hover { color: #fff; background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.15); transform: translateY(-1px); }
+    .social-icon svg { width: 16px; height: 16px; fill: currentColor; }
+    #footer-links { display: flex; align-items: center; justify-content: center; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
+    #footer-links a { color: rgba(255,255,255,0.35); text-decoration: none; font-size: 11px; transition: color 0.2s; }
+    #footer-links a:hover { color: rgba(255,255,255,0.7); }
+    #footer-links .sep { color: rgba(255,255,255,0.15); font-size: 11px; }
+    #footer-copyright { font-size: 11px; color: rgba(255,255,255,0.25); }
+
+    @media (max-width: 600px) {
+      #ty-card { padding: 36px 24px; margin: 0 8px; }
+      #ty-title { font-size: 1.4rem; }
+      .check-circle { width: 72px; height: 72px; }
+      .check-circle svg { width: 36px; height: 36px; }
     }
   </style>
 </head>
 <body>
 
-<noscript id="gtm-noscript"></noscript>
+  <div id="bg-gradient"></div>
+  <div id="hero-bg"></div>
+  <div id="hero-overlay"></div>
+  <div class="bg-orb bg-orb-1"></div>
+  <div class="bg-orb bg-orb-2"></div>
 
-<div class="container">
-  
-  <div class="checkmark">✓</div>
-  
-  <h1 id="page-title-main">Thank You!</h1>
-  
-  <p id="page-subtitle">Your verification call is confirmed</p>
-  
-  <div class="info-box" id="info-section">
-    <h3 id="info-title">Your profile review has been scheduled.
-    Your advisor will review your answers before the call so that your video call introductions can be coordinated.
-</h3>
-    <ul id="info-list">
-      <li>Check your email for call details</li>
-      <li>Add the call to your calendar</li>
-      <li>Be somewhere quiet for the conversation</li>
-    </ul>
+  <div id="page-wrapper">
+    <main id="main-content">
+      <div id="ty-card">
+
+        <div id="ty-logo">
+          <img id="ty-logo-img" src="" alt="Brand Logo">
+        </div>
+
+        <div id="check-wrap" aria-label="Success">
+          <div class="check-circle">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </div>
+        </div>
+
+        <h1 id="ty-title">You're Confirmed!</h1>
+        <p id="ty-subtitle">Thank you for taking the next step. We'll be in touch shortly.</p>
+
+        <div id="ty-cta-wrap" style="display:none;">
+          <a id="ty-cta-btn" href="#" target="_blank" rel="noopener">
+            <span id="ty-cta-text">Continue</span>
+            <span>→</span>
+          </a>
+        </div>
+
+        <p id="redirect-notice"></p>
+
+        <div id="details-strip"></div>
+
+      </div><!-- /#ty-card -->
+    </main>
+
+    <footer id="page-footer">
+      <div id="footer-inner">
+        <div id="footer-logo-wrap" style="display:none;">
+          <a id="footer-logo-link" href="#" target="_blank" rel="noopener">
+            <img id="footer-logo-img" src="" alt="Brand Logo">
+          </a>
+        </div>
+        <div id="footer-social" style="display:none;"></div>
+        <nav id="footer-links" aria-label="Footer links"></nav>
+        <p id="footer-copyright"></p>
+      </div>
+    </footer>
   </div>
-  
-  <p style="margin-top: 32px;">
-    <strong>Thank you!</strong><br>
-    <span id="brand-name">Brand Name</span>
-  </p>
-</div>
 
-<footer id="echo-footer">
-  <div id="footer-content">
-    <p id="footer-copyright"></p>
-    <div id="footer-links"></div>
+  <div id="debug-panel">
+    <div class="dtitle">🔍 THANK YOU v1.0 DEBUG</div>
+    <div id="debug-content"></div>
   </div>
-</footer>
 
-<script>
-(function() {
-  "use strict";
-  
-  let brandConfig = null;
-  
-  fetch('/brand-config.json')
-    .then(res => {
-      if (!res.ok) throw new Error('Config file not found');
-      return res.json();
-    })
-    .then(config => {
-      brandConfig = config;
-      brandConfig._loaded = true;
-      console.log('✅ brand-config.json loaded');
-      initializePage();
-    })
-    .catch(err => {
-      console.warn('⚠️ brand-config.json not found, using defaults');
-      brandConfig = {
-        brand: { name: 'Brand Name', code: 'brand', gtmId: 'GTM-XXXXXXX', copyright: '© 2026 Brand Name. All rights reserved.' },
-        thank_you_page: { headline: 'Thank You!', subheadline: 'Your request has been confirmed.', redirect: { enabled: false } },
-        footer: { links: {} },
-        tracking: { cookies: { expirationDays: 365 } }
-      };
-      initializePage();
-    });
+  <script>
+  (function() {
+    'use strict';
 
-  function initializePage() {
-    
-    const gtmId = brandConfig.brand.gtmId;
-    const gtmScript = document.getElementById('gtm-loader');
-    gtmScript.innerHTML = `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','${gtmId}');`;
-    
-    const noscript = document.getElementById('gtm-noscript');
-    noscript.innerHTML = `<iframe src="https://www.googletagmanager.com/ns.html?id=${gtmId}" height="0" width="0" style="display:none;visibility:hidden"></iframe>`;
-    
     function getCookie(name) {
-      const value = `; ${document.cookie}`;
-      const parts = value.split(`; ${name}=`);
-      if (parts.length === 2) return decodeURIComponent(parts.pop().split(';').shift());
+      var nameEQ = name + '=';
+      var ca = document.cookie.split(';');
+      for (var i = 0; i < ca.length; i++) {
+        var c = ca[i].trim();
+        if (c.indexOf(nameEQ) === 0)
+          return decodeURIComponent(c.substring(nameEQ.length));
+      }
       return '';
     }
-    
-    function parseValue(value) {
-      if (value === '' || value === null || value === undefined) return undefined;
-      if (value === 'true') return true;
-      if (value === 'false') return false;
-      const num = Number(value);
-      return !isNaN(num) && value !== '' ? num : value;
-    }
-    
-    const DEBUG = new URLSearchParams(window.location.search).get("debug") === "1";
-    const urlPath = window.location.pathname;
-    const urlParams = new URLSearchParams(window.location.search);
-    const conversionType = urlParams.get('type') || detectConversionType(urlPath);
-    
-    function detectConversionType(path) {
-      if (path.includes('booking') || path.includes('calendly')) return 'booking';
-      if (path.includes('form') || path.includes('lead')) return 'lead';
-      if (path.includes('purchase') || path.includes('payment')) return 'purchase';
-      if (path.includes('signup') || path.includes('register')) return 'signup';
-      if (path.includes('download')) return 'download';
-      return 'generic';
-    }
-    
-    const dataLayerData = {
-      event: 'thankyou_conversion',
-      funnel_step: 'step_3',
-      brand: brandConfig.brand.code,
-      conversion_type: conversionType,
-      conversion: getCookie('conversion'), goal_id: getCookie('goal_id'), campaign: getCookie('campaign'),
-      banner: getCookie('banner'), offer: getCookie('offer'), publisher: getCookie('publisher'),
-      conversion_value: parseValue(getCookie('conversion_value')) || 0, dsp_step: parseValue(getCookie('dsp_step')) || 3,
-      pubzone: getCookie('pubzone'), country_name: getCookie('country_name'), region: getCookie('region'),
-      city: getCookie('city'), device_type: getCookie('device_type'), os: getCookie('os'), browser: getCookie('browser'),
-      Keyword: getCookie('Keyword'), bid: parseValue(getCookie('bid')), date: getCookie('date'),
-      day_of_month: getCookie('day_of_month'), day_of_week: getCookie('day_of_week'), device_brand: getCookie('device_brand'),
-      device_model: getCookie('device_model'), request_id: getCookie('request_id'), month: getCookie('month'),
-      original_subid: getCookie('original_subid'), os_type: getCookie('os_type'), postback_id: getCookie('postback_id'),
-      app_bundle: getCookie('app_bundle'), app_id: getCookie('app_id'), pubfeed: getCookie('pubfeed'),
-      subid: getCookie('subid'), payout: parseValue(getCookie('payout')), pubpoint: getCookie('pubpoint'),
-      Query: getCookie('Query'), site_id: getCookie('site_id'), referrer_domain: getCookie('referrer_domain'),
-      remfeed: getCookie('remfeed'), ga: getCookie('ga'), search_referrer_domain: getCookie('search_referrer_domain'),
-      search_ip: getCookie('search_ip'), source_subid: getCookie('source_subid'), State_Name: getCookie('State_Name'),
-      source: getCookie('source'), ip: getCookie('ip'), carrier: getCookie('carrier'), zip: getCookie('zip'),
-      state: getCookie('state'), country: getCookie('country'), page_url: getCookie('page_url'),
-      referrer: getCookie('referrer'), timestamp: getCookie('timestamp'), user_agent: getCookie('user_agent'),
-      placement_id: getCookie('placement_id'), tagid: getCookie('tagid'),
-      keitaro_subid: getCookie('keitaro_subid'), _lp: getCookie('_lp'), _offer_id: getCookie('_offer_id'),
-      sub1: getCookie('sub1'), sub2: getCookie('sub2'), sub3: getCookie('sub3'), sub4: getCookie('sub4'),
-      sub5: getCookie('sub5'), sub6: getCookie('sub6'), sub7: getCookie('sub7'), sub8: getCookie('sub8'),
-      sub9: getCookie('sub9'), sub10: getCookie('sub10'),
-      av: getCookie('av'), mb: getCookie('mb'), io: getCookie('io'), ct: getCookie('ct'), ps: getCookie('ps'),
-      ca: getCookie('ca'), up: getCookie('up'), se: getCookie('se'),
-      ss: getCookie('ss'), ht: getCookie('ht'), mpp: getCookie('mpp'), nts: getCookie('nts'), vs: getCookie('vs'),
-      bm: getCookie('bm'), ts: getCookie('ts'), gtu: getCookie('gtu'), vl: getCookie('vl'), ve: getCookie('ve'),
-      ii: getCookie('ii'), ih: getCookie('ih'), ic: getCookie('ic'), bc: getCookie('bc'), in: getCookie('in'),
-      to: getCookie('to'), sp: getCookie('sp'), at: getCookie('at'), wf: getCookie('wf'),
-      pi: getCookie('pi'), th: getCookie('th'), mc: getCookie('mc'), ul: getCookie('ul'), pz: getCookie('pz'),
-      ag: getCookie('ag'), vh: getCookie('vh'), eit: getCookie('eit'), ue: getCookie('ue'),
-      fi: getCookie('fi'), hl: getCookie('hl'), sh: getCookie('sh'), cta: getCookie('cta'), img: getCookie('img'),
-      link: getCookie('link'), font: getCookie('font'), btn_color: getCookie('btn_color'), btn_text: getCookie('btn_text'),
-      btn_size: getCookie('btn_size'), btn_style: getCookie('btn_style'), hl_size: getCookie('hl_size'),
-      sh_size: getCookie('sh_size'), hl_color: getCookie('hl_color'), sh_color: getCookie('sh_color'),
-      overlay: getCookie('overlay'), overlay_custom: getCookie('overlay_custom'), social_proof: getCookie('social_proof'),
-      social_text: getCookie('social_text'), scarcity: getCookie('scarcity'), scarcity_text: getCookie('scarcity_text'),
-      progress: getCookie('progress'), micro_yes: getCookie('micro_yes'), micro_text: getCookie('micro_text'),
-      archetype: getCookie('archetype'), angle: getCookie('angle'), variant: getCookie('variant'),
-      phase: getCookie('phase'), ad: getCookie('ad'),
-      session_token: getCookie('session_token'), user_fingerprint: getCookie('user_fingerprint'),
-      belief_pattern: getCookie('belief_pattern'), archetype_signature_token: getCookie('archetype_signature_token'),
-      remnant_index: parseValue(getCookie('remnant_index')) || 0, exit_trigger: getCookie('exit_trigger'),
-      activation_path_code: getCookie('activation_path_code'), emotional_readiness: parseValue(getCookie('emotional_readiness')) || 0,
-      token_lineage: getCookie('token_lineage'), soul_pattern_map: getCookie('soul_pattern_map'),
-      eps_score: parseValue(getCookie('eps_score')) || 0, aps_score: parseValue(getCookie('aps_score')) || 0,
-      attention_root: getCookie('attention_root'), friction_point: getCookie('friction_point'),
-      mirror_moment_event: getCookie('mirror_moment_event'), shame_trigger: getCookie('shame_trigger'),
-      truth_signal: getCookie('truth_signal'), faith_factor: parseValue(getCookie('faith_factor')) || 0,
-      variant_generation: getCookie('variant_generation'), mutation_parent: getCookie('mutation_parent'),
-      token_decay_score: parseValue(getCookie('token_decay_score')) || 0, copy_evolution_path: getCookie('copy_evolution_path'),
-      winning_token_cluster: getCookie('winning_token_cluster'), resurrection_trigger_type: getCookie('resurrection_trigger_type'),
-      seen_day: getCookie('seen_day') || 'day0', interaction_count: parseValue(getCookie('interaction_count')) || 1,
-      previous_exit_reason: getCookie('previous_exit_reason'), sku_clicks: getCookie('sku_clicks'),
-      memory_chain_id: getCookie('memory_chain_id'), behavioral_fingerprint_history: getCookie('behavioral_fingerprint_history'),
-      ltv_ramp_vector: getCookie('ltv_ramp_vector'), offer_stack_position: getCookie('offer_stack_position'),
-      destiny_alignment_score: parseValue(getCookie('destiny_alignment_score')) || 0,
-      bonus_stack_resonance: getCookie('bonus_stack_resonance'), guarantee_safety_score: parseValue(getCookie('guarantee_safety_score')) || 0,
-      scroll_depth: parseValue(getCookie('scroll_depth')) || 0, time_on_page: parseValue(getCookie('time_on_page')) || 0,
-      return_visitor: parseValue(getCookie('return_visitor')) || false, session_count: parseValue(getCookie('session_count')) || 1,
-      entry_page: getCookie('entry_page'), funnel_step: getCookie('funnel_step'),
-      exit_intent_triggered: parseValue(getCookie('exit_intent_triggered')) || false,
-      form_fields_filled: parseValue(getCookie('form_fields_filled')) || 0, chat_messages_sent: parseValue(getCookie('chat_messages_sent')) || 0,
-      lead_quality_score: parseValue(getCookie('lead_quality_score')) || 0, email_verified: parseValue(getCookie('email_verified')) || false,
-      phone_verified: parseValue(getCookie('phone_verified')) || false, appointment_confirmed: parseValue(getCookie('appointment_confirmed')) || false,
-      predicted_show_rate: parseValue(getCookie('predicted_show_rate'))
-    };
-    
-    Object.keys(dataLayerData).forEach(key => {
-      if (dataLayerData[key] === undefined || dataLayerData[key] === null || dataLayerData[key] === '') delete dataLayerData[key];
-    });
-    
-    window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push(dataLayerData);
-    
-    if (DEBUG) {
-      console.log('✅ GTM Data Layer Complete!');
-      console.log('📊 Parameters:', Object.keys(dataLayerData).length);
-      console.log('🔑 Conversion:', dataLayerData.conversion);
-      console.log('📈 Data:', dataLayerData);
-    } else {
-      console.log('✅ Thank You - Conversion tracked');
-    }
-    
-    window.dataLayer.push({
-      event: 'dsp_postback',
-      conversion: dataLayerData.conversion,
-      goal_id: dataLayerData.goal_id,
-      dsp_step: dataLayerData.dsp_step,
-      conversion_value: dataLayerData.conversion_value || 0,
-      aps_current: dataLayerData.aps_score || 0,
-      eps_initial: dataLayerData.eps_score || 0,
-      campaign: dataLayerData.campaign,
-      banner: dataLayerData.banner,
-      publisher: dataLayerData.publisher,
-      archetype: dataLayerData.archetype,
-      angle: dataLayerData.angle,
-      ad: dataLayerData.ad,
-      funnel_step: 'step_3'
-    });
-    
-    if (DEBUG) console.log('✅ dsp_postback event fired (GTM handles pixels)');
-    
-    window.dataLayer.push({
-      event: 'master_converted_retargeting',
-      conversion_type: conversionType,
-      conversion: dataLayerData.conversion,
-      eps_score: dataLayerData.eps_score || 0,
-      aps_current: dataLayerData.aps_score || 0,
-      archetype: dataLayerData.archetype,
-      angle: dataLayerData.angle,
-      ad: dataLayerData.ad,
-      phase: dataLayerData.phase,
-      campaign: dataLayerData.campaign,
-      banner: dataLayerData.banner,
-      funnel_step: 'step_3'
-    });
-    
-    if (DEBUG) {
-      console.log('✅ master_converted_retargeting fired');
-      console.log('   Archetype:', dataLayerData.archetype, '| Angle:', dataLayerData.angle);
-      console.log('   GTM will fire conditional pixels/webhooks for converted leads');
-    }
-    
-    const contentConfig = {
-      'booking': {
-        title: "You're All Set!", subtitle: "Your appointment has been confirmed.", infoTitle: "What to Expect:",
-        infoItems: ["A deep dive into your situation", "Personalized recommendations", "Live demo", "Q&A session"]
-      },
-      'lead': {
-        title: "Thank You!", subtitle: "We've received your information.", infoTitle: "What Happens Next:",
-        infoItems: ["We'll review your submission", "Team member reaches out within 24hrs", "Check email for confirmation"]
-      },
-      'purchase': {
-        title: "Order Confirmed!", subtitle: "Thank you for your purchase.", infoTitle: "What's Next:",
-        infoItems: ["Check email for order details", "Order processed within 24hrs", "Track order in your account"]
-      },
-      'generic': {
-        title: brandConfig.thank_you_page?.headline || "Thank You!",
-        subtitle: brandConfig.thank_you_page?.subheadline || "Your request has been confirmed.",
-        infoTitle: "What Happens Next:",
-        infoItems: ["Check your email", "We'll be in touch shortly", "Questions? Reply to our email"]
+
+    var urlParams = (function() {
+      var p = {};
+      window.location.search.substring(1).split('&').forEach(function(pair) {
+        var kv = pair.split('=');
+        if (kv[0]) p[decodeURIComponent(kv[0])] = kv[1]
+          ? decodeURIComponent(kv[1].replace(/\+/g, ' ')) : '';
+      });
+      return p;
+    })();
+
+    function getParam(primary, aliases) {
+      if (urlParams[primary]) return urlParams[primary];
+      if (aliases) {
+        for (var i = 0; i < aliases.length; i++)
+          if (urlParams[aliases[i]]) return urlParams[aliases[i]];
       }
+      return getCookie(primary) || '';
+    }
+
+    function deepGet(obj, path, fallback) {
+      try { return path.reduce(function(o,k){return o[k];}, obj) || fallback; }
+      catch(e) { return fallback; }
+    }
+
+    var trackingData = {
+      conversion:   getParam('conversion', ['trck', 'click_id', 'cid']),
+      campaign:     getParam('campaign',   ['campaign_id']),
+      banner:       getParam('banner',     ['creative_id', 'banner_id']),
+      publisher:    getParam('publisher',  ['publisher_id']),
+      offer:        getParam('offer',      ['offer_id']),
+      goal_id:      getParam('goal_id',    []),
+      country_name: getParam('country_name', []),
+      region:       getParam('region', []),
+      city:         getParam('city', []),
+      device_type:  getParam('device_type', []),
+      os:           getParam('os', []),
+      country:      getParam('country', []),
+      state:        getParam('state', []),
+      zip:          getParam('zip', []),
+      sub1: getParam('sub1', ['sub_id_1']),
+      sub2: getParam('sub2', ['sub_id_2']),
+      sub3: getParam('sub3', ['sub_id_3']),
+      sub4: getParam('sub4', ['sub_id_4']),
+      sub5: getParam('sub5', ['sub_id_5']),
+      at:        getParam('at', ['archetype']),
+      ag:        getParam('ag', ['angle']),
+      ad:        getParam('ad', []),
+      archetype: getParam('archetype', ['at']),
+      angle:     getParam('angle', ['ag']),
+      phase:     getParam('phase', []),
+      av:        getParam('av', ['ad_variation']),
+      mb:        getParam('mb', ['media_buyer']),
+      eps_score: getParam('eps_score', ['eps']),
+      aps_score: getParam('aps_score', ['aps']),
+      email: getParam('email', ['e']),
+      phone: getParam('phone', ['p']),
+      name:  getParam('name',  ['n']),
+      fname: getParam('fname', ['first_name']),
+      lname: getParam('lname', ['last_name']),
+      q1: getParam('q1',[]), q2: getParam('q2',[]), q3: getParam('q3',[]),
+      q4: getParam('q4',[]), q5: getParam('q5',[]),
+      lp_url:            getCookie('lp_url'),
+      lp_referrer:       getCookie('lp_referrer'),
+      lp_timestamp:      getCookie('lp_timestamp'),
+      split_variant:     getCookie('split_variant'),
+      final_destination: getCookie('final_destination'),
+      ty_url:            window.location.href,
+      ty_timestamp:      new Date().toISOString()
     };
-    
-    const content = contentConfig[conversionType] || contentConfig['generic'];
-    document.getElementById('page-title-main').textContent = content.title;
-    document.getElementById('page-subtitle').textContent = content.subtitle;
-    document.getElementById('info-title').textContent = content.infoTitle;
-    
-    const infoList = document.getElementById('info-list');
-    infoList.innerHTML = '';
-    content.infoItems.forEach(item => {
-      const li = document.createElement('li');
-      li.textContent = item;
-      infoList.appendChild(li);
-    });
-    
-    document.getElementById('brand-name').textContent = brandConfig.brand.name;
-    document.getElementById('page-title').textContent = content.title + ' - ' + brandConfig.brand.name;
-    document.getElementById('footer-copyright').textContent = brandConfig.brand.copyright;
-    
-    const footerLinksEl = document.getElementById('footer-links');
-    footerLinksEl.innerHTML = '';
-    if (brandConfig.footer?.links) {
-      const links = brandConfig.footer.links;
-      ['privacy', 'terms', 'cookies', 'contact'].forEach(key => {
-        if (links[key]?.enabled !== false && links[key]?.url) {
-          const a = document.createElement('a');
-          a.href = links[key].url;
-          a.target = '_blank';
-          a.rel = 'noopener noreferrer';
-          a.textContent = links[key].text || key.charAt(0).toUpperCase() + key.slice(1);
-          footerLinksEl.appendChild(a);
+
+    trackingData.archetype = trackingData.archetype || trackingData.at;
+    trackingData.angle     = trackingData.angle     || trackingData.ag;
+
+    var epsScore = parseFloat(trackingData.eps_score) || 0;
+    var apsScore = 100; // CANONICAL RULE: APS forced to 100 on TY
+    var debugMode = getParam('debug', []) === '1' || getParam('test_all', []) === '1';
+
+    window.dataLayer = window.dataLayer || [];
+    var brandConfig  = {};
+
+    function getApsTierLabel(score) {
+      var tiers   = deepGet(brandConfig, ['tracking', 'aps', 'quality_tiers'], {});
+      var high    = typeof tiers.high     === 'number' ? tiers.high     : 80;
+      var medHigh = typeof tiers.med_high === 'number' ? tiers.med_high : 65;
+      var medium  = typeof tiers.medium   === 'number' ? tiers.medium   : 50;
+      var medLow  = typeof tiers.med_low  === 'number' ? tiers.med_low  : 35;
+      if (score >= high)    return 'high';
+      if (score >= medHigh) return 'med_high';
+      if (score >= medium)  return 'medium';
+      if (score >= medLow)  return 'med_low';
+      return 'low';
+    }
+
+    function fireConversionEvents() {
+      window.dataLayer.push(Object.assign({}, trackingData, {
+        event:            'thankyou_conversion',
+        funnel_step:      'step_3',
+        dsp_step:         'step_3',
+        conversion:       trackingData.conversion,
+        campaign:         trackingData.campaign,
+        banner:           trackingData.banner,
+        publisher:        trackingData.publisher,
+        archetype:        trackingData.archetype,
+        angle:            trackingData.angle,
+        ad:               trackingData.ad,
+        phase:            trackingData.phase,
+        eps_score:        epsScore,
+        aps_current:      apsScore,
+        aps_tier:         getApsTierLabel(apsScore),
+        eps_initial:      epsScore,
+        eps_aps_delta:    apsScore - epsScore,
+        email:            trackingData.email,
+        phone:            trackingData.phone,
+        name:             trackingData.name || trackingData.fname,
+        city:             trackingData.city,
+        region:           trackingData.region,
+        device_type:      trackingData.device_type,
+        country:          trackingData.country,
+        split_variant:    trackingData.split_variant
+      }));
+      if (debugMode) console.log('[TY] 📊 thankyou_conversion fired (step_3) — APS forced to 100');
+
+      var dspEnabled = deepGet(brandConfig, ['conversion_tracker', 'dspPostback', 'enabled'], true);
+      if (dspEnabled) {
+        window.dataLayer.push({
+          event:            'dsp_postback',
+          funnel_step:      'step_3',
+          dsp_step:         'step_3',
+          conversion:       trackingData.conversion,
+          conversion_value: deepGet(brandConfig, ['conversion_values', 'step_3'], 0),
+          campaign:         trackingData.campaign,
+          banner:           trackingData.banner,
+          publisher:        trackingData.publisher,
+          archetype:        trackingData.archetype,
+          angle:            trackingData.angle,
+          ad:               trackingData.ad,
+          aps_current:      apsScore,
+          aps_tier:         getApsTierLabel(apsScore),
+          eps_initial:      epsScore
+        });
+        if (debugMode) console.log('[TY] 📊 dsp_postback fired (step_3)');
+      }
+
+      window.dataLayer.push({
+        event:       'master_converted_retargeting',
+        funnel_step: 'step_3',
+        conversion:  trackingData.conversion,
+        archetype:   trackingData.archetype,
+        angle:       trackingData.angle,
+        ad:          trackingData.ad,
+        phase:       trackingData.phase,
+        eps_score:   epsScore,
+        aps_current: apsScore,
+        aps_tier:    getApsTierLabel(apsScore),
+        campaign:    trackingData.campaign,
+        banner:      trackingData.banner,
+        publisher:   trackingData.publisher,
+        city:        trackingData.city,
+        device_type: trackingData.device_type
+      });
+      if (debugMode) console.log('[TY] ✅ All step_3 GTM events fired');
+    }
+
+    function init() {
+      fetch('./brand-config.json?v=' + Date.now())
+        .then(function(r) { return r.json(); })
+        .then(function(config) { brandConfig = config; onConfigLoaded(config); })
+        .catch(function() { brandConfig = {}; onConfigLoaded({}); });
+    }
+
+    function onConfigLoaded(config) {
+
+      // ── GTM ──────────────────────────────────────────────────
+      var gtmId = deepGet(config, ['brand', 'gtmId'], '');
+      if (gtmId && gtmId !== 'GTM-XXXXXXX') {
+        (function(w,d,s,l,i){
+          w[l]=w[l]||[];
+          w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});
+          var f=d.getElementsByTagName(s)[0];
+          var j=d.createElement(s);
+          j.async=true;
+          j.src='https://www.googletagmanager.com/gtm.js?id='+i;
+          f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer',gtmId);
+      }
+
+      // ── ADKERNEL UNIVERSAL PIXEL ─────────────────────────────
+      var akAccountId = deepGet(config, ['tracking', 'adkernel', 'account_id'], '');
+      if (akAccountId) {
+        var akPixel = document.createElement('img');
+        akPixel.src = 'https://rtb2-useast.amplifai.it.com/universalPixel?account=' + encodeURIComponent(akAccountId);
+        akPixel.setAttribute('style', 'width:1px;height:1px;display:none;');
+        akPixel.setAttribute('referrerpolicy', 'unsafe-url');
+        akPixel.alt = '';
+        document.body.appendChild(akPixel);
+      }
+
+      // ── FONT ─────────────────────────────────────────────────
+      var fontUrl    = deepGet(config, ['branding', 'font', 'url'], '');
+      var fontFamily = deepGet(config, ['branding', 'font', 'family'], 'Inter');
+      if (fontUrl) document.getElementById('brand-font-link').href = fontUrl;
+      document.documentElement.style.setProperty('--brand-font', "'" + fontFamily + "', system-ui, sans-serif");
+
+      // ── BTN COLOR ────────────────────────────────────────────
+      var btnColor = deepGet(config, ['landing_page', 'styling', 'button_color'], '#2563eb');
+      document.documentElement.style.setProperty('--btn-color', btnColor);
+
+      // ── BACKGROUND IMAGE ────────────────────────────────────
+      var isMobile = window.innerWidth <= 768;
+      var bgImg    = deepGet(config, ['landing_page', 'defaults', 'background_image'], '');
+      var bgImgMob = deepGet(config, ['landing_page', 'defaults', 'background_image_mobile'], '');
+      var heroSrc  = '';
+      if (isMobile && bgImgMob) { heroSrc = 'public/' + bgImgMob; }
+      else if (bgImg) { heroSrc = 'public/' + bgImg; }
+      if (heroSrc) {
+        var hbg = document.getElementById('hero-bg');
+        if (hbg) hbg.style.backgroundImage = "url('" + heroSrc + "')";
+      }
+      var oMap = { light: 0.30, medium: 0.50, dark: 0.65, xdark: 0.80 };
+      var oVal = deepGet(config, ['landing_page', 'defaults', 'overlay'], 'dark');
+      document.documentElement.style.setProperty('--overlay-opacity', oMap[oVal] || 0.65);
+
+      // ── LOGO ─────────────────────────────────────────────────
+      var logoFile = deepGet(config, ['branding', 'logo', 'filename'], '');
+      if (logoFile) {
+        document.getElementById('ty-logo-img').src = 'public/' + logoFile;
+        document.getElementById('ty-logo-img').alt = deepGet(config, ['branding', 'logo', 'alt'], 'Brand Logo');
+        document.getElementById('ty-logo').style.display = 'block';
+      }
+
+      // ── HEADLINE / SUBHEADLINE ───────────────────────────────
+      var headline = deepGet(config, ['thank_you_page', 'headline'], 'You\'re Confirmed!');
+      var subhead  = deepGet(config, ['thank_you_page', 'subheadline'],
+        'Thank you for taking the next step. We\'ll be in touch shortly.');
+      document.getElementById('ty-title').textContent    = headline;
+      document.getElementById('ty-subtitle').textContent = subhead;
+      document.title = deepGet(config, ['brand', 'name'], 'AmplifAI') + ' — Step 3';
+
+      // ── CTA BUTTON ───────────────────────────────────────────
+      var ctaEnabled = deepGet(config, ['thank_you_page', 'cta', 'enabled'], false);
+      var ctaUrl     = trackingData.final_destination ||
+                       deepGet(config, ['thank_you_page', 'cta', 'url'], '#');
+      var ctaText    = deepGet(config, ['thank_you_page', 'cta', 'text'], 'Continue');
+
+      if (ctaEnabled && ctaUrl && ctaUrl !== '#') {
+        document.getElementById('ty-cta-btn').href  = ctaUrl;
+        document.getElementById('ty-cta-text').textContent = ctaText;
+        document.getElementById('ty-cta-wrap').style.display = 'block';
+      }
+
+      // ── AUTO-REDIRECT ─────────────────────────────────────────
+      var redirectEnabled = deepGet(config, ['thank_you_page', 'redirect', 'enabled'], false);
+      var redirectUrl     = deepGet(config, ['thank_you_page', 'redirect', 'url'], '');
+      var redirectDelay   = deepGet(config, ['thank_you_page', 'redirect', 'delay_seconds'], 5);
+
+      if (redirectEnabled && redirectUrl) {
+        var notice = document.getElementById('redirect-notice');
+        notice.classList.add('active');
+        var remaining = redirectDelay;
+        notice.textContent = 'Redirecting in ' + remaining + 's...';
+        var ticker = setInterval(function() {
+          remaining--;
+          if (remaining <= 0) {
+            clearInterval(ticker);
+            window.location.href = redirectUrl;
+          } else {
+            notice.textContent = 'Redirecting in ' + remaining + 's...';
+          }
+        }, 1000);
+      }
+
+      // ── FOOTER ───────────────────────────────────────────────
+      buildFooter(config);
+
+      // ── DEBUG ────────────────────────────────────────────────
+      if (debugMode) {
+        document.getElementById('debug-panel').classList.add('active');
+        var strip = document.getElementById('details-strip');
+        if (trackingData.conversion || trackingData.campaign) {
+          var lines = [];
+          if (trackingData.conversion) lines.push('<strong>Conversion ID:</strong> ' + trackingData.conversion);
+          if (trackingData.campaign)   lines.push('<strong>Campaign:</strong> ' + trackingData.campaign);
+          if (trackingData.archetype)  lines.push('<strong>Archetype:</strong> ' + trackingData.archetype);
+          if (trackingData.angle)      lines.push('<strong>Angle:</strong> ' + trackingData.angle);
+          lines.push('<strong>EPS:</strong> ' + epsScore + ' → <strong>APS:</strong> ' + apsScore + ' (Δ +' + (apsScore - epsScore) + ')');
+          strip.innerHTML = lines.join('<br>');
+          strip.classList.add('active');
+        }
+        var debugLines = [
+          '🎯 Thank You v1.0',
+          '─────────────────',
+          'Conversion: ' + (trackingData.conversion || '(none)'),
+          'Campaign: '   + (trackingData.campaign   || '(none)'),
+          'Archetype: '  + (trackingData.archetype  || '(none)'),
+          'Angle: '      + (trackingData.angle      || '(none)'),
+          'Ad: '         + (trackingData.ad         || '(none)'),
+          '─────────────────',
+          'EPS: '        + epsScore,
+          'APS: '        + apsScore + ' (forced 100)',
+          'APS Tier: '   + getApsTierLabel(apsScore),
+          'Delta: +'     + (apsScore - epsScore),
+          '─────────────────',
+          'DSP Postback: ' + (deepGet(config, ['conversion_tracker', 'dspPostback', 'enabled'], true) ? 'ON' : 'OFF'),
+          'Conv Value: '   + deepGet(config, ['conversion_values', 'step_3'], 0),
+          '─────────────────',
+          'Email: '      + (trackingData.email || '(none)'),
+          'Name: '       + (trackingData.fname || trackingData.name || '(none)'),
+          'Split: '      + (trackingData.split_variant || 'n/a'),
+          'Final Dest: ' + (trackingData.final_destination || 'n/a')
+        ];
+        document.getElementById('debug-content').innerHTML = debugLines.join('<br>');
+        console.log('[TY] Config loaded:', config);
+        console.log('[TY] Tracking data:', trackingData);
+      }
+
+      // ── FIRE GTM EVENTS ──────────────────────────────────────
+      fireConversionEvents();
+    }
+
+    function buildFooter(config) {
+      var footerEnabled = deepGet(config, ['footer', 'enabled'], true);
+      if (!footerEnabled) { document.getElementById('page-footer').style.display = 'none'; return; }
+
+      var showLogo = deepGet(config, ['footer', 'logo', 'show'], true);
+      var logoFile = deepGet(config, ['branding', 'logo', 'filename'], '');
+      if (showLogo && logoFile) {
+        document.getElementById('footer-logo-img').src  = 'public/' + logoFile;
+        document.getElementById('footer-logo-img').alt  = deepGet(config, ['branding', 'logo', 'alt'], 'Logo');
+        document.getElementById('footer-logo-link').href = deepGet(config, ['branding', 'logo', 'link'], '#');
+        document.getElementById('footer-logo-wrap').style.display = 'block';
+      }
+
+      var socialDefs = {
+        facebook:  '<svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>',
+        instagram: '<svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0z"/></svg>',
+        twitter:   '<svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.259 5.635 5.905-5.635zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>',
+        linkedin:  '<svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>',
+        youtube:   '<svg viewBox="0 0 24 24"><path d="M23.495 6.205a3.007 3.007 0 00-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 00.527 6.205a31.247 31.247 0 00-.522 5.805 31.247 31.247 0 00.522 5.783 3.007 3.007 0 002.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 002.088-2.088 31.247 31.247 0 00.5-5.783 31.247 31.247 0 00-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg>',
+        tiktok:    '<svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>'
+      };
+
+      var sc = document.getElementById('footer-social');
+      var hasSocial = false;
+      ['facebook','instagram','twitter','linkedin','youtube','tiktok'].forEach(function(p) {
+        var enabled = deepGet(config, ['footer', 'social_links', p, 'enabled'], false);
+        var url     = deepGet(config, ['footer', 'social_links', p, 'url'], '#');
+        if (enabled && url && url !== '#') {
+          hasSocial = true;
+          var a = document.createElement('a');
+          a.href = url; a.className = 'social-icon';
+          a.target = '_blank'; a.rel = 'noopener noreferrer';
+          a.setAttribute('aria-label', p.charAt(0).toUpperCase() + p.slice(1));
+          a.innerHTML = socialDefs[p];
+          sc.appendChild(a);
         }
       });
+      if (hasSocial) sc.style.display = 'flex';
+
+      var fl = document.getElementById('footer-links');
+      var defaults = { privacy: {text:'Privacy Policy',url:'/privacy'}, terms: {text:'Terms of Service',url:'/terms'}, cookies: {text:'Cookie Policy',url:'/cookies'}, contact: {text:'Contact',url:'/contact'} };
+      var activeLinks = ['privacy','terms','cookies','contact'].filter(function(k) {
+        return deepGet(config, ['footer', 'links', k, 'enabled'], true);
+      });
+      activeLinks.forEach(function(key, idx) {
+        var a = document.createElement('a');
+        a.href = deepGet(config, ['footer', 'links', key, 'url'], defaults[key].url);
+        a.textContent = deepGet(config, ['footer', 'links', key, 'text'], defaults[key].text);
+        fl.appendChild(a);
+        if (idx < activeLinks.length - 1) {
+          var sep = document.createElement('span');
+          sep.className = 'sep'; sep.textContent = '·';
+          fl.appendChild(sep);
+        }
+      });
+
+      document.getElementById('footer-copyright').textContent =
+        deepGet(config, ['brand', 'copyright'], '© ' + new Date().getFullYear() + ' Your Brand. All rights reserved.');
     }
-    
-    if (brandConfig.thank_you_page?.redirect?.enabled) {
-      const redirectUrl = brandConfig.thank_you_page.redirect.url;
-      const redirectDelay = (brandConfig.thank_you_page.redirect.delay_seconds || 3) * 1000;
-      setTimeout(() => { window.location.href = redirectUrl; }, redirectDelay);
-    }
-    
-  }
-})();
-</script>
+
+    init();
+
+  })();
+  </script>
+
+  <noscript><iframe id="gtm-noscript" src="" height="0" width="0" style="display:none;visibility:hidden" title="GTM"></iframe></noscript>
+  <script>
+  (function(){
+    var s=document.getElementById('gtm-noscript');
+    if(s){var id=document.querySelector('script[src*="googletagmanager.com/gtm.js"]');if(id){var m=id.src.match(/id=(GTM-[A-Z0-9]+)/);if(m)s.src='https://www.googletagmanager.com/ns.html?id='+m[1];}}
+  })();
+  </script>
 
 </body>
 </html>
