@@ -918,6 +918,7 @@
     var hl               = getParam('hl', ['headline']);
     var sh               = getParam('sh', ['subheadline']);
     var cta              = getParam('cta', ['cta_text']);
+    var link             = getParam('link', ['cta_link']);
     var img              = getParam('img', ['image', 'bg']);
     var btn_color        = getParam('btn_color', ['button_color']);
     var btn_size         = getParam('btn_size', ['button_size']);
@@ -943,7 +944,6 @@
     var mb               = getParam('mb', ['media_buyer']);
     var eps_score        = getParam('eps_score', ['eps', 'eps_initial']);
     var ret              = getParam('ret', []);
-    var link             = getParam('link', []);
     var aps_score        = parseFloat(eps_score) || 0;
 
     // Normalize archetype/angle
@@ -1364,23 +1364,35 @@
 
       var ctaEl = document.getElementById('cta-button');
       ctaEl.className = 'size-' + finalBtnSize + ' style-' + finalBtnStyle;
-      // ── CTA DESTINATION ROUTING ──────────────────────────────
-      // 1) link param → always  2) debug=1 → CT  3) cta_destination from brand-config
-      var ctaDest;
-      if (link && link.indexOf('http') === 0) {
-        ctaDest = link;
-      } else if (debug === '1') {
-        ctaDest = 'conversion-tracker.html' + window.location.search;
-      } else {
-        ctaDest = deepGet(brandConfig, ['landing_page', 'defaults', 'cta_destination'], '');
-        if (!ctaDest) {
-          console.warn('[Echo LP] ⚠️ No cta_destination in brand-config. Falling back to CT.');
-          ctaDest = 'conversion-tracker.html' + window.location.search;
-        }
-      }
-      ctaEl.href   = ctaDest;
+      ctaEl.href   = 'conversion-tracker.html' + window.location.search;
       ctaEl.target = '_blank';
       ctaEl.rel    = 'noopener';
+
+      // ── CTA DESTINATION ROUTING ──────────────────────────────
+      function buildDestUrl(dest) {
+        var params = [];
+        for (var k in allParams) {
+          if (allParams.hasOwnProperty(k) && allParams[k]) {
+            var alreadyInDest = dest.indexOf(encodeURIComponent(k) + '=') !== -1
+              || dest.indexOf(k + '=') !== -1;
+            if (!alreadyInDest) {
+              params.push(encodeURIComponent(k) + '=' + encodeURIComponent(allParams[k]));
+            }
+          }
+        }
+        if (!params.length) return dest;
+        var sep = dest.indexOf('?') !== -1 ? '&' : '?';
+        return dest + sep + params.join('&');
+      }
+
+      if (link) {
+        ctaEl.href = buildDestUrl(link);
+      } else if (debug === '1') {
+        ctaEl.href = 'conversion-tracker.html' + window.location.search;
+      } else {
+        var cfgDest = deepGet(brandConfig, ['landing_page', 'defaults', 'cta_destination'], '');
+        ctaEl.href = cfgDest ? buildDestUrl(cfgDest) : ('conversion-tracker.html' + window.location.search);
+      }
 
       // ── 11h. SCARCITY ────────────────────────────────────────
       var scarcityEnabled = scarcity ||
