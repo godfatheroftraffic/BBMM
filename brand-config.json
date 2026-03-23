@@ -30,10 +30,10 @@
       "overlay": "medium"
     },
     "styling": {
-      "button_color": "#b8860b",
+      "button_color": "#1a3a5c",
       "button_text_color": "#ffffff",
       "button_size": "xlarge",
-      "button_style": "rounded"
+      "button_style": "pill"
     },
     "features": {
       "social_proof": {
