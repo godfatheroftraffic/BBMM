@@ -504,11 +504,11 @@
     function selectSplitTestVariant(config) {
       var splitTest = deepGet(config, ['conversion_tracker', 'splitTest'], {});
       if (!splitTest.enabled) {
-        return deepGet(config, ['landing_page', 'defaults', 'cta_link'], 'thank-you.html');
+        return deepGet(config, ['landing_page', 'defaults', 'cta_destination'], 'thank-you.html');
       }
       var variants = (splitTest.variants || []).filter(function(v) { return v.enabled; });
       if (!variants.length) {
-        return deepGet(config, ['landing_page', 'defaults', 'cta_link'], 'thank-you.html');
+        return deepGet(config, ['landing_page', 'defaults', 'cta_destination'], 'thank-you.html');
       }
       var totalWeight = variants.reduce(function(sum, v) { return sum + (v.weight || 0); }, 0);
       var rand = Math.random() * totalWeight;
@@ -729,12 +729,12 @@
       var gtmDbg = urlParams['gtm_debug'];
       if (gtmDbg) params.push('gtm_debug=' + encodeURIComponent(gtmDbg));
       var qs = params.join('&');
-      // FIX GTM-5: Prevent redirect loop — never set final_destination to an internal page
       if (!baseUrl || baseUrl === '#' || baseUrl === 'thank-you.html' || baseUrl.indexOf('conversion-tracker') !== -1) {
         return 'thank-you.html?' + qs;
       }
-      setCookie('final_destination', baseUrl, 1);
-      return 'thank-you.html?' + qs;
+      // External URL (Cal.com, TypeBot, etc) — redirect directly with tracking params
+      var sep = baseUrl.indexOf('?') !== -1 ? '&' : '?';
+      return baseUrl + sep + qs;
     }
 
     function startRedirectFlow(destinationUrl) {
