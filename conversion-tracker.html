@@ -448,6 +448,10 @@
     var apsScore  = parseFloat(trackingData.aps_score) || epsScore;
     var dspStep   = 'step_2';
 
+    // Set title immediately so GTM Preview captures correct page name
+    var earlyBrand = getCookie('brand_name') || 'AmplifAI';
+    document.title = earlyBrand + ' — Step 2';
+
     var debugMode = getParam('debug', []) === '1' || getParam('test_all', []) === '1';
     var testMode  = getParam('testsurvey', []) === '1' || getParam('test', []) === '1';
 
@@ -680,6 +684,28 @@
         if (data.email) { trackingData.email = data.email; setCookie('email', data.email, 365); }
         if (data.phone) { trackingData.phone = data.phone; setCookie('phone', data.phone, 365); }
         if (data.name)  { trackingData.name  = data.name;  setCookie('name',  data.name,  365); }
+
+        // Calculate APS bonuses from survey data before redirect
+        var apsBonus = 0;
+        var apsCfg   = deepGet(brandConfig, ['tracking', 'aps'], {});
+        if (data.email || trackingData.email) {
+          apsBonus += deepGet(apsCfg, ['email_entry', 'bonus'], 15);
+        }
+        if (data.phone || trackingData.phone) {
+          apsBonus += deepGet(apsCfg, ['phone_entry', 'bonus'], 25);
+        }
+        var answerCount = data.answers ? Math.min(data.answers.length, 10) : 0;
+        if (answerCount > 0) {
+          var perAnswer  = deepGet(apsCfg, ['answer_survey', 'bonus_per_answer'], 5);
+          var maxSurvey  = deepGet(apsCfg, ['answer_survey', 'max_bonus'], 25);
+          apsBonus += Math.min(answerCount * perAnswer, maxSurvey);
+        }
+        if (apsBonus > 0) {
+          apsScore = Math.min(apsScore + apsBonus, 100);
+          setCookie('aps_score', apsScore, 365);
+          if (debugMode) console.log('[Tracker] APS bonus from survey: +' + apsBonus + ' → APS=' + apsScore);
+        }
+
         if (debugMode) console.log('[Tracker] Survey completed, starting redirect flow');
         startRedirectFlow(null);
       }
