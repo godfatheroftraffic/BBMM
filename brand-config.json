@@ -225,7 +225,7 @@
       "_type_help": "Survey provider. Options: formbricks | typebot | (leave empty for no survey)",
       "formbricks_id": "",
       "_formbricks_id_help": "FormBricks survey ID (if type = formbricks).",
-      "typebot_id": "",
+      "typebot_id": "bbmmefs",
       "_typebot_id_help": "TypeBot bot ID (if type = typebot)."
     },
     "dspPostback": {
