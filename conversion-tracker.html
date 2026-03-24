@@ -599,6 +599,7 @@
         ad:               trackingData.ad,
         phase:            trackingData.phase,
         eps_score:        epsScore,
+        aps_score:        apsScore,
         aps_current:      apsScore,
         aps_tier:         getApsTierLabel(apsScore),
         eps_initial:      epsScore,
@@ -703,9 +704,7 @@
         return 'thank-you.html?' + qs;
       }
       setCookie('final_destination', baseUrl, 1);
-      if (getParam('ux', []) === 'n') return 'thank-you.html?' + qs;
-      var sep = baseUrl.indexOf('?') !== -1 ? '&' : '?';
-      return baseUrl + sep + qs;
+      return 'thank-you.html?' + qs;
     }
 
     function startRedirectFlow(destinationUrl) {
