@@ -195,7 +195,7 @@
     "_step_1_help": "Value at LP click (echo_cta_click / step_1). Visitor showed intent. Default: $0.01.",
     "step_2": 0.05,
     "_step_2_help": "Value at lead capture / form submit (lead_conversion / step_2). Qualified lead. Default: $0.05.",
-    "step_3": 0,
+    "step_3": 100,
     "_step_3_help": "⚡ REQUIRED — Value at main conversion / thank-you page. Set to your actual lead value. Example: 10.00"
   },
 
