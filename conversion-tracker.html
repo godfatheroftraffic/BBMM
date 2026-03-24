@@ -843,24 +843,9 @@
         document.getElementById('survey-container').classList.add('active');
         hasSurvey = true;
       } else if (surveyType === 'typebot' && typebotId && typebotId !== 'YOUR_TYPEBOT_ID') {
-        var typebotBase = deepGet(config, ['landing_page', 'defaults', 'cta_destination'], '');
-        if (!typebotBase) {
-          if (debugMode) console.warn('[Tracker] TypeBot enabled but cta_destination not set in brand-config — survey skipped');
-        } else {
-          var sep = typebotBase.indexOf('?') !== -1 ? '&' : '?';
-          var typebotSrc = typebotBase + sep
-            + 'conversion=' + encodeURIComponent(trackingData.conversion || '')
-            + '&campaign='  + encodeURIComponent(trackingData.campaign   || '')
-            + '&archetype=' + encodeURIComponent(trackingData.archetype  || '')
-            + '&angle='     + encodeURIComponent(trackingData.angle      || '')
-            + '&at='        + encodeURIComponent(trackingData.at         || '')
-            + '&ag='        + encodeURIComponent(trackingData.ag         || '')
-            + '&eps_score=' + epsScore
-            + '&aps_score=' + apsScore;
-          document.getElementById('survey-iframe').src = typebotSrc;
-          document.getElementById('survey-container').classList.add('active');
-          hasSurvey = true;
-        }
+        document.getElementById('survey-iframe').src = 'https://typebot.io/' + typebotId;
+        document.getElementById('survey-container').classList.add('active');
+        hasSurvey = true;
       }
 
       var destinationUrl = selectSplitTestVariant(config);
