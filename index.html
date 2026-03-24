@@ -944,7 +944,7 @@
     var mb               = getParam('mb', ['media_buyer']);
     var eps_score        = getParam('eps_score', ['eps', 'eps_initial']);
     var ret              = getParam('ret', []);
-    var aps_score        = parseFloat(eps_score) || 0;
+    var aps_score        = 0;
 
     // Normalize archetype/angle
     archetype = archetype || at;
@@ -1111,7 +1111,7 @@
        8. APS CALCULATION ENGINE
     =========================================================== */
     var apsData = {
-      base: parseFloat(eps_score) || 0,
+      base: 0,
       timeBonus: 0,
       mouseBonus: 0,
       hoverBonus: 0,
