@@ -221,7 +221,7 @@
     },
     "survey": {
       "_comment": "Embed a survey on the conversion tracker page to qualify leads.",
-      "type": "typebot",
+      "type": "",
       "_type_help": "Survey provider. Options: formbricks | typebot | (leave empty for no survey)",
       "formbricks_id": "",
       "_formbricks_id_help": "FormBricks survey ID (if type = formbricks).",
