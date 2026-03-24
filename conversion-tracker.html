@@ -700,6 +700,8 @@
       if (trackingData.email) params.push('email=' + encodeURIComponent(trackingData.email));
       if (trackingData.fname) params.push('fname=' + encodeURIComponent(trackingData.fname));
       if (debugMode) params.push('debug=1');
+      var gtmDbg = urlParams['gtm_debug'];
+      if (gtmDbg) params.push('gtm_debug=' + encodeURIComponent(gtmDbg));
       var qs = params.join('&');
       // FIX GTM-5: Prevent redirect loop — never set final_destination to an internal page
       if (!baseUrl || baseUrl === '#' || baseUrl === 'thank-you.html' || baseUrl.indexOf('conversion-tracker') !== -1) {
