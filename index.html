@@ -1398,7 +1398,7 @@
 
       if (link) {
         ctaEl.href = buildDestUrl(link);
-      } else if (debug === '1') {
+      } else if (debug === '1' && ux !== 'y') {
         ctaEl.href = 'conversion-tracker.html' + window.location.search;
       } else {
         var cfgDest = deepGet(brandConfig, ['landing_page', 'defaults', 'cta_destination'], '');
