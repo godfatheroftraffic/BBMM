@@ -212,7 +212,7 @@
         {
           "name": "control",
           "_name_help": "Variant label for reporting.",
-          "url": "https://cal.com/amplifai/beyondbordersmatchmaking-profile-verification-call",
+          "url": "https://cal.com/beyondbordersmatchmaking/profile-verification-call",
           "_url_help": "⚡ REQUIRED if splitTest enabled — destination URL for this variant.",
           "weight": 100,
           "enabled": true
