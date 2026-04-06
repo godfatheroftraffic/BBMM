@@ -849,6 +849,8 @@
       }
 
       var destinationUrl = selectSplitTestVariant(config);
+      var uxMode = getParam('ux', []);
+if (uxMode === 'n') { destinationUrl = 'thank-you.html'; }
 
       if (debugMode) {
         document.getElementById('debug-panel').classList.add('active');
